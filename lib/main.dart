@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/menu_page_screen.dart';
 import 'package:multiplatform_donation_app/splash_screen.dart';
 
 void main() {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
        initialRoute: SplashScreen.routeName,
         routes: {
         SplashScreen.routeName: (context) => SplashScreen(),
+        MenuScreen.routeName: (context) => MenuScreen(),
         }
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );

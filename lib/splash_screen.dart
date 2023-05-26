@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const routeName = '/splash_screen_route';
@@ -17,9 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Timer untuk mengatur waktu tampilan SplashScreen
     Timer(Duration(seconds: 3), () {
       // Navigasi ke halaman berikutnya setelah 3 detik
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (BuildContext context) => HomePage()),
-      );
+        Navigator.pushNamed(context, MenuScreen.routeName);
     });
   }
 
