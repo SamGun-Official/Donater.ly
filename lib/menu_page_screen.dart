@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
+import 'package:multiplatform_donation_app/register_page_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   static const routeName = '/menu_page_screen';
@@ -16,6 +17,7 @@ class MenuScreen extends StatelessWidget {
       home: LoginRegisterPage(),
        routes: {
         '/login_page_screen': (context) => LoginPageScreen(), // Definisikan rute untuk halaman kedua
+        '/register_page_route': (context)=> RegisterPageScreen()
       },
     );
   }
@@ -67,6 +69,7 @@ class LoginRegisterPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Tombol register ditekan
+                   Navigator.pushNamed(context, '/register_page_route'); // Pindahkan ke halaman register
                 },
                 child: Text('Create Account'),
                 style: ButtonStyle(

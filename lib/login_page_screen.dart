@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
-    double desiredHeightPercentage = 0.15; // Adjust the desired height percentage (e.g., 0.5 for 50%)
+    double desiredHeightPercentage = 0.1; // Adjust the desired height percentage (e.g., 0.5 for 50%)
     return Scaffold(
       body: 
       Stack(
@@ -43,10 +43,9 @@ class LoginPage extends StatelessWidget {
                 primaryColor: Color.fromRGBO(107,147,225,1), // Change the border color
                 hintColor: Colors.blueGrey, // Change the hint text color
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ListView(
               children: [
-                SizedBox(height: screenHeight*0.08), // Added extra space to align the back button properly 
+               SizedBox(height: screenHeight*0.02), // Added extra space to align the back button properly 
                Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
