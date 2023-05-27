@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
 class LoginPageScreen extends StatelessWidget {
     static const routeName = '/login_page_screen';
-  const LoginPageScreen({super.key});
+    const LoginPageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,9 @@ class LoginPageScreen extends StatelessWidget {
          primaryColor: Colors.white, // Ganti dengan kode hex warna yang diinginkan
       ),
       home: LoginPage(),
+        routes: {
+        '/menu_page_screen': (context) => MenuScreen(), // Definisikan rute untuk halaman kedua
+      },
     );
   }
 }
@@ -19,26 +23,52 @@ class LoginPageScreen extends StatelessWidget {
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double desiredHeightPercentage = 0.15; // Adjust the desired height percentage (e.g., 0.5 for 50%)
     return Scaffold(
       body: 
-      Container(
-         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/background_white.jpg'), // Ganti dengan path/lokasi gambar Anda
-            fit: BoxFit.cover,
-          ),
+      Stack(
+        children: [
+          Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/background_white.jpg'), // Ganti dengan path/lokasi gambar Anda
+              fit: BoxFit.cover,
+            ),
         ),
-        child:       Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            primaryColor: Color.fromRGBO(107,147,225,1), // Change the border color
-            hintColor: Colors.blueGrey, // Change the hint text color
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              primaryColor: Color.fromRGBO(107,147,225,1), // Change the border color
+              hintColor: Colors.blueGrey, // Change the hint text color
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-             crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              SizedBox(height: 30.0), // Added extra space to align the back button properly
+              Positioned(
+                      top: 0,
+                      left: 0,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Color.fromRGBO(107,147,225,1), // Change the color of the back button
+                            ),
+                            onPressed: () {
+                               Navigator.pushNamed(context, '/menu_page_screen');
+                            },
+                          ),
+                        ),
+                      ),
+                ),
+               SizedBox(
+                height: screenHeight * desiredHeightPercentage,
+              ),
               Text(
               'Sign In',
               textAlign: TextAlign.left,
@@ -142,7 +172,9 @@ class LoginPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
+        ),
+          )
+        ],
       ),    
     );
   }
