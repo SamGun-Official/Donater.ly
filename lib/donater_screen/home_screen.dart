@@ -9,6 +9,7 @@ class DonaterHomeScreen extends StatefulWidget {
 }
 
 class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,8 +42,9 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                                 child: Text(
                                   "Welcome, Clarissa",
                                   style: TextStyle(
+                                    color: Colors.white,
                                     fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
                               ),
@@ -89,6 +91,51 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
             )
           ],
         ),    
+
+        bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 10,
+              spreadRadius: 5,
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.grey,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list),
+              label: 'List',
+            ),
+             BottomNavigationBarItem(
+              icon: Icon(Icons.history),
+              label: 'History',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
+      ),
+
     );
   }
 }
