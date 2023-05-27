@@ -15,22 +15,11 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
       body: Stack(
         children: [
           Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('images/background_white.jpg'), // Ganti dengan path/lokasi gambar Anda
-              fit: BoxFit.cover,
-            ),
-        ),
           child: Center(
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                primaryColor: Color.fromRGBO(107,147,225,1), // Change the border color
-                hintColor: Colors.blueGrey, // Change the hint text color
-            ),
             child: ListView(
               children:[
                   Container( //container card
-                    width: MediaQuery.of(context).size.width,
+                    width: double.infinity,
                     child: Card(
                     color: Color.fromRGBO(107,147,225,1), // Ubah warna card sesuai kebutuhan
                     shape: RoundedRectangleBorder(
@@ -44,13 +33,13 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                           const Row(
                             children: [
                               CircleAvatar(
-                                //image
+                              
                                 radius: 40,
                               ),
                               SizedBox(width: 16),
                               Expanded(
                                 child: Text(
-                                  "Welcome, Clarissa", //welcome, name
+                                  "Welcome, Clarissa",
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -63,9 +52,10 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                           Row(
                             children: [
                               Container(
+                                width: MediaQuery.of(context).size.width*0.89,
                                 decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
                                 padding: EdgeInsets.all(8),
                                 child: const Row(
@@ -73,14 +63,14 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                                   children: [
                                     Icon(
                                       Icons.attach_money,
-                                      color: Colors.white,
+                                      color: Color.fromRGBO(107,147,225,1)
                                     ),
                                     SizedBox(width: 4),
                                     Text(
-                                      'Saldo: 50000',
+                                      'Rp 1.500.000 total donation',
                                       style: TextStyle(
                                         fontSize: 16,
-                                        color: Colors.white,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ],
@@ -95,7 +85,6 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                 )
               ],
             ),
-          ),
           ),
             )
           ],
