@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
 import 'package:multiplatform_donation_app/register_page_screen.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         MenuScreen.routeName: (context) => MenuScreen(),
         LoginPageScreen.routeName: (context) => LoginPageScreen(),
         RegisterPageScreen.routeName: (context) => RegisterPageScreen(),
+        
+        //Donater
+        DonaterHomeScreen.routeName:(context)=>DonaterHomeScreen(),
         }
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
