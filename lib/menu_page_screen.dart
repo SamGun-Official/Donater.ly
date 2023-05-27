@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/login_page_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   static const routeName = '/menu_page_screen';
@@ -13,6 +14,9 @@ class MenuScreen extends StatelessWidget {
         
       ),
       home: LoginRegisterPage(),
+       routes: {
+        '/login_page_screen': (context) => LoginPageScreen(), // Definisikan rute untuk halaman kedua
+      },
     );
   }
 }
@@ -29,7 +33,7 @@ class LoginRegisterPage extends StatelessWidget {
           ),
         ),
         child: Center(
-        child: Column(
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:<Widget>[
             Container(
@@ -43,6 +47,7 @@ class LoginRegisterPage extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // Tombol login ditekan
+                   Navigator.pushNamed(context, '/login_page_screen'); // Pindahkan ke halaman login
                 },
                 child: Text('Sign In'),
                   style: ButtonStyle(
