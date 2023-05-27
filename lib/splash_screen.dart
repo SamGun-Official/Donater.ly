@@ -36,24 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Container(margin: EdgeInsets.all(20.0), child: Image.asset('images/logo.jpg')),
               SizedBox(height: 24),
-              // CircularProgressIndicator(),
+              CircularProgressIndicator(),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
-      body: Center(
-        child: Text('Welcome to the Home Page!'),
       ),
     );
   }

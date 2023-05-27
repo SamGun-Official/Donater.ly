@@ -9,7 +9,8 @@ class MenuScreen extends StatelessWidget {
     return MaterialApp(
       title: 'Login/Register Page',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+         primaryColor: Colors.white, // Ganti dengan kode hex warna yang diinginkan
+        
       ),
       home: LoginRegisterPage(),
     );
@@ -20,16 +21,20 @@ class LoginRegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      
-      ),
-     body: Center(
+         body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/background_white.jpg'), // Ganti dengan path/lokasi gambar Anda
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children:<Widget>[
             Container(
               margin: EdgeInsets.all(20),
-              child: Image.asset('images/logo.jpg')
+              child: Image.asset('images/logo.png')
             ),
             Container(
               width: 350,
@@ -39,8 +44,9 @@ class LoginRegisterPage extends StatelessWidget {
                 onPressed: () {
                   // Tombol login ditekan
                 },
-                child: Text('Login'),
+                child: Text('Sign In'),
                   style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(107,147,225,1)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15), // Set your desired border radius here
@@ -57,8 +63,9 @@ class LoginRegisterPage extends StatelessWidget {
                 onPressed: () {
                   // Tombol register ditekan
                 },
-                child: Text('Register'),
+                child: Text('Create Account'),
                 style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(107,147,225,1)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15), // Set your desired border radius here
@@ -70,34 +77,8 @@ class LoginRegisterPage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Center(
-        child: Text('Login Page'),
       ),
     );
   }
 }
 
-class RegisterPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Register'),
-      ),
-      body: Center(
-        child: Text('Register Page'),
-      ),
-    );
-  }
-}
