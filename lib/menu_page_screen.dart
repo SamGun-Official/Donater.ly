@@ -26,7 +26,7 @@ class LoginRegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
          body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/background_white.jpg'), // Ganti dengan path/lokasi gambar Anda
             fit: BoxFit.cover,
@@ -37,13 +37,13 @@ class LoginRegisterPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children:<Widget>[
             Container(
-              margin: EdgeInsets.all(20),
+              margin: const EdgeInsets.all(20),
               child: Image.asset('images/logo.png')
             ),
             Container(
               width: 350,
               height: 50,
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               child: ElevatedButton(
                 onPressed: () {
                   // Tombol login ditekan
@@ -63,7 +63,7 @@ class LoginRegisterPage extends StatelessWidget {
             Container(
               width: 350,
               height: 50,
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               child: ElevatedButton(
                 onPressed: () {
                   // Tombol register ditekan
