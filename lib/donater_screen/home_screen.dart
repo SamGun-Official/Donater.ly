@@ -84,10 +84,31 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       ),
                     ),
                   ),
+                ),
+                Container(
+                 width:MediaQuery.of(context).size.width*0.89,
+                  child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.grey, // Change the icon color
+                          ),
+                          hintText: 'Search',
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                 ),
                 )
               ],
             ),
-          ),
+             ),
             )
           ],
         ),    
@@ -108,7 +129,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.blue,
+          selectedItemColor: Color.fromRGBO(107,147,225,1),
           unselectedItemColor: Colors.grey,
           onTap: (index) {
             setState(() {
