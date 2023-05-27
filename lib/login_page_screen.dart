@@ -46,26 +46,47 @@ class LoginPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 30.0), // Added extra space to align the back button properly
+              SizedBox(height: screenHeight*0.08), // Added extra space to align the back button properly
               Positioned(
-                      top: 0,
-                      left: 0,
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Color.fromRGBO(107,147,225,1), // Change the color of the back button
+            top: 0,
+            left: 0,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Stack(
+                  children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
                             ),
-                            onPressed: () {
-                               Navigator.pushNamed(context, '/menu_page_screen');
-                            },
-                          ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 20,
                         ),
                       ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Color.fromRGBO(107, 147, 225, 1),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/menu_page_screen');
+                        },
+                      ),
+                    ],
+                  ),
                 ),
+              ),
+            ),
                SizedBox(
                 height: screenHeight * desiredHeightPercentage,
               ),
