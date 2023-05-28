@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/my_donation_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
+import 'package:multiplatform_donation_app/main_donater.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
 import 'package:multiplatform_donation_app/register_page_screen.dart';
 import 'package:multiplatform_donation_app/splash_screen.dart';
@@ -17,24 +25,32 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-       initialRoute: SplashScreen.routeName,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        initialRoute: SplashScreen.routeName,
         routes: {
-        SplashScreen.routeName: (context) => SplashScreen(),
-        MenuScreen.routeName: (context) => MenuScreen(),
-        LoginPageScreen.routeName: (context) => LoginPageScreen(),
-        RegisterPageScreen.routeName: (context) => RegisterPageScreen(),
-        
-        //Donater
-        DonaterHomeScreen.routeName:(context)=>DonaterHomeScreen(),
-        DonaterDetailScreen.routeName:(context)=>DonaterDetailScreen(),
+          SplashScreen.routeName: (context) => SplashScreen(),
+          MenuScreen.routeName: (context) => MenuScreen(),
+          LoginPageScreen.routeName: (context) => LoginPageScreen(),
+          RegisterPageScreen.routeName: (context) => RegisterPageScreen(),
+
+          //Donater
+          DonaterHomeScreen.routeName: (context) => DonaterHomeScreen(),
+          DonaterDetailScreen.routeName: (context) => DonaterDetailScreen(),
+          DonaterDetailScreen.routeName: (context) => DonaterDetailScreen(),
+          DonaterDonationScreen.routeName: (context) => DonaterDonationScreen(),
+          DonaterEditProfileScreen.routeName: (context) => DonaterEditProfileScreen(),
+          DonaterMyDonationScreen.routeName: (context) => DonaterMyDonationScreen(),
+          ProfileScreen.routeName: (context) => ProfileScreen(),
+          DonaterSavedDonationScreen.routeName: (context) => DonaterSavedDonationScreen(),
+          DonaterTransactionScreen.routeName: (context) => DonaterTransactionScreen(),
+          MainDonater.routeName: (context) => MainDonater(),
         }
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+        );
   }
 }
 
@@ -57,7 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -81,6 +82,7 @@ class CustomCard extends StatelessWidget {
 }
 
 class DonaterSavedDonationScreen extends StatefulWidget {
+  static const routeName = '/donater_saved_donation';
   @override
   State<DonaterSavedDonationScreen> createState() =>
       _DonaterSavedDonationScreenState();
@@ -182,49 +184,7 @@ class _DonaterSavedDonationScreenState
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              blurRadius: 10,
-              spreadRadius: 5,
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          currentIndex: _selectedIndex,
-          selectedItemColor: Color.fromRGBO(107, 147, 225, 1),
-          unselectedItemColor: Colors.grey,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'List',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              label: 'History',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-        ),
-      ),
+      
     );
   }
 }

@@ -23,7 +23,7 @@ class MenuScreen extends StatelessWidget {
         primaryColor:
             Colors.white, // Ganti dengan kode hex warna yang diinginkan
       ),
-      home: DonaterMyDonationScreen(),
+      home: LoginRegisterPage(),
       routes: {
         '/login_page_screen': (context) =>
             LoginPageScreen(), // Definisikan rute untuk halaman kedua
