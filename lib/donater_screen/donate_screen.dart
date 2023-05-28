@@ -49,22 +49,14 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                       style:
                           TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: const CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child:
-                            Icon(Icons.bookmark_outline, color: Colors.black),
+                    const CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Opacity(
+                        opacity: 0.0,
+                        child: Icon(
+                          Icons.bookmark_outline,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],
