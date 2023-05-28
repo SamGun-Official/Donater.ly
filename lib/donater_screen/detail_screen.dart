@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DonaterDetailScreen extends StatefulWidget {
-  static const routeName = '/donater_home_route';
+  static const routeName = '/donater_detail_route';
   const DonaterDetailScreen({super.key});
 
   @override
@@ -19,52 +19,55 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
+                SizedBox(
+                  height: 60,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.arrow_back, color: Colors.black),
+                          ),
                         ),
-                        child: const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.arrow_back, color: Colors.black),
+                        const Text(
+                          'Details',
+                          style: TextStyle(
+                              fontSize: 26, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      const Text(
-                        'Details',
-                        style: TextStyle(
-                            fontSize: 26, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.bookmark_outline,
+                                color: Colors.black),
+                          ),
                         ),
-                        child: const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child:
-                              Icon(Icons.bookmark_outline, color: Colors.black),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
