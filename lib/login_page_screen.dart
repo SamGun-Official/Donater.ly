@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
 class LoginPageScreen extends StatelessWidget {
@@ -16,7 +17,8 @@ class LoginPageScreen extends StatelessWidget {
       home: LoginPage(),
         routes: {
         '/menu_page_screen': (context) => MenuScreen(), // Definisikan rute untuk halaman kedua
-        '/donater_home_route': (context)=> DonaterHomeScreen()
+        '/donater_home_route': (context)=> DonaterHomeScreen(),
+        '/donater_detail_route': (context)=> DonaterDetailScreen(),
       },
     );
   }
