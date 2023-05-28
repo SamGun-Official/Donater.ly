@@ -7,7 +7,7 @@ import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
 class BottomNavigation extends StatefulWidget {
   final Key? key; // Named 'key' parameter
   final Function(int) onItemTapped;
-  static dynamic menu = DonaterDonationScreen();
+  static dynamic menu = DonaterHomeScreen();
 
   BottomNavigation({this.key, required this.onItemTapped}) : super(key: key);
 
@@ -24,7 +24,7 @@ class BottomNavigation extends StatefulWidget {
     } else if (index == 3) {
       return ProfileScreen();
     }
-    return DonaterDonationScreen(); // Default menu
+    return DonaterHomeScreen(); // Default menu
   }
 }
 
