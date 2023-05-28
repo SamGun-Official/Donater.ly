@@ -4,6 +4,7 @@ import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
 import 'package:multiplatform_donation_app/register_page_screen.dart';
 
@@ -19,7 +20,7 @@ class MenuScreen extends StatelessWidget {
         primaryColor:
             Colors.white, // Ganti dengan kode hex warna yang diinginkan
       ),
-      home: DonaterTransactionScreen(),
+      home: DonaterSavedDonationScreen(),
       routes: {
         '/login_page_screen': (context) =>
             LoginPageScreen(), // Definisikan rute untuk halaman kedua
