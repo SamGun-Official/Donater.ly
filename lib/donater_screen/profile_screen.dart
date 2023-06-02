@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
-import 'package:multiplatform_donation_app/register_page_screen.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/donater_profile';
+
+  const ProfileScreen({super.key});
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Navigasi ke halaman profile
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                      MaterialPageRoute(builder: (context) => const ProfilePage()),
                     );
                   },
                   child: Card(
@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SavedDonationsPage()),
+                          builder: (context) => const SavedDonationsPage()),
                     );
                   },
                   child: Card(
@@ -180,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => TransactionHistoryPage()),
+                          builder: (context) => const TransactionHistoryPage()),
                     );
                   },
                   child: Card(
@@ -223,7 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ChangePasswordPage()),
+                          builder: (context) => const ChangePasswordPage()),
                     );
                   },
                   child: Card(
