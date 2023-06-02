@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
@@ -32,6 +33,10 @@ class RegisterPage extends StatelessWidget {
   final _auth = FirebaseAuth.instance;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _nameController = TextEditingController();
+
+  RegisterPage({super.key});
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -151,6 +156,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
+                      controller: _nameController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.abc,
@@ -232,11 +238,11 @@ class RegisterPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
+                      controller: _phoneController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.phone,
-                          color: Color.fromRGBO(
-                              107, 147, 225, 1), // Change the icon color
+                          color: Color.fromRGBO(107, 147, 225, 1),
                         ),
                         labelText: 'Phone Number',
                         border: OutlineInputBorder(
@@ -321,15 +327,27 @@ class RegisterPage extends StatelessWidget {
                           try {
                             final email = _emailController.text;
                             final password = _passwordController.text;
+                            final name = _nameController.text;
+                            final phone = _phoneController.text;
 
                             await _auth
                                 .createUserWithEmailAndPassword(
                                     email: email, password: password)
                                 .then((value) {
-                              const snackbar = SnackBar(content: Text("Account created!"));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackbar);
-                               // navigator.pop();
+                              final uid = value.user!.uid;
+                              final userRef = FirebaseFirestore.instance
+                                  .collection('Users')
+                                  .doc(uid);
+                              userRef.set({
+                                'name': name,
+                                'phone': phone,
+                              });
+                              const snackbar =
+                                  SnackBar(content: Text("Account created!"));
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackbar);
+                              print("Account created!");
+                              // navigator.pop();
                             });
                           } on Exception catch (e) {
                             final snackbar =
