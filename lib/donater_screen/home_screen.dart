@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class DonaterHomeScreen extends StatefulWidget {
   static const routeName = '/donater_home';
@@ -10,7 +9,6 @@ class DonaterHomeScreen extends StatefulWidget {
 }
 
 class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
-  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,11 +18,11 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
             child: Center(
               child: ListView(
                 children: [
-                  Container(
+                  SizedBox(
                     //container card
                     width: double.infinity,
                     child: Card(
-                      color: Color.fromRGBO(
+                      color: const Color.fromRGBO(
                           107, 147, 225, 1), // Ubah warna card sesuai kebutuhan
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
@@ -32,7 +30,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       ),
                       elevation: 2,
                       child: Padding(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         child: Column(
                           children: [
                             const Row(
@@ -63,7 +61,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   child: const Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -88,10 +86,10 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.89,
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: TextField(
                         decoration: InputDecoration(
                           prefixIcon: const Icon(
@@ -109,7 +107,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.89,
                     child: const Padding(
                       padding: EdgeInsets.all(16),

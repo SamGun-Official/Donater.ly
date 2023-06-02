@@ -263,7 +263,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 GestureDetector(
                   onTap: () {
                     FirebaseAuth.instance.signOut().then((value) {
-                      print("signed out");
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginPage()),
@@ -314,6 +313,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -328,6 +329,8 @@ class ProfilePage extends StatelessWidget {
 }
 
 class SavedDonationsPage extends StatelessWidget {
+  const SavedDonationsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -342,6 +345,8 @@ class SavedDonationsPage extends StatelessWidget {
 }
 
 class TransactionHistoryPage extends StatelessWidget {
+  const TransactionHistoryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -356,6 +361,8 @@ class TransactionHistoryPage extends StatelessWidget {
 }
 
 class ChangePasswordPage extends StatelessWidget {
+  const ChangePasswordPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

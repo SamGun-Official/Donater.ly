@@ -26,11 +26,11 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
       home: LoginPage(),
       routes: {
         '/menu_page_screen': (context) =>
-            MenuScreen(), // Definisikan rute untuk halaman kedua
-        '/donater_home_route': (context) => DonaterHomeScreen(),
-        '/donater_detail_route': (context) => DonaterDetailScreen(),
-        '/donater_donate_route': (context) => DonaterDonateScreen(),
-        MainDonater.routeName: (context) => MainDonater(),
+            const MenuScreen(), // Definisikan rute untuk halaman kedua
+        '/donater_home_route': (context) => const DonaterHomeScreen(),
+        '/donater_detail_route': (context) => const DonaterDetailScreen(),
+        '/donater_donate_route': (context) => const DonaterDonateScreen(),
+        MainDonater.routeName: (context) => const MainDonater(),
       },
     );
   }
@@ -38,8 +38,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
 class LoginPage extends StatelessWidget {
   final _auth = FirebaseAuth.instance;
-  var _emailController = TextEditingController();
-  var _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  LoginPage({super.key});
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -57,10 +59,10 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Theme(
                 data: Theme.of(context).copyWith(
-                  primaryColor: Color.fromRGBO(
+                  primaryColor: const Color.fromRGBO(
                       107, 147, 225, 1), // Change the border color
                   hintColor: Colors.blueGrey, // Change the hint text color
                 ),
@@ -83,7 +85,7 @@ class LoginPage extends StatelessWidget {
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 2,
                                     blurRadius: 5,
-                                    offset: Offset(0, 3),
+                                    offset: const Offset(0, 3),
                                   ),
                                 ],
                               ),
@@ -125,7 +127,7 @@ class LoginPage extends StatelessWidget {
                         fontSize: 16.0,
                       ),
                     ),
-                    SizedBox(height: 28.0),
+                    const SizedBox(height: 28.0),
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -165,7 +167,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     TextField(
                       controller: _passwordController,
                       decoration: InputDecoration(
@@ -214,14 +216,13 @@ class LoginPage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
-                            final navigator = Navigator.of(context);
                             final email = _emailController.text;
                             final password = _passwordController.text;
                             await _auth
                                 .signInWithEmailAndPassword(
                                     email: email, password: password)
                                 .then((value) {
-                              Navigator.pushNamed(context, '/main_donater');
+                               Navigator.pushNamed(context, '/main_donater');
                             });
                           } on Exception catch (e) {
                             final snackbar =
@@ -230,10 +231,9 @@ class LoginPage extends StatelessWidget {
                                 .showSnackBar(snackbar);
                           } finally {}
                         },
-                        child: Text('Sign In'),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromRGBO(107, 147, 225, 1)),
+                              const Color.fromRGBO(107, 147, 225, 1)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -242,6 +242,7 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        child: const Text('Sign In'),
                       ),
                     ),
                   ],

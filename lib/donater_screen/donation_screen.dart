@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -9,7 +8,7 @@ class CustomCard extends StatelessWidget {
   final double progress;
   final String collectedAmount;
 
-  const CustomCard({
+  const CustomCard({super.key, 
     required this.imagePath,
     required this.title,
     required this.subtitle,
@@ -41,19 +40,19 @@ class CustomCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.timer, size: 16),
+                      const Icon(Icons.timer, size: 16),
                       const SizedBox(width: 4),
                       Text(daysLeft),
                     ],
@@ -66,7 +65,7 @@ class CustomCard extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: Text(
                       '${(progress * 100).toStringAsFixed(0)}%',
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -90,7 +89,6 @@ class DonaterDonationScreen extends StatefulWidget {
 }
 
 class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
-  int _selectedIndex = 0;
   String selectedCategory = 'All';
   String selectedSort = 'Ascending';
   bool isFilterApplied = false;
@@ -160,8 +158,8 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Select Category'),
-                              content: Container(
+                              title: const Text('Select Category'),
+                              content: SizedBox(
                                 width: double.maxFinite,
                                 child: ListView.builder(
                                   shrinkWrap: true,
@@ -183,7 +181,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                             ),
                           );
                         },
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(Icons.list, size: 28),
                             SizedBox(width: 4),
@@ -191,14 +189,14 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       InkWell(
                         onTap: () {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Select Sort'),
-                              content: Container(
+                              title: const Text('Select Sort'),
+                              content: SizedBox(
                                 width: double.maxFinite,
                                 child: ListView.builder(
                                   shrinkWrap: true,
@@ -219,7 +217,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                             ),
                           );
                         },
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(Icons.sort, size: 28),
                             SizedBox(width: 4),
@@ -227,18 +225,18 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       InkWell(
                         onTap: () {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text('Filter'),
+                              title: const Text('Filter'),
                               content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   RadioListTile(
-                                    title: Text('By Title'),
+                                    title: const Text('By Title'),
                                     value: 'By Title',
                                     groupValue:
                                         isFilterApplied ? selectedSort : null,
@@ -251,7 +249,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                                     },
                                   ),
                                   RadioListTile(
-                                    title: Text('By Donation Raised'),
+                                    title: const Text('By Donation Raised'),
                                     value: 'By Donation Raised',
                                     groupValue:
                                         isFilterApplied ? selectedSort : null,
@@ -268,7 +266,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                             ),
                           );
                         },
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(Icons.filter_alt, size: 28),
                             SizedBox(width: 4),
@@ -279,7 +277,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                     ],
                   ),
                 ),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Many Children Need Food to Survive',
                   subtitle: 'The Unity',
@@ -288,7 +286,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                   collectedAmount: 'Collected Rp 150.000,00',
                 ),
                 const SizedBox(height: 16),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Build a school to study',
                   subtitle: 'Another Subtitle',
@@ -297,7 +295,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                   collectedAmount: 'Collected Rp 200.000,00',
                 ),
                 const SizedBox(height: 16),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Build a school to study',
                   subtitle: 'Another Subtitle',
@@ -306,7 +304,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                   collectedAmount: 'Collected Rp 200.000,00',
                 ),
                 const SizedBox(height: 16),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Build a school to study',
                   subtitle: 'Another Subtitle',

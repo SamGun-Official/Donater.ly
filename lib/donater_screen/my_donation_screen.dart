@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -9,7 +8,7 @@ class CustomCard extends StatelessWidget {
   final double progress;
   final String collectedAmount;
 
-  const CustomCard({
+  const CustomCard({super.key, 
     required this.imagePath,
     required this.title,
     required this.subtitle,
@@ -41,19 +40,19 @@ class CustomCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.timer, size: 16),
+                      const Icon(Icons.timer, size: 16),
                       const SizedBox(width: 4),
                       Text(daysLeft),
                     ],
@@ -66,7 +65,7 @@ class CustomCard extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: Text(
                       '${(progress * 100).toStringAsFixed(0)}%',
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -98,15 +97,15 @@ Widget buildGridItem(String imagePath, String count, String text) {
         children: [
           Text(
             count,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
             ),
           ),
@@ -118,13 +117,14 @@ Widget buildGridItem(String imagePath, String count, String text) {
 
 class DonaterMyDonationScreen extends StatefulWidget {
   static const routeName = '/donater_my_donation';
+
+  const DonaterMyDonationScreen({super.key});
   @override
   State<DonaterMyDonationScreen> createState() =>
       _DonaterMyDonationScreenState();
 }
 
 class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
-  int _selectedIndex = 0;
   String selectedCategory = 'All';
   String selectedSort = 'Ascending';
   bool isFilterApplied = false;
@@ -139,7 +139,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 60,
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
@@ -153,8 +153,8 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   'By Categories',
                   style: TextStyle(
@@ -165,7 +165,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
               GridView.count(
                 crossAxisCount: 2,
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -175,7 +175,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             8.0), // Tambahkan border radius di sini
-                        side: BorderSide(
+                        side: const BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
@@ -194,7 +194,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(
+                        side: const BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
@@ -212,7 +212,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(
+                        side: const BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
@@ -230,7 +230,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(
+                        side: const BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
@@ -244,8 +244,8 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   'All Donations',
                   style: TextStyle(
@@ -253,7 +253,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                   ),
                 ),
               ),
-              CustomCard(
+              const CustomCard(
                 imagePath: 'images/detail_pic.jpg',
                 title: 'Many Children Need Food to Survive',
                 subtitle: 'The Unity',
@@ -262,7 +262,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 collectedAmount: 'Collected Rp 150.000,00',
               ),
               const SizedBox(height: 16),
-              CustomCard(
+              const CustomCard(
                 imagePath: 'images/detail_pic.jpg',
                 title: 'Build a school to study',
                 subtitle: 'Another Subtitle',
@@ -271,7 +271,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 collectedAmount: 'Collected Rp 200.000,00',
               ),
               const SizedBox(height: 16),
-              CustomCard(
+              const CustomCard(
                 imagePath: 'images/detail_pic.jpg',
                 title: 'Build a school to study',
                 subtitle: 'Another Subtitle',
@@ -280,7 +280,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 collectedAmount: 'Collected Rp 200.000,00',
               ),
               const SizedBox(height: 16),
-              CustomCard(
+              const CustomCard(
                 imagePath: 'images/detail_pic.jpg',
                 title: 'Build a school to study',
                 subtitle: 'Another Subtitle',

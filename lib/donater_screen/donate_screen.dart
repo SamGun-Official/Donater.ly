@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class DonaterDonateScreen extends StatefulWidget {
   static const routeName = '/donater_donate';
@@ -11,9 +10,8 @@ class DonaterDonateScreen extends StatefulWidget {
 }
 
 class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
-  int _selectedIndex = 0;
-  var selectedIcon = null;
-  TextEditingController _dateController = TextEditingController();
+  var selectedIcon = Icons.credit_card;
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +209,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                     value: selectedIcon,
                                     onChanged: (newValue) {
                                       setState(() {
-                                        selectedIcon = newValue;
+                                        selectedIcon = newValue!;
                                       });
                                     },
                                     items: const [
@@ -333,73 +331,71 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     ],
                   ),
                 ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Subtotal',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            '\$50.00',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Tax',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            '\$5.00',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        height: 1,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(height: 16),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Total',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '\$55.00',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 32),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Add your donation logic here
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10), // Menambahkan border radius
-                          ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Subtotal',
+                          style: TextStyle(fontSize: 16),
                         ),
-                        child: const Text('Donate Now'),
+                        Text(
+                          '\$50.00',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Tax',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          '\$5.00',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      height: 1,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 16),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '\$55.00',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add your donation logic here
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10), // Menambahkan border radius
+                        ),
                       ),
-                    ],
-                  ),
+                      child: const Text('Donate Now'),
+                    ),
+                  ],
                 ),
               ],
             ),

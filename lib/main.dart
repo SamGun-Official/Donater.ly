@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
@@ -36,15 +35,14 @@ class MyApp extends StatelessWidget {
         initialRoute: SplashScreen.routeName,
         routes: {
           SplashScreen.routeName: (context) => SplashScreen(),
-          MenuScreen.routeName: (context) => MenuScreen(),
-          LoginPageScreen.routeName: (context) => LoginPageScreen(),
-          RegisterPageScreen.routeName: (context) => RegisterPageScreen(),
+          MenuScreen.routeName: (context) => const MenuScreen(),
+          LoginPageScreen.routeName: (context) => const LoginPageScreen(),
+          RegisterPageScreen.routeName: (context) => const RegisterPageScreen(),
 
           //Donater
-          DonaterHomeScreen.routeName: (context) => DonaterHomeScreen(),
-          DonaterDetailScreen.routeName: (context) => DonaterDetailScreen(),
-          DonaterDetailScreen.routeName: (context) => DonaterDetailScreen(),
-          DonaterDonationScreen.routeName: (context) => DonaterDonationScreen(),
+          DonaterHomeScreen.routeName: (context) => const DonaterHomeScreen(),
+          DonaterDetailScreen.routeName: (context) => const DonaterDetailScreen(),
+          DonaterDonationScreen.routeName: (context) => const DonaterDonationScreen(),
           DonaterEditProfileScreen.routeName: (context) =>
               DonaterEditProfileScreen(),
           DonaterMyDonationScreen.routeName: (context) =>
@@ -54,7 +52,7 @@ class MyApp extends StatelessWidget {
               DonaterSavedDonationScreen(),
           DonaterTransactionScreen.routeName: (context) =>
               DonaterTransactionScreen(),
-          MainDonater.routeName: (context) => MainDonater(),
+          MainDonater.routeName: (context) => const MainDonater(),
         }
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
         );

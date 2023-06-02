@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class DonaterTransactionScreen extends StatefulWidget {
   static const routeName = '/donater_transaction';
+
+  const DonaterTransactionScreen({super.key});
   @override
   State<DonaterTransactionScreen> createState() =>
       _DonaterTransactionScreenState();
 }
 
 class _DonaterTransactionScreenState extends State<DonaterTransactionScreen> {
-  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -9,7 +8,7 @@ class CustomCard extends StatelessWidget {
   final double progress;
   final String collectedAmount;
 
-  const CustomCard({
+  const CustomCard({super.key, 
     required this.imagePath,
     required this.title,
     required this.subtitle,
@@ -41,19 +40,19 @@ class CustomCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.timer, size: 16),
+                      const Icon(Icons.timer, size: 16),
                       const SizedBox(width: 4),
                       Text(daysLeft),
                     ],
@@ -66,7 +65,7 @@ class CustomCard extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: Text(
                       '${(progress * 100).toStringAsFixed(0)}%',
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -83,6 +82,8 @@ class CustomCard extends StatelessWidget {
 
 class DonaterSavedDonationScreen extends StatefulWidget {
   static const routeName = '/donater_saved_donation';
+
+  const DonaterSavedDonationScreen({super.key});
   @override
   State<DonaterSavedDonationScreen> createState() =>
       _DonaterSavedDonationScreenState();
@@ -90,7 +91,6 @@ class DonaterSavedDonationScreen extends StatefulWidget {
 
 class _DonaterSavedDonationScreenState
     extends State<DonaterSavedDonationScreen> {
-  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +144,7 @@ class _DonaterSavedDonationScreenState
                     ),
                   ),
                 ),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Many Children Need Food to Survive',
                   subtitle: 'The Unity',
@@ -153,7 +153,7 @@ class _DonaterSavedDonationScreenState
                   collectedAmount: 'Collected Rp 150.000,00',
                 ),
                 const SizedBox(height: 16),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Build a school to study',
                   subtitle: 'Another Subtitle',
@@ -162,7 +162,7 @@ class _DonaterSavedDonationScreenState
                   collectedAmount: 'Collected Rp 200.000,00',
                 ),
                 const SizedBox(height: 16),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Build a school to study',
                   subtitle: 'Another Subtitle',
@@ -171,7 +171,7 @@ class _DonaterSavedDonationScreenState
                   collectedAmount: 'Collected Rp 200.000,00',
                 ),
                 const SizedBox(height: 16),
-                CustomCard(
+                const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Build a school to study',
                   subtitle: 'Another Subtitle',

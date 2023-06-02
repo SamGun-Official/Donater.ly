@@ -22,7 +22,7 @@ class _RegisterPageScreenState extends State<RegisterPageScreen> {
       home: RegisterPage(),
       routes: {
         '/menu_page_screen': (context) =>
-            MenuScreen(), // Definisikan rute untuk halaman kedua
+            const MenuScreen(), // Definisikan rute untuk halaman kedua
       },
     );
   }
@@ -49,10 +49,10 @@ class RegisterPage extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Theme(
                 data: Theme.of(context).copyWith(
-                  primaryColor: Color.fromRGBO(
+                  primaryColor: const Color.fromRGBO(
                       107, 147, 225, 1), // Change the border color
                   hintColor: Colors.blueGrey, // Change the hint text color
                 ),
@@ -75,7 +75,7 @@ class RegisterPage extends StatelessWidget {
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 2,
                                     blurRadius: 5,
-                                    offset: Offset(0, 3),
+                                    offset: const Offset(0, 3),
                                   ),
                                 ],
                               ),
@@ -110,7 +110,7 @@ class RegisterPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 28.0),
+                    const SizedBox(height: 28.0),
                     TextField(
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
@@ -149,7 +149,7 @@ class RegisterPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16.0),
+                    const SizedBox(height: 16.0),
                     TextField(
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
@@ -319,17 +319,17 @@ class RegisterPage extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () async {
                           try {
-                            final navigator = Navigator.of(context);
                             final email = _emailController.text;
                             final password = _passwordController.text;
-                            print(email);
-                            print(password);
+
                             await _auth
                                 .createUserWithEmailAndPassword(
                                     email: email, password: password)
                                 .then((value) {
-                              print("created new account");
-                              // navigator.pop();
+                              const snackbar = SnackBar(content: Text("Account created!"));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                               // navigator.pop();
                             });
                           } on Exception catch (e) {
                             final snackbar =
@@ -338,10 +338,9 @@ class RegisterPage extends StatelessWidget {
                                 .showSnackBar(snackbar);
                           } finally {}
                         },
-                        child: Text('Create Account'),
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromRGBO(107, 147, 225, 1)),
+                              const Color.fromRGBO(107, 147, 225, 1)),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -350,6 +349,7 @@ class RegisterPage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        child: const Text('Create Account'),
                       ),
                     ),
                   ],

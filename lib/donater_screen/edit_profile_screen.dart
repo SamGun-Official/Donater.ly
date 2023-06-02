@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
 
 class TextFieldWithShadow extends StatelessWidget {
   final String label;
@@ -22,7 +21,7 @@ class TextFieldWithShadow extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             spreadRadius: 2,
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -30,7 +29,7 @@ class TextFieldWithShadow extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           hintText: placeholder,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           border: InputBorder.none,
         ),
       ),
@@ -40,13 +39,14 @@ class TextFieldWithShadow extends StatelessWidget {
 
 class DonaterEditProfileScreen extends StatefulWidget {
   static const routeName = '/donater_edit_profile';
+
+  const DonaterEditProfileScreen({super.key});
   @override
   State<DonaterEditProfileScreen> createState() =>
       _DonaterEditProfileScreenState();
 }
 
 class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
-  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +103,7 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                 CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: AssetImage('images/cole_second.jpg'),
+                  backgroundImage: const AssetImage('images/cole_second.jpg'),
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -111,27 +111,27 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
-                TextFieldWithShadow(
+                const SizedBox(height: 16),
+                const TextFieldWithShadow(
                   label: 'Name',
                   placeholder: 'Cole Sprouse',
                 ),
-                SizedBox(height: 16),
-                TextFieldWithShadow(
+                const SizedBox(height: 16),
+                const TextFieldWithShadow(
                   label: 'Username',
                   placeholder: 'coleesprouse',
                 ),
-                SizedBox(height: 16),
-                TextFieldWithShadow(
+                const SizedBox(height: 16),
+                const TextFieldWithShadow(
                   label: 'Email',
                   placeholder: 'Cole_Sprouse@gmail.com',
                 ),
-                SizedBox(height: 16),
-                TextFieldWithShadow(
+                const SizedBox(height: 16),
+                const TextFieldWithShadow(
                   label: 'Phone Number',
                   placeholder: '087855022221',
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 Row(
                   children: [
                     Expanded(
@@ -139,18 +139,18 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                         onPressed: () {
                           // Add your 'Continue' button logic here
                         },
-                        style: ElevatedButton.styleFrom(primary: Colors.blue),
-                        child: Text('Continue'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                        child: const Text('Continue'),
                       ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: () {
                           // Add your 'Cancel' button logic here
                         },
-                        style: ElevatedButton.styleFrom(primary: Colors.grey),
-                        child: Text('Cancel'),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                        child: const Text('Cancel'),
                       ),
                     ),
                   ],

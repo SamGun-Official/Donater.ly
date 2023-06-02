@@ -1,13 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/my_donation_screen.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
 import 'package:multiplatform_donation_app/register_page_screen.dart';
 
@@ -23,17 +14,19 @@ class MenuScreen extends StatelessWidget {
         primaryColor:
             Colors.white, // Ganti dengan kode hex warna yang diinginkan
       ),
-      home: LoginRegisterPage(),
+      home: const LoginRegisterPage(),
       routes: {
         '/login_page_screen': (context) =>
-            LoginPageScreen(), // Definisikan rute untuk halaman kedua
-        '/register_page_route': (context) => RegisterPageScreen()
+            const LoginPageScreen(), // Definisikan rute untuk halaman kedua
+        '/register_page_route': (context) => const RegisterPageScreen()
       },
     );
   }
 }
 
 class LoginRegisterPage extends StatelessWidget {
+  const LoginRegisterPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,10 +55,9 @@ class LoginRegisterPage extends StatelessWidget {
                     Navigator.pushNamed(context,
                         '/login_page_screen'); // Pindahkan ke halaman login
                   },
-                  child: Text('Sign In'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromRGBO(107, 147, 225, 1)),
+                        const Color.fromRGBO(107, 147, 225, 1)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
@@ -73,6 +65,7 @@ class LoginRegisterPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  child: const Text('Sign In'),
                 ),
               ),
               Container(
@@ -85,10 +78,9 @@ class LoginRegisterPage extends StatelessWidget {
                     Navigator.pushNamed(context,
                         '/register_page_route'); // Pindahkan ke halaman register
                   },
-                  child: Text('Create Account'),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromRGBO(107, 147, 225, 1)),
+                        const Color.fromRGBO(107, 147, 225, 1)),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
@@ -96,6 +88,7 @@ class LoginRegisterPage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  child: const Text('Create Account'),
                 ),
               ),
             ],
