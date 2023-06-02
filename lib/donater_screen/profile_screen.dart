@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/bottom_navigation.dart';
+import 'package:multiplatform_donation_app/login_page_screen.dart';
+import 'package:multiplatform_donation_app/register_page_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/donater_profile';
@@ -257,12 +260,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
+                GestureDetector(
+                  onTap: () {
+                    FirebaseAuth.instance.signOut().then((value) {
+                      print("signed out");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    });
+                  },
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.lock),
+                          const SizedBox(width: 16.0),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  'Logout from your account',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
-      
     );
   }
 }

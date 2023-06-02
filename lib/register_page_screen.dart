@@ -1,10 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
-class RegisterPageScreen extends StatelessWidget {
+class RegisterPageScreen extends StatefulWidget {
   static const routeName = '/register_page_route';
   const RegisterPageScreen({super.key});
 
+  @override
+  State<RegisterPageScreen> createState() => _RegisterPageScreenState();
+}
+
+class _RegisterPageScreenState extends State<RegisterPageScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +29,9 @@ class RegisterPageScreen extends StatelessWidget {
 }
 
 class RegisterPage extends StatelessWidget {
+  final _auth = FirebaseAuth.instance;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -182,6 +191,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.mail,
@@ -218,7 +228,7 @@ class RegisterPage extends StatelessWidget {
                           horizontal: 10.0,
                         ),
                       ),
-                      obscureText: true,
+                      obscureText: false,
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
@@ -262,6 +272,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.lock,
@@ -306,8 +317,26 @@ class RegisterPage extends StatelessWidget {
                       height: 50,
                       margin: const EdgeInsets.all(10),
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Tombol register ditekan
+                        onPressed: () async {
+                          try {
+                            final navigator = Navigator.of(context);
+                            final email = _emailController.text;
+                            final password = _passwordController.text;
+                            print(email);
+                            print(password);
+                            await _auth
+                                .createUserWithEmailAndPassword(
+                                    email: email, password: password)
+                                .then((value) {
+                              print("created new account");
+                              // navigator.pop();
+                            });
+                          } on Exception catch (e) {
+                            final snackbar =
+                                SnackBar(content: Text(e.toString()));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          } finally {}
                         },
                         child: Text('Create Account'),
                         style: ButtonStyle(

@@ -4,11 +4,17 @@ import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
 import 'package:multiplatform_donation_app/main_donater.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPageScreen extends StatelessWidget {
+class LoginPageScreen extends StatefulWidget {
   static const routeName = '/login_page_screen';
   const LoginPageScreen({super.key});
 
+  @override
+  State<LoginPageScreen> createState() => _LoginPageScreenState();
+}
+
+class _LoginPageScreenState extends State<LoginPageScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,6 +37,9 @@ class LoginPageScreen extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
+  final _auth = FirebaseAuth.instance;
+  var _emailController = TextEditingController();
+  var _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -89,8 +98,7 @@ class LoginPage extends StatelessWidget {
                                 color: Color.fromRGBO(107, 147, 225, 1),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(
-                                    context, '/main_donater');
+                                Navigator.pushNamed(context, '/main_donater');
                               },
                             ),
                           ],
@@ -119,13 +127,14 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 28.0),
                     TextField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.person,
                           color: Color.fromRGBO(
                               107, 147, 225, 1), // Change the icon color
                         ),
-                        labelText: 'Username',
+                        labelText: 'Email',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           borderSide: const BorderSide(
@@ -158,6 +167,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 16.0),
                     TextField(
+                      controller: _passwordController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.lock,
@@ -202,9 +212,23 @@ class LoginPage extends StatelessWidget {
                       height: 50,
                       margin: const EdgeInsets.all(10),
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Tombol register ditekan
-                          Navigator.pushNamed(context, '/main_donater');
+                        onPressed: () async {
+                          try {
+                            final navigator = Navigator.of(context);
+                            final email = _emailController.text;
+                            final password = _passwordController.text;
+                            await _auth
+                                .signInWithEmailAndPassword(
+                                    email: email, password: password)
+                                .then((value) {
+                              Navigator.pushNamed(context, '/main_donater');
+                            });
+                          } on Exception catch (e) {
+                            final snackbar =
+                                SnackBar(content: Text(e.toString()));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          } finally {}
                         },
                         child: Text('Sign In'),
                         style: ButtonStyle(

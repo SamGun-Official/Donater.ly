@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
@@ -14,7 +15,9 @@ import 'package:multiplatform_donation_app/menu_page_screen.dart';
 import 'package:multiplatform_donation_app/register_page_screen.dart';
 import 'package:multiplatform_donation_app/splash_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -42,11 +45,15 @@ class MyApp extends StatelessWidget {
           DonaterDetailScreen.routeName: (context) => DonaterDetailScreen(),
           DonaterDetailScreen.routeName: (context) => DonaterDetailScreen(),
           DonaterDonationScreen.routeName: (context) => DonaterDonationScreen(),
-          DonaterEditProfileScreen.routeName: (context) => DonaterEditProfileScreen(),
-          DonaterMyDonationScreen.routeName: (context) => DonaterMyDonationScreen(),
+          DonaterEditProfileScreen.routeName: (context) =>
+              DonaterEditProfileScreen(),
+          DonaterMyDonationScreen.routeName: (context) =>
+              DonaterMyDonationScreen(),
           ProfileScreen.routeName: (context) => ProfileScreen(),
-          DonaterSavedDonationScreen.routeName: (context) => DonaterSavedDonationScreen(),
-          DonaterTransactionScreen.routeName: (context) => DonaterTransactionScreen(),
+          DonaterSavedDonationScreen.routeName: (context) =>
+              DonaterSavedDonationScreen(),
+          DonaterTransactionScreen.routeName: (context) =>
+              DonaterTransactionScreen(),
           MainDonater.routeName: (context) => MainDonater(),
         }
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
