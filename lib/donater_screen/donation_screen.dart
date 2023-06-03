@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -310,19 +311,26 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
-                    return Column(children: [
-                      ...snapshot.data!.docs.map((document) {
-                        final data = document.data();
-                        return CustomCard(
-                          imagePath: data['imagePath'],
-                          title: data['title'],
-                          subtitle: data['subtitle'],
-                          daysLeft: data['daysLeft'],
-                          progress: data['progress'],
-                          collectedAmount: data['collectedAmount'],
-                        );
-                      })
-                    ]);
+                    return Column(
+                      children: [
+                        ...snapshot.data!.docs.map((document) {
+                          final data = document.data();
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/donater_detail');
+                            },
+                            child: CustomCard(
+                              imagePath: data['imagePath'],
+                              title: data['title'],
+                              subtitle: data['subtitle'],
+                              daysLeft: data['daysLeft'],
+                              progress: data['progress'],
+                              collectedAmount: data['collectedAmount'],
+                            ),
+                          );
+                        }),
+                      ],
+                    );
                   },
                   //doneTasks: _doneTodoList,
                 ),

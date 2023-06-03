@@ -31,6 +31,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
         '/donater_detail_route': (context) => const DonaterDetailScreen(),
         '/donater_donate_route': (context) => const DonaterDonateScreen(),
         MainDonater.routeName: (context) => const MainDonater(),
+        DonaterDetailScreen.routeName: (context) => const DonaterDetailScreen(),
       },
     );
   }
@@ -222,7 +223,7 @@ class LoginPage extends StatelessWidget {
                                 .signInWithEmailAndPassword(
                                     email: email, password: password)
                                 .then((value) {
-                               Navigator.pushNamed(context, '/main_donater');
+                              Navigator.pushNamed(context, '/main_donater');
                             });
                           } on Exception catch (e) {
                             final snackbar =
