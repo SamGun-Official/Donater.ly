@@ -153,7 +153,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                           Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.89,
+                                width: MediaQuery.of(context).size.width * 0.88,
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(20),
