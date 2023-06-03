@@ -2,6 +2,87 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+class CustomCard extends StatelessWidget {
+  final String imagePath;
+  final String title;
+  final String subtitle;
+  final int daysLeft;
+  final double progress;
+  final int collectedAmount;
+
+  const CustomCard({
+    super.key,
+    required this.imagePath,
+    required this.title,
+    required this.subtitle,
+    required this.daysLeft,
+    required this.progress,
+    required this.collectedAmount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Image.asset(
+              imagePath,
+              width: 80,
+              height: 80,
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(Icons.timer, size: 16),
+                      const SizedBox(width: 4),
+                      Text("$daysLeft days left"),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: progress,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${(progress * 100).toStringAsFixed(0)}%',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(collectedAmount.toString()),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class DonaterHomeScreen extends StatefulWidget {
   static const routeName = '/donater_home';
   const DonaterHomeScreen({super.key});
@@ -11,7 +92,7 @@ class DonaterHomeScreen extends StatefulWidget {
 }
 
 class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
-  final _fireStore = FirebaseFirestore.instance;
+  final _firestore = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
@@ -38,7 +119,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       child: Column(
                         children: [
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                              stream: _fireStore
+                              stream: _firestore
                                   .collection('Users')
                                   .where("uid", isEqualTo: currentUser.uid)
                                   .snapshots(),
@@ -137,6 +218,30 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       ),
                     ),
                   ),
+                ),
+                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: _firestore.collection('Donations').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return Column(children: [
+                      ...snapshot.data!.docs.map((document) {
+                        final data = document.data();
+                        return CustomCard(
+                          imagePath: data['imagePath'],
+                          title: data['title'],
+                          subtitle: data['subtitle'],
+                          daysLeft: data['daysLeft'],
+                          progress: data['progress'],
+                          collectedAmount: data['collectedAmount'],
+                        );
+                      })
+                    ]);
+                  },
+                  //doneTasks: _doneTodoList,
                 )
               ],
             ),

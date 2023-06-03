@@ -5,18 +5,20 @@ import 'package:multiplatform_donation_app/menu_page_screen.dart';
 class SplashScreen extends StatefulWidget {
   static const routeName = '/splash_screen_route';
 
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  double _opacityLevel = 1.0;
+  final double _opacityLevel = 1.0;
 
   @override
   void initState() {
     super.initState();
     // Timer untuk mengatur waktu tampilan SplashScreen
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       // Navigasi ke halaman berikutnya setelah 3 detik
         Navigator.pushNamed(context, MenuScreen.routeName);
     });
@@ -28,15 +30,15 @@ class _SplashScreenState extends State<SplashScreen> {
       // Desain tampilan SplashScreen
       body: AnimatedOpacity(
         opacity: _opacityLevel,
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         curve: Curves.easeInOut,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(margin: EdgeInsets.all(20.0), child: Image.asset('images/logo.jpg')),
-              SizedBox(height: 24),
-              CircularProgressIndicator(),
+              Container(margin: const EdgeInsets.all(20.0), child: Image.asset('images/logo.jpg')),
+              const SizedBox(height: 24),
+              const CircularProgressIndicator(),
             ],
           ),
         ),
@@ -46,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home: SplashScreen(),
   ));

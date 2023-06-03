@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
   final String title;
   final String subtitle;
-  final String daysLeft;
+  final int daysLeft;
   final double progress;
-  final String collectedAmount;
+  final int collectedAmount;
 
-  const CustomCard({super.key, 
+  const CustomCard({
+    super.key,
     required this.imagePath,
     required this.title,
     required this.subtitle,
@@ -54,7 +57,7 @@ class CustomCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.timer, size: 16),
                       const SizedBox(width: 4),
-                      Text(daysLeft),
+                      Text("$daysLeft days left"),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -69,7 +72,7 @@ class CustomCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(collectedAmount),
+                  Text(collectedAmount.toString()),
                 ],
               ),
             ),
@@ -95,6 +98,8 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
 
   List<String> categoryList = ['All', 'Category 1', 'Category 2', 'Category 3'];
   List<String> sortList = ['Ascending', 'Descending'];
+  final _firestore = FirebaseFirestore.instance;
+  final currentUser = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -277,47 +282,35 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                     ],
                   ),
                 ),
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Many Children Need Food to Survive',
-                  subtitle: 'The Unity',
-                  daysLeft: '20 days left',
-                  progress: 0.2,
-                  collectedAmount: 'Collected Rp 150.000,00',
-                ),
-                const SizedBox(height: 16),
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Build a school to study',
-                  subtitle: 'Another Subtitle',
-                  daysLeft: '10 days left',
-                  progress: 0.5,
-                  collectedAmount: 'Collected Rp 200.000,00',
-                ),
-                const SizedBox(height: 16),
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Build a school to study',
-                  subtitle: 'Another Subtitle',
-                  daysLeft: '10 days left',
-                  progress: 0.5,
-                  collectedAmount: 'Collected Rp 200.000,00',
-                ),
-                const SizedBox(height: 16),
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Build a school to study',
-                  subtitle: 'Another Subtitle',
-                  daysLeft: '10 days left',
-                  progress: 0.5,
-                  collectedAmount: 'Collected Rp 200.000,00',
+                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: _firestore.collection('Donations').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return Column(children: [
+                      ...snapshot.data!.docs.map((document) {
+                        final data = document.data();
+                        return CustomCard(
+                          imagePath: data['imagePath'],
+                          title: data['title'],
+                          subtitle: data['subtitle'],
+                          daysLeft: data['daysLeft'],
+                          progress: data['progress'],
+                          collectedAmount: data['collectedAmount'],
+                        );
+                      })
+                    ]);
+                  },
+                  //doneTasks: _doneTodoList,
                 ),
               ],
             ),
           ),
         ),
       ),
-      
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
 
-
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/donater_profile';
 
@@ -70,7 +69,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Navigasi ke halaman profile
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const ProfilePage()),
+                      MaterialPageRoute(
+                          builder: (context) => const ProfilePage()),
                     );
                   },
                   child: Card(
