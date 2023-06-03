@@ -68,38 +68,26 @@ class RegisterPage extends StatelessWidget {
                             0.02), // Added extra space to align the back button properly
                     Align(
                       alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
+                      child:   InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, MenuScreen.routeName);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
                               ),
-                              child: const CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 20,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                color: Color.fromRGBO(107, 147, 225, 1),
-                              ),
-                              onPressed: () {
-                                Navigator.pushNamed(
-                                    context, '/menu_page_screen');
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.arrow_back, color: Colors.black),
+                          ),
                         ),
                       ),
                     ),
