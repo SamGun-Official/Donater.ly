@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
@@ -12,6 +13,9 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final currentUser = FirebaseAuth.instance.currentUser!;
+  final _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,27 +33,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.arrow_back, color: Colors.black),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.arrow_back, color: Colors.black),
+                            ),
                           ),
                         ),
                         const Text(
                           'My Profile',
-                          style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                         ),
                         const CircleAvatar(
                           backgroundColor: Colors.white,
@@ -67,11 +75,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigasi ke halaman profile
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const DonaterEditProfileScreen()),
+                      MaterialPageRoute(builder: (context) => const DonaterEditProfileScreen()),
                     );
                   },
                   child: Card(
@@ -102,28 +108,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                           const SizedBox(width: 16.0),
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'John Doe',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  'john.doe@example.com',
-                                  style: TextStyle(fontSize: 16),
+                                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                                  stream: _firestore
+                                      .collection('Users')
+                                      .where("uid", isEqualTo: currentUser.uid)
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    final userData = snapshot.data!.docs[0].data();
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${userData['name']}',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8.0),
+                                        Text(
+                                          '${userData['email']}',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
                               ],
                             ),
                           ),
                           IconButton(
                             onPressed: () {
-                              // Tombol edit ditekan
                               Navigator.pushNamed(context, DonaterEditProfileScreen.routeName);
                             },
                             icon: const Icon(Icons.edit),
@@ -135,11 +159,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigasi ke halaman saved donations
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const SavedDonationsPage()),
+                      MaterialPageRoute(builder: (context) => const SavedDonationsPage()),
                     );
                   },
                   child: Card(
@@ -178,11 +200,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigasi ke halaman transaction history
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const TransactionHistoryPage()),
+                      MaterialPageRoute(builder: (context) => const TransactionHistoryPage()),
                     );
                   },
                   child: Card(
@@ -221,11 +241,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigasi ke halaman change password
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const ChangePasswordPage()),
+                      MaterialPageRoute(builder: (context) => const ChangePasswordPage()),
                     );
                   },
                   child: Card(
@@ -276,7 +294,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
                         children: [
-                          const Icon(Icons.lock),
+                          const Icon(Icons.logout),
                           const SizedBox(width: 16.0),
                           Expanded(
                             child: Column(
@@ -313,6 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -377,3 +396,5 @@ class ChangePasswordPage extends StatelessWidget {
     );
   }
 }
+
+

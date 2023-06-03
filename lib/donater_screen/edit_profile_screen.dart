@@ -108,7 +108,7 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                 CircleAvatar(
                   radius: 80,
                   backgroundColor: Colors.transparent,
-                  backgroundImage: const AssetImage('images/cole_second.jpg'),
+                  backgroundImage: const AssetImage('images/profile.png'),
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
