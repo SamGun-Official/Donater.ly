@@ -8,7 +8,8 @@ class CustomCard extends StatelessWidget {
   final double progress;
   final String collectedAmount;
 
-  const CustomCard({super.key, 
+  const CustomCard({
+    super.key,
     required this.imagePath,
     required this.title,
     required this.subtitle,
@@ -108,21 +109,27 @@ class _DonaterSavedDonationScreenState
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.arrow_back, color: Colors.black),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child:
+                                  Icon(Icons.arrow_back, color: Colors.black),
+                            ),
                           ),
                         ),
                         const Text(
@@ -184,7 +191,6 @@ class _DonaterSavedDonationScreenState
           ),
         ),
       ),
-      
     );
   }
 }

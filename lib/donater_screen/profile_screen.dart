@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -29,21 +30,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.arrow_back, color: Colors.black),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child:
+                                  Icon(Icons.arrow_back, color: Colors.black),
+                            ),
                           ),
                         ),
                         const Text(
@@ -71,7 +78,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const DonaterEditProfileScreen()),
+                          builder: (context) =>
+                              const DonaterEditProfileScreen()),
                     );
                   },
                   child: Card(
@@ -124,7 +132,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           IconButton(
                             onPressed: () {
                               // Tombol edit ditekan
-                              Navigator.pushNamed(context, DonaterEditProfileScreen.routeName);
+                              Navigator.pushNamed(
+                                  context, DonaterEditProfileScreen.routeName);
                             },
                             icon: const Icon(Icons.edit),
                           ),
@@ -139,7 +148,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const SavedDonationsPage()),
+                          builder: (context) =>
+                              const DonaterSavedDonationScreen()),
                     );
                   },
                   child: Card(

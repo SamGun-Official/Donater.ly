@@ -57,25 +57,22 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                         style: TextStyle(
                             fontSize: 26, fontWeight: FontWeight.bold),
                       ),
-                      Opacity(
-                        opacity: 0.0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.bookmark_outline,
-                                color: Colors.black),
-                          ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child:
+                              Icon(Icons.bookmark_outline, color: Colors.black),
                         ),
                       ),
                     ],
@@ -277,7 +274,8 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, "/donater_donate",arguments: donation);
+                              Navigator.pushNamed(context, "/donater_donate",
+                                  arguments: donation);
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
