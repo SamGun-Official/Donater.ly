@@ -99,7 +99,7 @@ class LoginPage extends StatelessWidget {
                                 color: Color.fromRGBO(107, 147, 225, 1),
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/main_donater');
+                                Navigator.pushNamed(context, '/menu_page_screen');
                               },
                             ),
                           ],
