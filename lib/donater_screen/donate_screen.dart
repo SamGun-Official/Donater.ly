@@ -219,24 +219,6 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: Row(
                           children: [
-                            // Expanded(
-                            //   child: TextFormField(
-                            //     decoration: InputDecoration(
-                            //       contentPadding: const EdgeInsets.symmetric(
-                            //         vertical: 16,
-                            //         horizontal: 16,
-                            //       ),
-                            //       hintText: 'Rp 50.000,00',
-                            //       border: OutlineInputBorder(
-                            //         borderRadius: BorderRadius.circular(10),
-                            //         borderSide: BorderSide.none,
-                            //       ),
-                            //       filled: true,
-                            //       fillColor: Colors.white,
-                            //     ),
-                            //   ),
-                            // ),
-                            // const SizedBox(width: 8),
                             Expanded(
                               child: Container(
                                 decoration: BoxDecoration(

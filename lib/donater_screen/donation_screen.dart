@@ -99,8 +99,9 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
   bool isFilterApplied = false;
   String searchQuery = '';
 
-  List<String> categoryList = ['All', 'Category 1', 'Category 2', 'Category 3'];
+  List<String> categoryList = ['All', 'Education', 'Food', 'Animal', 'Health'];
   List<String> sortList = ['Ascending', 'Descending'];
+
   final _firestore = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser!;
 
@@ -312,9 +313,30 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
+                    var donations = snapshot.data!.docs;
+
+                    if (searchQuery != "") {
+                      donations = donations
+                          .where((donation) =>
+                              donation['title'].contains(searchQuery))
+                          .toList();
+                    }
+                    if (selectedSort == "Ascending") {
+                      donations
+                          .sort((a, b) => (a['title']).compareTo(b['title']));
+                    } else {
+                      donations
+                          .sort((a, b) => (b['title']).compareTo(a['title']));
+                    }
+                    if (selectedCategory != "All") {
+                      donations = donations
+                          .where((donation) =>
+                              donation['category'] == selectedCategory)
+                          .toList();
+                    }
                     return Column(
                       children: [
-                        ...snapshot.data!.docs.map((document) {
+                        ...donations.map((document) {
                           final data = document.data();
                           return InkWell(
                             onTap: () {
