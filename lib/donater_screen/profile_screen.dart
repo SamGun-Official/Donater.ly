@@ -332,7 +332,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
