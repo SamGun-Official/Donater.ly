@@ -26,40 +26,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 60,
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.arrow_back, color: Colors.black),
-                            ),
-                          ),
-                        ),
-                        const Text(
+                        Text(
                           'My Profile',
                           style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                         ),
-                        const CircleAvatar(
+                        CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Opacity(
                             opacity: 0.0,
