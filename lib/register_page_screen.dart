@@ -333,21 +333,20 @@ class RegisterPage extends StatelessWidget {
                             await _auth
                                 .createUserWithEmailAndPassword(
                                     email: email, password: password)
-                                .then((value) {
-                              final uid = value.user!.uid;
-                              final userRef = FirebaseFirestore.instance
+                                .then((value) async {
+                              await FirebaseFirestore.instance
                                   .collection('Users')
-                                  .doc(uid);
-                              userRef.set({
+                                  .add({
+                                'email': email,
                                 'name': name,
                                 'phone': phone,
+                                'uid':value.user!.uid
                               });
+                            }).then((value) {
                               const snackbar =
                                   SnackBar(content: Text("Account created!"));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackbar);
-                              print("Account created!");
-                              // navigator.pop();
                             });
                           } on Exception catch (e) {
                             final snackbar =
