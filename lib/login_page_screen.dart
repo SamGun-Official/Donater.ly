@@ -28,6 +28,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
         '/menu_page_screen': (context) =>
             const MenuScreen(), // Definisikan rute untuk halaman kedua
         '/donater_home_route': (context) => const DonaterHomeScreen(),
+        '/donater_detail_route': (context) => const DonaterDetailScreen(),
         '/donater_donate_route': (context) => const DonaterDonateScreen(),
         MainDonater.routeName: (context) => const MainDonater(),
       },
@@ -221,7 +222,7 @@ class LoginPage extends StatelessWidget {
                                 .signInWithEmailAndPassword(
                                     email: email, password: password)
                                 .then((value) {
-                              Navigator.pushNamed(context, '/main_donater');
+                               Navigator.pushNamed(context, '/main_donater');
                             });
                           } on Exception catch (e) {
                             final snackbar =
