@@ -277,7 +277,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, "/donater_donate");
+                              Navigator.pushNamed(context, "/donater_donate",arguments: donation);
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,

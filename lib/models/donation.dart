@@ -1,4 +1,5 @@
 class Donation {
+  int id;
   String imagePath;
   String title;
   String subtitle;
@@ -11,6 +12,7 @@ class Donation {
   int collectedAmount;
 
   Donation({
+    required this.id,
     required this.imagePath,
     required this.title,
     required this.subtitle,

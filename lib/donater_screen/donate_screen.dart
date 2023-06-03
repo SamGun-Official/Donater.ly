@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:multiplatform_donation_app/models/donation.dart';
 
 class DonaterDonateScreen extends StatefulWidget {
   static const routeName = '/donater_donate';
@@ -12,9 +16,41 @@ class DonaterDonateScreen extends StatefulWidget {
 class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
   var selectedIcon = Icons.credit_card;
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _cvvController = TextEditingController();
+  double subtotal = 0.0;
+  double tax = 0.0;
+  double total = 0.0;
+
+  void updateAmount(String value) {
+    if (value.isNotEmpty) {
+      double amount = double.parse(value);
+      setState(() {
+        subtotal = amount;
+        tax = amount * 0.1;
+        total = subtotal + tax;
+      });
+    } else {
+      setState(() {
+        subtotal = 0.0;
+        tax = 0.0;
+        total = 0.0;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final donation = ModalRoute.of(context)!.settings.arguments as Donation;
+    final _firestore = FirebaseFirestore.instance;
+    final currentUser = FirebaseAuth.instance.currentUser!;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -96,24 +132,25 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                           ),
                         ),
                         const SizedBox(width: 16),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Help Children in Ambon Better Education',
-                                style: TextStyle(
+                                donation.title,
+                                style: const TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Row(
                                 children: [
                                   Text(
-                                    'The Donation',
-                                    style: TextStyle(fontSize: 14),
+                                    donation.fundraiser,
+                                    style: const TextStyle(fontSize: 14),
                                   ),
-                                  SizedBox(width: 8),
-                                  Icon(Icons.check_circle, color: Colors.green),
+                                  const SizedBox(width: 8),
+                                  const Icon(Icons.check_circle,
+                                      color: Colors.green),
                                 ],
                               ),
                             ],
@@ -140,12 +177,18 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                         elevation: 5,
                         borderRadius: BorderRadius.circular(10),
                         child: TextFormField(
+                          controller: _amountController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          onChanged: updateAmount,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.symmetric(
                               vertical: 16,
                               horizontal: 16,
                             ),
-                            hintText: 'Rp 50.000,00',
+                            hintText: '50000',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide.none,
@@ -176,61 +219,71 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                         borderRadius: BorderRadius.circular(10),
                         child: Row(
                           children: [
+                            // Expanded(
+                            //   child: TextFormField(
+                            //     decoration: InputDecoration(
+                            //       contentPadding: const EdgeInsets.symmetric(
+                            //         vertical: 16,
+                            //         horizontal: 16,
+                            //       ),
+                            //       hintText: 'Rp 50.000,00',
+                            //       border: OutlineInputBorder(
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         borderSide: BorderSide.none,
+                            //       ),
+                            //       filled: true,
+                            //       fillColor: Colors.white,
+                            //     ),
+                            //   ),
+                            // ),
+                            // const SizedBox(width: 8),
                             Expanded(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                    horizontal: 16,
-                                  ),
-                                  hintText: 'Rp 50.000,00',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    value: selectedIcon,
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        selectedIcon = newValue!;
-                                      });
-                                    },
-                                    items: const [
-                                      DropdownMenuItem(
-                                        value: Icons.credit_card,
-                                        child: Icon(Icons.credit_card),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: Icons.payment,
-                                        child: Icon(Icons.payment),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: Icons.monetization_on,
-                                        child: Icon(Icons.monetization_on),
-                                      ),
-                                    ],
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      value: selectedIcon,
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          selectedIcon = newValue!;
+                                        });
+                                      },
+                                      items: const [
+                                        DropdownMenuItem(
+                                          value: Icons.credit_card,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.credit_card),
+                                              SizedBox(width: 8),
+                                              Text('Credit Card'),
+                                            ],
+                                          ),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: Icons.monetization_on,
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.monetization_on),
+                                              SizedBox(width: 8),
+                                              Text('Cash'),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -315,6 +368,11 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                               elevation: 5,
                               borderRadius: BorderRadius.circular(10),
                               child: TextFormField(
+                                controller: _cvvController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: 16,
@@ -328,6 +386,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                   filled: true,
                                   fillColor: Colors.white,
                                 ),
+                                obscureText: true,
                               ),
                             ),
                           ],
@@ -339,30 +398,30 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Subtotal',
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          '\$50.00',
-                          style: TextStyle(fontSize: 16),
+                          '\$${subtotal.toStringAsFixed(2)}',
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Tax',
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          '\$5.00',
-                          style: TextStyle(fontSize: 16),
+                          '\$${tax.toStringAsFixed(2)}',
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -372,17 +431,17 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                       color: Colors.grey,
                     ),
                     const SizedBox(height: 16),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Total',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '\$55.00',
-                          style: TextStyle(
+                          '\$${total.toStringAsFixed(2)}',
+                          style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -390,7 +449,26 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     const SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: () {
-                        // Add your donation logic here
+                        final amount = total;
+
+                        final expiredDate = _dateController.text;
+                        final cvv = _cvvController.text.toString();
+                        final paymentMethod =
+                            ((selectedIcon == Icons.credit_card)
+                                ? "credit card"
+                                : "cash");
+                        _firestore.collection('UserDonates').add({
+                          'CVV': cvv,
+                          'donationID': donation.id,
+                          'expiredDate': DateTime.parse(expiredDate),
+                          'paymentMethod': paymentMethod,
+                          'total': double.parse(amount.toString()),
+                          'userUID': currentUser.uid
+                        }).then((value) {
+                          const snackbar =
+                              SnackBar(content: Text("Donate successful!"));
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        });
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(

@@ -320,12 +320,14 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                             onTap: () {
                               Navigator.pushNamed(context, '/donater_detail',
                                   arguments: Donation(
+                                    id: data['id'],
                                     imagePath: data['imagePath'],
                                     title: data['title'],
                                     subtitle: data['subtitle'],
                                     description: data['description'],
-                                    fundraiser:data['fundraiser'],
-                                    isFundraiserVerified: data['isFundraiserVerified'],
+                                    fundraiser: data['fundraiser'],
+                                    isFundraiserVerified:
+                                        data['isFundraiserVerified'],
                                     daysLeft: data['daysLeft'],
                                     donaterCount: data['donaterCount'],
                                     progress: data['progress'],
