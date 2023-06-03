@@ -8,6 +8,7 @@ import 'package:multiplatform_donation_app/donater_screen/my_donation_screen.dar
 import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
+import 'package:multiplatform_donation_app/firebase_options.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
 import 'package:multiplatform_donation_app/main_donater.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
@@ -16,7 +17,9 @@ import 'package:multiplatform_donation_app/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -41,8 +44,10 @@ class MyApp extends StatelessWidget {
 
           //Donater
           DonaterHomeScreen.routeName: (context) => const DonaterHomeScreen(),
-          DonaterDetailScreen.routeName: (context) => const DonaterDetailScreen(),
-          DonaterDonationScreen.routeName: (context) => const DonaterDonationScreen(),
+          DonaterDetailScreen.routeName: (context) =>
+              const DonaterDetailScreen(),
+          DonaterDonationScreen.routeName: (context) =>
+              const DonaterDonationScreen(),
           DonaterEditProfileScreen.routeName: (context) =>
               DonaterEditProfileScreen(),
           DonaterMyDonationScreen.routeName: (context) =>
