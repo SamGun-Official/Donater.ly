@@ -95,11 +95,26 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
   String selectedCategory = 'All';
   String selectedSort = 'Ascending';
   bool isFilterApplied = false;
+  String searchQuery = '';
 
   List<String> categoryList = ['All', 'Category 1', 'Category 2', 'Category 3'];
   List<String> sortList = ['Ascending', 'Descending'];
   final _firestore = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser!;
+
+  void _showSearchPopup(BuildContext context) async {
+    final searchQuery = await showSearch<String>(
+      context: context,
+      delegate: CustomSearchDelegate(),
+    );
+
+    if (searchQuery != null && searchQuery.isNotEmpty) {
+      setState(() {
+        this.searchQuery = searchQuery;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,9 +159,14 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                               ),
                             ],
                           ),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.search, color: Colors.black),
+                          child: InkWell(
+                            onTap: () {
+                              _showSearchPopup(context);
+                            },
+                            child: const CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.search, color: Colors.black),
+                            ),
                           ),
                         ),
                       ],
@@ -311,6 +331,60 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate<String> {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // Perform the search based on the query and display the results
+    return Center(
+      child: Text('Search Results for: $query'),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // Show suggestions as the user types in the search bar
+    final suggestionList = query.isEmpty
+        ? []
+        : ['Result 1', 'Result 2', 'Result 3']
+            .where((result) => result.startsWith(query))
+            .toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(suggestionList[index]),
+          onTap: () {
+            close(context, suggestionList[index]);
+          },
+        );
+      },
     );
   }
 }
