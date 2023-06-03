@@ -193,7 +193,7 @@ class RegisterPage extends StatelessWidget {
                           horizontal: 10.0,
                         ),
                       ),
-                      obscureText: true,
+                      obscureText: false,
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
@@ -274,7 +274,7 @@ class RegisterPage extends StatelessWidget {
                           horizontal: 10.0,
                         ),
                       ),
-                      obscureText: true,
+                      obscureText: false,
                     ),
                     const SizedBox(height: 16.0),
                     TextField(
