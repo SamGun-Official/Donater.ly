@@ -28,10 +28,8 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
         '/menu_page_screen': (context) =>
             const MenuScreen(), // Definisikan rute untuk halaman kedua
         '/donater_home_route': (context) => const DonaterHomeScreen(),
-        '/donater_detail_route': (context) => const DonaterDetailScreen(),
         '/donater_donate_route': (context) => const DonaterDonateScreen(),
         MainDonater.routeName: (context) => const MainDonater(),
-        DonaterDetailScreen.routeName: (context) => const DonaterDetailScreen(),
       },
     );
   }

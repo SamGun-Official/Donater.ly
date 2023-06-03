@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
+import 'package:multiplatform_donation_app/models/donation.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -317,7 +318,19 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                           final data = document.data();
                           return InkWell(
                             onTap: () {
-                              Navigator.pushNamed(context, '/donater_detail');
+                              Navigator.pushNamed(context, '/donater_detail',
+                                  arguments: Donation(
+                                    imagePath: data['imagePath'],
+                                    title: data['title'],
+                                    subtitle: data['subtitle'],
+                                    description: data['description'],
+                                    fundraiser:data['fundraiser'],
+                                    isFundraiserVerified: data['isFundraiserVerified'],
+                                    daysLeft: data['daysLeft'],
+                                    donaterCount: data['donaterCount'],
+                                    progress: data['progress'],
+                                    collectedAmount: data['collectedAmount'],
+                                  ));
                             },
                             child: CustomCard(
                               imagePath: data['imagePath'],

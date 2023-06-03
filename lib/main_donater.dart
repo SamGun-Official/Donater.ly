@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/bottom_navigation.dart';
 import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
@@ -51,6 +52,8 @@ class _MainDonaterState extends State<MainDonater> {
           DonaterHomeScreen.routeName: (context) => const DonaterHomeScreen(),
           DonaterDetailScreen.routeName: (context) =>
               const DonaterDetailScreen(),
+          DonaterDonateScreen.routeName: (context) =>
+              const DonaterDonateScreen(),
           DonaterDonationScreen.routeName: (context) =>
               const DonaterDonationScreen(),
           DonaterEditProfileScreen.routeName: (context) =>

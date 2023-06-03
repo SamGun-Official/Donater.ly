@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:multiplatform_donation_app/models/donation.dart';
 
 class DonaterDetailScreen extends StatefulWidget {
   static const routeName = '/donater_detail';
@@ -9,8 +11,12 @@ class DonaterDetailScreen extends StatefulWidget {
 }
 
 class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
+  final String donationTitle = 'Education Fund';
+  final double donationProgress = 0.6;
   @override
   Widget build(BuildContext context) {
+    final donation = ModalRoute.of(context)!.settings.arguments as Donation;
+    final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp');
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -24,21 +30,26 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.arrow_back, color: Colors.black),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.arrow_back, color: Colors.black),
+                          ),
                         ),
                       ),
                       const Text(
@@ -46,22 +57,25 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                         style: TextStyle(
                             fontSize: 26, fontWeight: FontWeight.bold),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child:
-                              Icon(Icons.bookmark_outline, color: Colors.black),
+                      Opacity(
+                        opacity: 0.0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.bookmark_outline,
+                                color: Colors.black),
+                          ),
                         ),
                       ),
                     ],
@@ -72,36 +86,37 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
                         child: Image.asset(
-                          'images/detail_pic.jpg',
+                          donation.imagePath,
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      'Help Children in Ambon Get Better Education',
-                      style: TextStyle(
+                    Text(
+                      donation.title,
+                      style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Opacity(
+                        const Opacity(
                           opacity: 0.6,
                           child: Icon(Icons.access_time, size: 20),
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
                         Text(
-                          '20 Days Left',
-                          style: TextStyle(fontSize: 16),
+                          "${donation.daysLeft} days left",
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -114,9 +129,12 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                             width: 100,
                             height: 40,
                             child: Stack(
-                              children: [
-                                Positioned(
-                                  left: 0,
+                              children: List.generate(
+                                  donation.donaterCount >= 3
+                                      ? 3
+                                      : donation.donaterCount, (index) {
+                                return Positioned(
+                                  left: 30.0 * index,
                                   child: Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
@@ -132,80 +150,26 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                                     child: const CircleAvatar(
                                       radius: 20,
                                       backgroundImage: AssetImage(
-                                          'images/profile.png'), // Ganti dengan path foto profil pertama
+                                          'images/profile.png'), // Ganti dengan path foto profil
                                     ),
                                   ),
-                                ),
-                                Positioned(
-                                  left: 30,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.8),
-                                          blurRadius: 5.0,
-                                          spreadRadius: 2.0,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: const CircleAvatar(
-                                      radius: 20,
-                                      backgroundImage: AssetImage(
-                                          'images/profile.png'), // Ganti dengan path foto profil kedua
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  left: 60,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.8),
-                                          blurRadius: 5.0,
-                                          spreadRadius: 2.0,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: const CircleAvatar(
-                                      radius: 20,
-                                      backgroundImage: AssetImage(
-                                          'images/profile.png'), // Ganti dengan path foto profil ketiga
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                );
+                              }),
                             ),
                           ),
                           const SizedBox(width: 10),
-                          const Text(
-                            '200+ donated',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          const Spacer(),
-                          const Row(
-                            children: [
-                              Text(
-                                'See More',
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.blue),
-                              ),
-                              SizedBox(width: 5),
-                              Icon(Icons.arrow_forward, color: Colors.blue),
-                            ],
+                          Text(
+                            '${donation.donaterCount}+ donated',
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ],
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: const Text(
-                        'Join us in making a difference through this donation account, where every contribution counts towards creating a brighter future for those in need. Together, let\'s spread hope and transform lives. #DonateForGood',
-                        style: TextStyle(fontSize: 16),
+                      child: Text(
+                        donation.description,
+                        style: const TextStyle(fontSize: 16),
                         textAlign: TextAlign.justify,
                       ),
                     ),
@@ -243,23 +207,26 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Row(
+                                  Row(
                                     children: [
                                       Text(
-                                        'The Donation',
-                                        style: TextStyle(
+                                        donation.fundraiser,
+                                        style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      SizedBox(width: 8.0),
-                                      Icon(Icons.check_circle,
-                                          color: Colors.green),
+                                      const SizedBox(width: 8.0),
+                                      if (donation.isFundraiserVerified)
+                                        const Icon(Icons.check_circle,
+                                            color: Colors.green),
                                     ],
                                   ),
                                   const SizedBox(height: 8.0),
                                   Text(
-                                    'Verified Public Donation',
+                                    donation.isFundraiserVerified
+                                        ? 'Verified Public Donation'
+                                        : 'Unverified Public Donation',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey[600],
@@ -271,6 +238,55 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                           ],
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 25.0),
+                    const Text(
+                      'Donation Goals',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    LinearProgressIndicator(
+                      value: donation.progress,
+                      minHeight: 10,
+                      backgroundColor: Colors.grey[300],
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${(donation.progress * 100).toStringAsFixed(0)}%',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        Text(
+                          'Collected: ${currencyFormat.format(donation.collectedAmount)}',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/donater_donate");
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                            ),
+                            child: const Text('Go to Donate'),
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),
