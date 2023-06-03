@@ -64,7 +64,11 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
+                         InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             boxShadow: [
@@ -81,6 +85,7 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                             child: Icon(Icons.arrow_back, color: Colors.black),
                           ),
                         ),
+                      ),
                         const Text(
                           'Edit Profile',
                           style: TextStyle(
