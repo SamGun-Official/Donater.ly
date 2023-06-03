@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
 import 'package:multiplatform_donation_app/models/donation.dart';
+import 'package:intl/intl.dart';
+
+final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp');
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -74,7 +76,7 @@ class CustomCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(collectedAmount.toString()),
+                  Text(currencyFormat.format(collectedAmount)),
                 ],
               ),
             ),
@@ -95,7 +97,8 @@ class DonaterDonationScreen extends StatefulWidget {
 
 class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
   String selectedCategory = 'All';
-  String selectedSort = 'Ascending';
+  String? selectedSort = 'Ascending';
+  String? selectedFilterChoose;
   bool isFilterApplied = false;
   String searchQuery = '';
 
@@ -114,6 +117,156 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
     if (searchQuery != null && searchQuery.isNotEmpty) {
       setState(() {
         this.searchQuery = searchQuery;
+      });
+    }
+  }
+
+  String filterByTitleQuery = '';
+  String? selectedFilterRange;
+  RangeValues selectedFilterRangeValues = RangeValues(0, 1000000);
+  // ...
+
+  void _showFilterPopup(BuildContext context) async {
+    final selectedFilter = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Filter'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile(
+              title: const Text('By Title'),
+              value: 'By Title',
+              groupValue: isFilterApplied ? selectedFilterChoose : null,
+              onChanged: (value) {
+                setState(() {
+                  selectedFilterChoose = value;
+                });
+                Navigator.pop(context);
+                if (selectedFilterChoose == 'By Title') {
+                  _showTitleFilterDialog();
+                }
+              },
+            ),
+            RadioListTile(
+              title: const Text('By Donation Raised'),
+              value: 'By Donation Raised',
+              groupValue: isFilterApplied ? selectedFilterChoose : null,
+              onChanged: (value) {
+                setState(() {
+                  selectedFilterChoose = value;
+                });
+                Navigator.pop(context);
+                if (selectedFilterChoose == 'By Donation Raised') {
+                  _showRangeFilterDialog();
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showTitleFilterDialog() async {
+    final titleQuery = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Filter by Title'),
+        content: TextField(
+          decoration: const InputDecoration(hintText: 'Enter title'),
+          onChanged: (value) {
+            setState(() {
+              filterByTitleQuery = value;
+            });
+          },
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                // selectedSort = 'Ascending';
+                filterByTitleQuery = '';
+              });
+            },
+          ),
+          TextButton(
+            child: const Text('Apply'),
+            onPressed: () {
+              Navigator.pop(context, filterByTitleQuery);
+            },
+          ),
+        ],
+      ),
+    );
+
+    if (titleQuery != null) {
+      setState(() {
+        filterByTitleQuery = titleQuery;
+      });
+    }
+  }
+
+  void _showRangeFilterDialog() async {
+    final selectedRange = await showDialog<RangeValues>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Filter by Donation Raised'),
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RangeSlider(
+                  values: selectedFilterRangeValues,
+                  min: 0,
+                  max: 1000000,
+                  divisions: 100,
+                  onChanged: (RangeValues values) {
+                    setState(() {
+                      selectedFilterRangeValues = values;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                        '\$${currencyFormat.format(selectedFilterRangeValues.start.round())}'),
+                    Text(
+                        '\$${currencyFormat.format(selectedFilterRangeValues.end.round())}'),
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() {
+                selectedFilterRangeValues = RangeValues(0, 1000000);
+              });
+            },
+          ),
+          TextButton(
+            child: const Text('Apply'),
+            onPressed: () {
+              Navigator.pop(context, selectedFilterRangeValues);
+            },
+          ),
+        ],
+      ),
+    );
+
+    if (selectedRange != null) {
+      setState(() {
+        selectedFilterRangeValues = selectedRange;
       });
     }
   }
@@ -256,43 +409,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                       const SizedBox(width: 16),
                       InkWell(
                         onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Filter'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  RadioListTile(
-                                    title: const Text('By Title'),
-                                    value: 'By Title',
-                                    groupValue:
-                                        isFilterApplied ? selectedSort : null,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        // selectedSort = value;
-                                        isFilterApplied = true;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RadioListTile(
-                                    title: const Text('By Donation Raised'),
-                                    value: 'By Donation Raised',
-                                    groupValue:
-                                        isFilterApplied ? selectedSort : null,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        // selectedSort = value;
-                                        isFilterApplied = true;
-                                      });
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                          _showFilterPopup(context);
                         },
                         child: const Row(
                           children: [
@@ -314,13 +431,25 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                       );
                     }
                     var donations = snapshot.data!.docs;
-
+                    if (filterByTitleQuery != "") {
+                      donations = donations
+                          .where((donation) =>
+                              donation['title'].contains(filterByTitleQuery))
+                          .toList();
+                    }
                     if (searchQuery != "") {
                       donations = donations
                           .where((donation) =>
                               donation['title'].contains(searchQuery))
                           .toList();
                     }
+                    donations = donations
+                        .where((donation) =>
+                            donation['collectedAmount'] >=
+                                selectedFilterRangeValues.start &&
+                            donation['collectedAmount'] <=
+                                selectedFilterRangeValues.end)
+                        .toList();
                     if (selectedSort == "Ascending") {
                       donations
                           .sort((a, b) => (a['title']).compareTo(b['title']));
