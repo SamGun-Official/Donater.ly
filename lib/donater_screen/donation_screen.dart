@@ -388,6 +388,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
         icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
+          showResults(context);
         },
       ),
     ];
@@ -405,9 +406,56 @@ class CustomSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    // Perform the search based on the query and display the results
-    return Center(
-      child: Text('Search Results for: $query'),
+    final firestore = FirebaseFirestore.instance;
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      stream: firestore.collection('Donations').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        var donations = snapshot.data!.docs;
+
+        donations = donations
+            .where((donation) =>
+                donation['title'].toLowerCase().contains(query.toLowerCase()))
+            .toList();
+
+        return Column(
+          children: [
+            ...donations.map((document) {
+              final data = document.data();
+              return InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, '/donater_detail',
+                      arguments: Donation(
+                        id: data['id'],
+                        imagePath: data['imagePath'],
+                        title: data['title'],
+                        subtitle: data['subtitle'],
+                        description: data['description'],
+                        fundraiser: data['fundraiser'],
+                        isFundraiserVerified: data['isFundraiserVerified'],
+                        daysLeft: data['daysLeft'],
+                        donaterCount: data['donaterCount'],
+                        progress: data['progress'],
+                        collectedAmount: data['collectedAmount'],
+                      ));
+                },
+                child: CustomCard(
+                  imagePath: data['imagePath'],
+                  title: data['title'],
+                  subtitle: data['subtitle'],
+                  daysLeft: data['daysLeft'],
+                  progress: data['progress'],
+                  collectedAmount: data['collectedAmount'],
+                ),
+              );
+            }),
+          ],
+        );
+      },
     );
   }
 
