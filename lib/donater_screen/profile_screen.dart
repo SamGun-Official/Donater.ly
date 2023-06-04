@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
 import 'package:multiplatform_donation_app/login_page_screen.dart';
+import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/donater_profile';
@@ -107,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         Text(
                                           '${userData['name']}',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -115,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         const SizedBox(height: 8.0),
                                         Text(
                                           '${userData['email']}',
-                                          style: TextStyle(fontSize: 16),
+                                          style: const TextStyle(fontSize: 16),
                                         ),
                                       ],
                                     );
@@ -263,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     FirebaseAuth.instance.signOut().then((value) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(builder: (context) => MenuScreen()),
                       );
                     });
                   },
