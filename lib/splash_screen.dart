@@ -5,7 +5,7 @@ import 'package:multiplatform_donation_app/menu_page_screen.dart';
 class SplashScreen extends StatefulWidget {
   static const routeName = '/splash_screen_route';
 
-  const SplashScreen({super.key});
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Timer untuk mengatur waktu tampilan SplashScreen
     Timer(const Duration(seconds: 3), () {
       // Navigasi ke halaman berikutnya setelah 3 detik
-        Navigator.pushNamed(context, MenuScreen.routeName);
+      Navigator.pushNamed(context, MenuScreen.routeName);
     });
   }
 
@@ -28,17 +28,24 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Desain tampilan SplashScreen
-      body: AnimatedOpacity(
-        opacity: _opacityLevel,
-        duration: const Duration(seconds: 2),
-        curve: Curves.easeInOut,
-        child: Center(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: AnimatedOpacity(
+          opacity: _opacityLevel,
+          duration: const Duration(seconds: 2),
+          curve: Curves.easeInOut,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(margin: const EdgeInsets.all(20.0), child: Image.asset('images/logo.jpg')),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.all(20.0),
+                  child: Image.asset('images/logo.jpg'),
+                ),
+              ),
               const SizedBox(height: 24),
-              const CircularProgressIndicator(),
+              // const CircularProgressIndicator(),
             ],
           ),
         ),
