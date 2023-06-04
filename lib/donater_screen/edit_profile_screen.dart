@@ -15,7 +15,8 @@ class TextFieldWithShadow extends StatefulWidget {
     required this.label,
     required this.placeholder,
     this.enabled = true, // Default value is true
-    this.initialValue, required TextEditingController controller,
+    this.initialValue,
+    required TextEditingController controller,
   }) : super(key: key);
 
   @override
@@ -70,7 +71,8 @@ class _TextFieldWithShadowState extends State<TextFieldWithShadow> {
         decoration: InputDecoration(
           labelText: _isFocused ? widget.label : null,
           hintText: widget.placeholder,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           border: InputBorder.none,
         ),
       ),
@@ -87,7 +89,6 @@ class DonaterEditProfileScreen extends StatefulWidget {
       _DonaterEditProfileScreenState();
 }
 
-
 class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final _firestore = FirebaseFirestore.instance;
@@ -97,24 +98,28 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
   TextEditingController _phoneNumberController = TextEditingController();
 
   void updateFirestoreData() {
-  // Retrieve data from the text fields
-  String name = _nameController.text;
-  String email = _emailController.text;
-  String phoneNumber = _phoneNumberController.text;
+    // Retrieve data from the text fields
+    String name = _nameController.text;
+    String email = _emailController.text;
+    String phoneNumber = _phoneNumberController.text;
 
-  // Update Firestore document
-  _firestore.collection('Users').doc(currentUser.uid).update({
-    'name': name,
-    'email': email,
-    'phoneNumber': phoneNumber,
-  }).then((value) {
-    // Data successfully updated
-    // Perform any desired actions here
-  }).catchError((error) {
-    // An error occurred while updating data
-    // Handle the error appropriately
-  });
-}
+    // Update Firestore document
+    _firestore.collection('Users').doc(currentUser.uid).update({
+      'name': name,
+      'email': email,
+      'phoneNumber': phoneNumber,
+    }).then((value) {
+      // Data successfully updated
+      // Perform any desired actions here
+      const snackbar = SnackBar(content: Text("Account Edited!"));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    }).catchError((error) {
+      // An error occurred while updating data
+      // Handle the error appropriately
+      final snackbar = SnackBar(content: Text(error.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,28 +138,29 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.arrow_back, color: Colors.black),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child:
+                                  Icon(Icons.arrow_back, color: Colors.black),
+                            ),
                           ),
                         ),
-                      ),
                         const Text(
                           'Edit Profile',
                           style: TextStyle(
@@ -174,70 +180,71 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     ),
                   ),
                 ),
-            CircleAvatar(
-              radius: 80,
-              backgroundColor: Colors.transparent,
-              child: Container(
-                child: const Icon(
-                  Icons.person,
-                  color: Colors.black,
-                  size: 120,
-                ),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.black, width: 3), // Increase width for a thicker border
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
+                CircleAvatar(
+                  radius: 80,
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.black,
+                      size: 120,
                     ),
-                  ],
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: Colors.black,
+                          width: 3), // Increase width for a thicker border
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
                 const SizedBox(height: 16),
-                          StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                                  stream: _firestore
-                                      .collection('Users')
-                                      .where("uid", isEqualTo: currentUser.uid)
-                                      .snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    final userData = snapshot.data!.docs[0].data();
-                                    return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                          const SizedBox(height: 16),
-                                          TextFieldWithShadow(
-                                            label: 'Name',
-                                            placeholder: 'Name',
-                                            initialValue: '${userData['name']}',
-                                            controller: _nameController
-                                          ),
-                                          const SizedBox(height: 16),
-                                          TextFieldWithShadow(
-                                            label: 'Email',
-                                            placeholder: 'Email',
-                                            initialValue: '${userData['email']}',
-                                            controller: _emailController,
-                                          ),
-                                          const SizedBox(height: 16),
-                                          TextFieldWithShadow(
-                                            label: 'Phone Number',
-                                            placeholder: 'Phone',
-                                            initialValue: '${userData['phone']}',
-                                            controller: _phoneNumberController,
-                                          ),
-                                      ],
-                                    );
-                                  },
-                                ),
+                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: _firestore
+                      .collection('Users')
+                      .where("uid", isEqualTo: currentUser.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    final userData = snapshot.data!.docs[0].data();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 16),
+                        TextFieldWithShadow(
+                            label: 'Name',
+                            placeholder: 'Name',
+                            initialValue: '${userData['name']}',
+                            controller: _nameController),
+                        const SizedBox(height: 16),
+                        TextFieldWithShadow(
+                          label: 'Email',
+                          placeholder: 'Email',
+                          initialValue: '${userData['email']}',
+                          controller: _emailController,
+                        ),
+                        const SizedBox(height: 16),
+                        TextFieldWithShadow(
+                          label: 'Phone Number',
+                          placeholder: 'Phone',
+                          initialValue: '${userData['phone']}',
+                          controller: _phoneNumberController,
+                        ),
+                      ],
+                    );
+                  },
+                ),
                 const SizedBox(height: 32),
                 Row(
                   children: [
@@ -247,7 +254,8 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                           // Add your 'Continue' button logic here
                           //edit profile
                         },
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue),
                         child: const Text('Continue'),
                       ),
                     ),
@@ -258,7 +266,8 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                           // Add your 'Cancel' button logic here
                           Navigator.pop(context);
                         },
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey),
                         child: const Text('Cancel'),
                       ),
                     ),
@@ -269,7 +278,6 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
           ),
         ),
       ),
-      
     );
   }
 }

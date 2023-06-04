@@ -35,6 +35,7 @@ class RegisterPage extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _phoneController = TextEditingController();
   final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
 
   RegisterPage({super.key});
   @override
@@ -105,6 +106,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 28.0),
                     TextField(
+                     controller: _usernameController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.person,
@@ -317,6 +319,7 @@ class RegisterPage extends StatelessWidget {
                             final password = _passwordController.text;
                             final name = _nameController.text;
                             final phone = _phoneController.text;
+                            final username  = _usernameController.text;
 
                             await _auth
                                 .createUserWithEmailAndPassword(
@@ -325,6 +328,7 @@ class RegisterPage extends StatelessWidget {
                               await FirebaseFirestore.instance
                                   .collection('Users')
                                   .add({
+                                'username': username,    
                                 'email': email,
                                 'name': name,
                                 'phone': phone,
