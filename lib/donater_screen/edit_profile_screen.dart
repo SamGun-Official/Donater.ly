@@ -9,14 +9,17 @@ class TextFieldWithShadow extends StatefulWidget {
   final String placeholder;
   final String? initialValue;
   final bool enabled;
+  final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
 
   const TextFieldWithShadow({
     Key? key,
     required this.label,
     required this.placeholder,
-    this.enabled = true, // Default value is true
+    this.enabled = true,
     this.initialValue,
-    required TextEditingController controller,
+    required this.controller,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -65,9 +68,10 @@ class _TextFieldWithShadowState extends State<TextFieldWithShadow> {
         ],
       ),
       child: TextField(
-        controller: _controller,
+        controller: widget.controller,
         focusNode: _focusNode,
-        enabled: widget.enabled, // Pass the enabled property
+        enabled: widget.enabled,
+        onChanged: widget.onChanged,
         decoration: InputDecoration(
           labelText: _isFocused ? widget.label : null,
           hintText: widget.placeholder,
@@ -83,9 +87,10 @@ class _TextFieldWithShadowState extends State<TextFieldWithShadow> {
 class DonaterEditProfileScreen extends StatefulWidget {
   static const routeName = '/donater_edit_profile';
 
-  const DonaterEditProfileScreen({super.key});
+  const DonaterEditProfileScreen({Key? key}) : super(key: key);
+
   @override
-  State<DonaterEditProfileScreen> createState() =>
+  _DonaterEditProfileScreenState createState() =>
       _DonaterEditProfileScreenState();
 }
 
@@ -93,32 +98,35 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final _firestore = FirebaseFirestore.instance;
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _usernameController = TextEditingController();
 
-  void updateFirestoreData() {
-    // Retrieve data from the text fields
-    String name = _nameController.text;
-    String email = _emailController.text;
-    String phoneNumber = _phoneNumberController.text;
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
 
-    // Update Firestore document
-    _firestore.collection('Users').doc(currentUser.uid).update({
-      'name': name,
-      'email': email,
-      'phoneNumber': phoneNumber,
-    }).then((value) {
-      // Data successfully updated
-      // Perform any desired actions here
-      const snackbar = SnackBar(content: Text("Account Edited!"));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    }).catchError((error) {
-      // An error occurred while updating data
-      // Handle the error appropriately
-      final snackbar = SnackBar(content: Text(error.toString()));
-      ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    });
+  Future<void> fetchUserData() async {
+    try {
+      final snapshot = await _firestore
+          .collection('Users')
+          .where('uid', isEqualTo: currentUser.uid)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final userData = snapshot.docs[0].data();
+        _nameController.text = userData['name'];
+        _emailController.text = userData['email'];
+        _phoneNumberController.text = userData['phone'];
+        _usernameController.text = userData['username'];
+      }
+    } catch (error) {
+      // Handle error
+    }
   }
 
   @override
@@ -186,17 +194,17 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                   child: Container(
                     child: const Icon(
                       Icons.person,
-                      color: Colors.black,
+                      color: Colors.blue,
                       size: 120,
                     ),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: Colors.black,
+                          color: Colors.blue,
                           width: 3), // Increase width for a thicker border
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.white.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
                           offset: const Offset(0, 3),
@@ -206,56 +214,98 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: _firestore
-                      .collection('Users')
-                      .where("uid", isEqualTo: currentUser.uid)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    final userData = snapshot.data!.docs[0].data();
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-                        TextFieldWithShadow(
-                            label: 'Name',
-                            placeholder: 'Name',
-                            initialValue: '${userData['name']}',
-                            controller: _nameController),
-                        const SizedBox(height: 16),
-                        TextFieldWithShadow(
-                          label: 'Email',
-                          placeholder: 'Email',
-                          initialValue: '${userData['email']}',
-                          controller: _emailController,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFieldWithShadow(
-                          label: 'Phone Number',
-                          placeholder: 'Phone',
-                          initialValue: '${userData['phone']}',
-                          controller: _phoneNumberController,
-                        ),
-                      ],
-                    );
-                  },
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    TextFieldWithShadow(
+                      label: 'Username',
+                      placeholder: 'Username',
+                      controller: _usernameController,
+                      onChanged: (value) {
+                        // Handle onChanged event
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFieldWithShadow(
+                      label: 'Name',
+                      placeholder: 'Name',
+                      controller: _nameController,
+                      onChanged: (value) {
+                        // Handle onChanged event
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFieldWithShadow(
+                      label: 'Email',
+                      placeholder: 'Email',
+                      controller: _emailController,
+                      onChanged: (value) {
+                        // Handle onChanged event
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFieldWithShadow(
+                      label: 'Phone Number',
+                      placeholder: 'Phone',
+                      controller: _phoneNumberController,
+                      onChanged: (value) {
+                        // Handle onChanged event
+                      },
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 32),
                 Row(
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // Add your 'Continue' button logic here
-                          //edit profile
+                          // Edit profile
+                          String name = _nameController.text;
+                          String email = _emailController.text;
+                          String phoneNumber = _phoneNumberController.text;
+                          String username = _usernameController.text;
+
+                          // Create a map with the updated data
+                          Map<String, dynamic> data = {
+                            'name': name,
+                            'email': email,
+                            'phone': phoneNumber,
+                            'username': username,
+                          };
+
+                          try {
+                            // Update Firestore document using set() with merge option
+                            await _firestore
+                                .collection('Users')
+                                .where("uid", isEqualTo: currentUser.uid)
+                                .get()
+                                .then((QuerySnapshot querySnapshot) {
+                              for (var doc in querySnapshot.docs) {
+                                doc.reference.update(data);
+                              }
+                            });
+
+                            // Data successfully updated
+                            // Perform any desired actions here
+                            const snackbar =
+                                SnackBar(content: Text("Account Edited!"));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          } catch (error) {
+                            // An error occurred while updating data
+                            // Handle the error appropriately
+                            final snackbar =
+                                SnackBar(content: Text(error.toString()));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue),
+                          backgroundColor: Colors.blue,
+                        ),
                         child: const Text('Continue'),
                       ),
                     ),
@@ -267,7 +317,8 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey),
+                          backgroundColor: Colors.grey,
+                        ),
                         child: const Text('Cancel'),
                       ),
                     ),
