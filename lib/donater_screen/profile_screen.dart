@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
-import 'package:multiplatform_donation_app/login_page_screen.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
