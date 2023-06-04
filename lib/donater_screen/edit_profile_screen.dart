@@ -239,6 +239,7 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     TextFieldWithShadow(
                       label: 'Email',
                       placeholder: 'Email',
+                      enabled: false,
                       controller: _emailController,
                       onChanged: (value) {
                         // Handle onChanged event
