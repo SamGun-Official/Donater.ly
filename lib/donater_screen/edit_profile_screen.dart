@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +8,14 @@ class TextFieldWithShadow extends StatefulWidget {
   final String label;
   final String placeholder;
   final String? initialValue;
+  final bool enabled;
 
   const TextFieldWithShadow({
     Key? key,
     required this.label,
     required this.placeholder,
-    this.initialValue,
+    this.enabled = true, // Default value is true
+    this.initialValue, required TextEditingController controller,
   }) : super(key: key);
 
   @override
@@ -62,6 +66,7 @@ class _TextFieldWithShadowState extends State<TextFieldWithShadow> {
       child: TextField(
         controller: _controller,
         focusNode: _focusNode,
+        enabled: widget.enabled, // Pass the enabled property
         decoration: InputDecoration(
           labelText: _isFocused ? widget.label : null,
           hintText: widget.placeholder,
@@ -82,9 +87,34 @@ class DonaterEditProfileScreen extends StatefulWidget {
       _DonaterEditProfileScreenState();
 }
 
+
 class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final _firestore = FirebaseFirestore.instance;
+
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+
+  void updateFirestoreData() {
+  // Retrieve data from the text fields
+  String name = _nameController.text;
+  String email = _emailController.text;
+  String phoneNumber = _phoneNumberController.text;
+
+  // Update Firestore document
+  _firestore.collection('Users').doc(currentUser.uid).update({
+    'name': name,
+    'email': email,
+    'phoneNumber': phoneNumber,
+  }).then((value) {
+    // Data successfully updated
+    // Perform any desired actions here
+  }).catchError((error) {
+    // An error occurred while updating data
+    // Handle the error appropriately
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -144,17 +174,29 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     ),
                   ),
                 ),
-                CircleAvatar(
-                  radius: 80,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: const AssetImage('images/profile.png'),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                  ),
+            CircleAvatar(
+              radius: 80,
+              backgroundColor: Colors.transparent,
+              child: Container(
+                child: const Icon(
+                  Icons.person,
+                  color: Colors.black,
+                  size: 120,
                 ),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.black, width: 3), // Increase width for a thicker border
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+              ),
+            ),
                 const SizedBox(height: 16),
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                                   stream: _firestore
@@ -171,28 +213,26 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                                     return Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                          const SizedBox(height: 16),
                                           TextFieldWithShadow(
                                             label: 'Name',
                                             placeholder: 'Name',
                                             initialValue: '${userData['name']}',
-                                          ),
-                                          const SizedBox(height: 16),
-                                          TextFieldWithShadow(
-                                            label: 'Username',
-                                            placeholder: 'Username',
-                                            initialValue: '${userData['username']}',
+                                            controller: _nameController
                                           ),
                                           const SizedBox(height: 16),
                                           TextFieldWithShadow(
                                             label: 'Email',
                                             placeholder: 'Email',
                                             initialValue: '${userData['email']}',
+                                            controller: _emailController,
                                           ),
                                           const SizedBox(height: 16),
                                           TextFieldWithShadow(
                                             label: 'Phone Number',
                                             placeholder: 'Phone',
                                             initialValue: '${userData['phone']}',
+                                            controller: _phoneNumberController,
                                           ),
                                       ],
                                     );
@@ -205,6 +245,7 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           // Add your 'Continue' button logic here
+                          //edit profile
                         },
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                         child: const Text('Continue'),
@@ -215,6 +256,7 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           // Add your 'Cancel' button logic here
+                          Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
                         child: const Text('Cancel'),
