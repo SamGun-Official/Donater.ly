@@ -11,7 +11,6 @@ class CustomCard extends StatelessWidget {
   final int collectedAmount;
 
   const CustomCard({
-    super.key,
     required this.imagePath,
     required this.title,
     required this.subtitle,
@@ -83,9 +82,54 @@ class CustomCard extends StatelessWidget {
   }
 }
 
+class ButtonRow extends StatefulWidget {
+  const ButtonRow({Key? key});
+
+  @override
+  _ButtonRowState createState() => _ButtonRowState();
+}
+
+class _ButtonRowState extends State<ButtonRow> {
+  int selectedIndex = 0;
+  List<String> buttonLabels = ['All', 'Education', 'Food', 'Health', 'Animal'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: List.generate(
+        buttonLabels.length,
+        (index) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                selectedIndex = index;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: selectedIndex == index ? Colors.blue : Colors.grey,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: Text(
+              buttonLabels[index],
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class DonaterHomeScreen extends StatefulWidget {
   static const routeName = '/donater_home';
-  const DonaterHomeScreen({super.key});
+  const DonaterHomeScreen({Key? key});
 
   @override
   State<DonaterHomeScreen> createState() => _DonaterHomeScreenState();
@@ -184,7 +228,6 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       ),
                     ),
                   ),
-
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.89,
@@ -245,7 +288,23 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                     ]);
                   },
                   //doneTasks: _doneTodoList,
-                )
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.89,
+                  child: const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'Featured Causes',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const ButtonRow()
               ],
             ),
           )
