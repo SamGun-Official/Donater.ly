@@ -17,7 +17,7 @@ class DatabaseHelper {
   Future<Database> _initializeDb() async {
     var path = await getDatabasesPath();
     var db = await openDatabase(
-      '$path/donations_5_database.db',
+      '$path/donations.db',
       onCreate: (db, version) async {
         await db.execute('''
         CREATE TABLE $_tableName (
@@ -60,5 +60,11 @@ class DatabaseHelper {
       whereArgs: [donationId, userUid],
     );
     print('Donasi dihapus dari saved donations');
+  }
+
+  Future<void> clearSavedDonations() async {
+    final Database db = await database;
+    await db.delete(_tableName);
+    print("All data cleared from 'saved_donations' table!");
   }
 }

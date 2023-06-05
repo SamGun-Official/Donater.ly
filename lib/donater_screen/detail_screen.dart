@@ -26,7 +26,10 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
     final donation = ModalRoute.of(context)!.settings.arguments as Donation;
     final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp');
     final dbProvider = Provider.of<DbProvider>(context, listen: false);
-
+    isDonationExists = dbProvider.savedDonations.any((savedDonation) {
+      return savedDonation.donationId == donation.id &&
+          savedDonation.userUid == currentUser.uid;
+    });
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -69,18 +72,12 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                       ),
                       InkWell(
                         onTap: () async {
-                          print(donation.id.toString());
                           isDonationExists =
                               dbProvider.savedDonations.any((savedDonation) {
                             return savedDonation.donationId == donation.id &&
                                 savedDonation.userUid == currentUser.uid;
                           });
 
-                          for (var i = 0;
-                              i < dbProvider.savedDonations.length;
-                              i++) {
-                            print(dbProvider.savedDonations[i].toMap());
-                          }
                           // Cek apakah donasi sudah ada pada saved donation
                           if (isDonationExists) {
                             await dbProvider
@@ -101,7 +98,6 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                           } else {
                             await dbProvider
                                 .addSavedDonation(SavedDonation(
-                              id: 0,
                               donationId: donation.id,
                               userUid: currentUser.uid,
                               createdAt: Timestamp.now().toString(),

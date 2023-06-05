@@ -9,9 +9,11 @@ class DbProvider extends ChangeNotifier {
   DbProvider() {
     _dbHelper = DatabaseHelper();
     getSavedDonations();
+    clearSavedDonations();
   }
   Future<void> addSavedDonation(SavedDonation savedDonation) async {
     await _dbHelper.insertSavedDonation(savedDonation);
+    await getSavedDonations();
   }
 
   Future<void> getSavedDonations() async {
@@ -25,5 +27,10 @@ class DbProvider extends ChangeNotifier {
   Future<void> removeSavedDonation(int donationId, String userUid) async {
     await _dbHelper.removeSavedDonation(donationId, userUid);
     await getSavedDonations(); // Refresh daftar savedDonations setelah menghapus donasi
+  }
+
+  Future<void> clearSavedDonations() async {
+    await _dbHelper.clearSavedDonations();
+    await getSavedDonations(); 
   }
 }
