@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/provider/db_provider.dart';
+import 'package:provider/provider.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -151,6 +153,7 @@ class _DonaterSavedDonationScreenState
                     ),
                   ),
                 ),
+
                 const CustomCard(
                   imagePath: 'images/detail_pic.jpg',
                   title: 'Many Children Need Food to Survive',
