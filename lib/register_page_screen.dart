@@ -328,7 +328,8 @@ class RegisterPage extends StatelessWidget {
                               await FirebaseFirestore.instance
                                   .collection('Users')
                                   .add({
-                                'username': username,    
+                                'username': username,   
+                                'password': password, 
                                 'email': email,
                                 'name': name,
                                 'phone': phone,

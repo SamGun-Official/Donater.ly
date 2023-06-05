@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/edit_password_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
@@ -57,6 +58,8 @@ class MyApp extends StatelessWidget {
               DonaterSavedDonationScreen(),
           DonaterTransactionScreen.routeName: (context) =>
               DonaterTransactionScreen(),
+          DonaterEditPasswordScreen.routeName: (context)=>
+          DonaterEditPasswordScreen(),
           MainDonater.routeName: (context) => const MainDonater(),
         }
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
