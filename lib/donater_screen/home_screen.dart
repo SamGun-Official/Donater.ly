@@ -83,14 +83,20 @@ class CustomCard extends StatelessWidget {
 }
 
 class ButtonRow extends StatefulWidget {
-  const ButtonRow({Key? key});
+  final int selectedIndex;
+  final Function(int) onButtonPressed;
+  const ButtonRow({
+    Key? key,
+    required this.selectedIndex,
+    required this.onButtonPressed,
+    });
 
   @override
   _ButtonRowState createState() => _ButtonRowState();
 }
 
 class _ButtonRowState extends State<ButtonRow> {
-  int selectedIndex = 0;
+  
   List<String> buttonLabels = ['All', 'Education', 'Food', 'Health', 'Animal'];
 
   @override
@@ -104,11 +110,11 @@ class _ButtonRowState extends State<ButtonRow> {
           child: ElevatedButton(
             onPressed: () {
               setState(() {
-                selectedIndex = index;
+                widget.onButtonPressed(index); // Call the provided callback function
               });
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: selectedIndex == index ? Colors.blue : Colors.grey,
+              backgroundColor: widget.selectedIndex == index ? Colors.blue : Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -141,6 +147,8 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
   late Stream<QuerySnapshot<Map<String, dynamic>>> _stream;
   TextEditingController _searchController = TextEditingController();
   String _searchKeyword = '';
+  List<String> buttonLabels = ['All', 'Education', 'Food', 'Health', 'Animal'];
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -271,23 +279,14 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.89,
-                  child: const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                      'Urgent Causes',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                ButtonRow(selectedIndex: selectedIndex,
+                  onButtonPressed: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },),
                 StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: _stream,
+                 stream: _stream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -298,10 +297,15 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                     final filteredData = snapshot.data!.docs.where((document) {
                       final data = document.data();
                       final title = data['title'].toString().toLowerCase();
-                      final subtitle = data['subtitle'].toString().toLowerCase();
-                      return title.contains(_searchKeyword) || subtitle.contains(_searchKeyword);
+                      final subtitle =
+                          data['subtitle'].toString().toLowerCase();
+                      final category = data['category']
+                          .toString()
+                          .toLowerCase(); // Menambahkan filter berdasarkan kategori
+                      final filter_category = selectedIndex==0 || category==(buttonLabels[selectedIndex].toLowerCase()); 
+                      final filter_keyword = title.contains(_searchKeyword) || subtitle.contains(_searchKeyword);
+                      return filter_category && filter_keyword;
                     });
-
                     return Column(
                       children: [
                         ...filteredData.map((document) {
@@ -319,22 +323,6 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                     );
                   },
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.89,
-                  child: const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Text(
-                      'Featured Causes',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                const ButtonRow(),
               ],
             ),
           ),
