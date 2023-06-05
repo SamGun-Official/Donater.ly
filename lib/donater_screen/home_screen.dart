@@ -138,6 +138,26 @@ class DonaterHomeScreen extends StatefulWidget {
 class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
   final _firestore = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser!;
+  late Stream<QuerySnapshot<Map<String, dynamic>>> _stream;
+  TextEditingController _searchController = TextEditingController();
+  String _searchKeyword = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _stream = _firestore.collection('Donations').snapshots();
+    _searchController.addListener(() {
+      setState(() {
+        _searchKeyword = _searchController.text.toLowerCase();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -234,6 +254,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: TextField(
+                      controller: _searchController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.search,
@@ -266,28 +287,37 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                   ),
                 ),
                 StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: _firestore.collection('Donations').snapshots(),
+                  stream: _stream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                    return Column(children: [
-                      ...snapshot.data!.docs.map((document) {
-                        final data = document.data();
-                        return CustomCard(
-                          imagePath: data['imagePath'],
-                          title: data['title'],
-                          subtitle: data['subtitle'],
-                          daysLeft: data['daysLeft'],
-                          progress: data['progress'],
-                          collectedAmount: data['collectedAmount'],
-                        );
-                      })
-                    ]);
+
+                    final filteredData = snapshot.data!.docs.where((document) {
+                      final data = document.data();
+                      final title = data['title'].toString().toLowerCase();
+                      final subtitle = data['subtitle'].toString().toLowerCase();
+                      return title.contains(_searchKeyword) || subtitle.contains(_searchKeyword);
+                    });
+
+                    return Column(
+                      children: [
+                        ...filteredData.map((document) {
+                          final data = document.data();
+                          return CustomCard(
+                            imagePath: data['imagePath'],
+                            title: data['title'],
+                            subtitle: data['subtitle'],
+                            daysLeft: data['daysLeft'],
+                            progress: data['progress'],
+                            collectedAmount: data['collectedAmount'],
+                          );
+                        }),
+                      ],
+                    );
                   },
-                  //doneTasks: _doneTodoList,
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.89,
@@ -304,10 +334,10 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                     ),
                   ),
                 ),
-                const ButtonRow()
+                const ButtonRow(),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
