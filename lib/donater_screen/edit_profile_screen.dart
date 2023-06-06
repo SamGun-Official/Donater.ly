@@ -188,31 +188,35 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     ),
                   ),
                 ),
-                CircleAvatar(
-                  radius: 80,
-                  backgroundColor: Colors.transparent,
-                  child: Container(
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.blue,
-                      size: 120,
-                    ),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: Colors.blue,
-                          width: 3), // Increase width for a thicker border
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
+                  CircleAvatar(
+                    radius: 80,
+                    backgroundColor: Colors.transparent,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.transparent,
+                          width: 3,
                         ),
-                      ],
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2), // Ubah warna bayangan di sini
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'images/profile.png',
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
