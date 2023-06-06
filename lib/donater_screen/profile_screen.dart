@@ -34,9 +34,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'My Profile',
-                          style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                       Expanded(
+                          child: Center(
+                            child: Text(
+                              'My Profile',
+                              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
                         CircleAvatar(
                           backgroundColor: Colors.white,
