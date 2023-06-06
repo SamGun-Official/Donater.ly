@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/models/donation.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
@@ -101,37 +102,43 @@ class _ButtonRowState extends State<ButtonRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: List.generate(
-        buttonLabels.length,
-        (index) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                widget.onButtonPressed(index); // Call the provided callback function
-              });
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: widget.selectedIndex == index ? Colors.blue : Colors.grey,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            child: Text(
-              buttonLabels[index],
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white,
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: List.generate(
+            buttonLabels.length,
+            (index) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    widget.onButtonPressed(index); // Call the provided callback function
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: widget.selectedIndex == index ? Colors.blue : Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Text(
+                  buttonLabels[index],
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
               ),
             ),
           ),
         ),
-      ),
+        const SizedBox(height: 16), // Margin bottom
+      ],
     );
   }
 }
+
 
 class DonaterHomeScreen extends StatefulWidget {
   static const routeName = '/donater_home';
@@ -310,13 +317,32 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       children: [
                         ...filteredData.map((document) {
                           final data = document.data();
-                          return CustomCard(
-                            imagePath: data['imagePath'],
-                            title: data['title'],
-                            subtitle: data['subtitle'],
-                            daysLeft: data['daysLeft'],
-                            progress: data['progress'],
-                            collectedAmount: data['collectedAmount'],
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/donater_detail',
+                                  arguments: Donation(
+                                    id: data['id'],
+                                    imagePath: data['imagePath'],
+                                    title: data['title'],
+                                    subtitle: data['subtitle'],
+                                    description: data['description'],
+                                    fundraiser: data['fundraiser'],
+                                    isFundraiserVerified:
+                                        data['isFundraiserVerified'],
+                                    daysLeft: data['daysLeft'],
+                                    donaterCount: data['donaterCount'],
+                                    progress: data['progress'],
+                                    collectedAmount: data['collectedAmount'],
+                                  ));
+                            },
+                            child: CustomCard(
+                              imagePath: data['imagePath'],
+                              title: data['title'],
+                              subtitle: data['subtitle'],
+                              daysLeft: data['daysLeft'],
+                              progress: data['progress'],
+                              collectedAmount: data['collectedAmount'],
+                            ),
                           );
                         }),
                       ],
