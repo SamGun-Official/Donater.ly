@@ -90,43 +90,44 @@ class ButtonRow extends StatefulWidget {
     Key? key,
     required this.selectedIndex,
     required this.onButtonPressed,
-    });
+  }) : super(key: key);
 
   @override
   _ButtonRowState createState() => _ButtonRowState();
 }
 
 class _ButtonRowState extends State<ButtonRow> {
-  
   List<String> buttonLabels = ['All', 'Education', 'Food', 'Health', 'Animal'];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: List.generate(
-            buttonLabels.length,
-            (index) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    widget.onButtonPressed(index); // Call the provided callback function
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: widget.selectedIndex == index ? Colors.blue : Colors.grey,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              buttonLabels.length,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.onButtonPressed(index); // Call the provided callback function
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: widget.selectedIndex == index ? Colors.blue : Colors.grey,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
-                ),
-                child: Text(
-                  buttonLabels[index],
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
+                  child: Text(
+                    buttonLabels[index],
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -324,13 +325,22 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                   ),
                 ),
               ),
-              ButtonRow(
-                selectedIndex: selectedIndex,
-                onButtonPressed: (index) {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                },
+                SizedBox(
+                width: MediaQuery.of(context).size.width * 0.89,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child:  Container(
+                    alignment: Alignment.topLeft,
+                    child: ButtonRow(
+                      selectedIndex: selectedIndex,
+                      onButtonPressed: (index) {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                    ),
+                  ),
+                ),
               ),
               StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: _stream,
