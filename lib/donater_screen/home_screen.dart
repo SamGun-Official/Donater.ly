@@ -183,7 +183,6 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
             child: ListView(
               children: [
                 SizedBox(
-                  //container card
                   width: double.infinity,
                   child: Card(
                     color: const Color.fromRGBO(107, 147, 225, 1),
@@ -194,11 +193,57 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              StreamBuilder<
+                                  QuerySnapshot<Map<String, dynamic>>>(
+                                stream: _firestore
+                                    .collection('Users')
+                                    .where("uid", isEqualTo: currentUser.uid)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  final userData =
+                                      snapshot.data!.docs[0].data();
+                                  return Row(
+                                    children: [
+                                      ClipOval(
+                                        child: Image.asset(
+                                          'images/profile.jpg',
+                                          width: 80,
+                                          height: 80,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Text(
+                                          "Welcome, ${userData['name']}",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
                           StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                             stream: _firestore
-                                .collection('Users')
-                                .where("uid", isEqualTo: currentUser.uid)
+                                .collection('UserDonates')
+                                .where('userUID', isEqualTo: currentUser.uid)
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
@@ -206,154 +251,151 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                                   child: CircularProgressIndicator(),
                                 );
                               }
-                              final userData = snapshot.data!.docs[0].data();
-                              return Row(
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 40,
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Text(
-                                      "Welcome, ${userData['name']}",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 8,
+                              final userDonatesData = snapshot.data!.docs;
+                              double totalDonation = 0;
+
+                              for (var document in userDonatesData) {
+                                final donationData = document.data();
+                                final donationAmount =
+                                    donationData['total'] as double;
+                                totalDonation += donationAmount;
+                              }
+
+                              return FractionallySizedBox(
+                                widthFactor: 1.0,
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   padding: const EdgeInsets.all(8),
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Icon(
+                                      const Icon(
                                         Icons.attach_money,
                                         color: Color.fromRGBO(107, 147, 225, 1),
                                       ),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        'Rp 1.500.000 total donation',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
+                                      const SizedBox(width: 4),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Rp ${totalDonation.toStringAsFixed(0)} total donation',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            ],
+                              );
+                            },
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.89,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.grey, // Change the icon color
-                        ),
-                        hintText: 'Search',
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
+
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.89,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: Colors.grey, // Change the icon color
+                      ),
+                      hintText: 'Search',
+                      filled: true,
+                      fillColor: Colors.grey[300],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
                 ),
-                ButtonRow(selectedIndex: selectedIndex,
-                  onButtonPressed: (index) {
-                    setState(() {
-                      selectedIndex = index;
-                    });
-                  },),
-                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                 stream: _stream,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    final filteredData = snapshot.data!.docs.where((document) {
-                      final data = document.data();
-                      final title = data['title'].toString().toLowerCase();
-                      final subtitle =
-                          data['subtitle'].toString().toLowerCase();
-                      final category = data['category']
-                          .toString()
-                          .toLowerCase(); // Menambahkan filter berdasarkan kategori
-                      final filter_category = selectedIndex==0 || category==(buttonLabels[selectedIndex].toLowerCase()); 
-                      final filter_keyword = title.contains(_searchKeyword) || subtitle.contains(_searchKeyword);
-                      return filter_category && filter_keyword;
-                    });
-                    return Column(
-                      children: [
-                        ...filteredData.map((document) {
-                          final data = document.data();
-                          return InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/donater_detail',
-                                  arguments: Donation(
-                                    id: data['id'],
-                                    imagePath: data['imagePath'],
-                                    title: data['title'],
-                                    subtitle: data['subtitle'],
-                                    description: data['description'],
-                                    fundraiser: data['fundraiser'],
-                                    isFundraiserVerified:
-                                        data['isFundraiserVerified'],
-                                    daysLeft: data['daysLeft'],
-                                    donaterCount: data['donaterCount'],
-                                    progress: data['progress'],
-                                    collectedAmount: data['collectedAmount'],
-                                  ));
-                            },
-                            child: CustomCard(
-                              imagePath: data['imagePath'],
-                              title: data['title'],
-                              subtitle: data['subtitle'],
-                              daysLeft: data['daysLeft'],
-                              progress: data['progress'],
-                              collectedAmount: data['collectedAmount'],
-                            ),
-                          );
-                        }),
-                      ],
+              ),
+              ButtonRow(
+                selectedIndex: selectedIndex,
+                onButtonPressed: (index) {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+              ),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: _stream,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                ),
-              ],
-            ),
+                  }
+
+                  final filteredData = snapshot.data!.docs.where((document) {
+                    final data = document.data();
+                    final title = data['title'].toString().toLowerCase();
+                    final subtitle =
+                        data['subtitle'].toString().toLowerCase();
+                    final category =
+                        data['category'].toString().toLowerCase();
+                    final filter_category = selectedIndex == 0 ||
+                        category == (buttonLabels[selectedIndex].toLowerCase());
+                    final filter_keyword =
+                        title.contains(_searchKeyword) ||
+                            subtitle.contains(_searchKeyword);
+                    return filter_category && filter_keyword;
+                  });
+                  return Column(
+                    children: [
+                      ...filteredData.map((document) {
+                        final data = document.data();
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/donater_detail',
+                                arguments: Donation(
+                                  id: data['id'],
+                                  imagePath: data['imagePath'],
+                                  title: data['title'],
+                                  subtitle: data['subtitle'],
+                                  description: data['description'],
+                                  fundraiser: data['fundraiser'],
+                                  isFundraiserVerified:
+                                      data['isFundraiserVerified'],
+                                  daysLeft: data['daysLeft'],
+                                  donaterCount: data['donaterCount'],
+                                  progress: data['progress'],
+                                  collectedAmount: data['collectedAmount'],
+                                ));
+                          },
+                          child: CustomCard(
+                            imagePath: data['imagePath'],
+                            title: data['title'],
+                            subtitle: data['subtitle'],
+                            daysLeft: data['daysLeft'],
+                            progress: data['progress'],
+                            collectedAmount: data['collectedAmount'],
+                          ),
+                        );
+                      }),
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 }
