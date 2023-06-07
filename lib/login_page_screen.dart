@@ -73,9 +73,9 @@ class LoginPage extends StatelessWidget {
                             0.02), // Added extra space to align the back button properly
                     Align(
                       alignment: Alignment.topLeft,
-                      child:   InkWell(
+                      child: InkWell(
                         onTap: () {
-                           Navigator.pushNamed(context, MenuScreen.routeName);
+                          Navigator.pushNamed(context, MenuScreen.routeName);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -211,7 +211,7 @@ class LoginPage extends StatelessWidget {
                                 .signInWithEmailAndPassword(
                                     email: email, password: password)
                                 .then((value) {
-                               Navigator.pushNamed(context, '/main_donater');
+                              Navigator.pushNamed(context, '/main_donater');
                             });
                           } on Exception catch (e) {
                             final snackbar =

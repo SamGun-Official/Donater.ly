@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_password_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -34,11 +35,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                       Expanded(
+                        Expanded(
                           child: Center(
                             child: Text(
                               'My Profile',
-                              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 26, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -60,7 +62,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const DonaterEditProfileScreen()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const DonaterEditProfileScreen()),
                     );
                   },
                   child: Card(
@@ -95,7 +99,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                                StreamBuilder<
+                                    QuerySnapshot<Map<String, dynamic>>>(
                                   stream: _firestore
                                       .collection('Users')
                                       .where("uid", isEqualTo: currentUser.uid)
@@ -106,9 +111,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         child: CircularProgressIndicator(),
                                       );
                                     }
-                                    final userData = snapshot.data!.docs[0].data();
+                                    final userData =
+                                        snapshot.data!.docs[0].data();
                                     return Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '${userData['name']}',
@@ -131,7 +138,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           IconButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, DonaterEditProfileScreen.routeName);
+                              Navigator.pushNamed(
+                                  context, DonaterEditProfileScreen.routeName);
                             },
                             icon: const Icon(Icons.edit),
                           ),
@@ -144,7 +152,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SavedDonationsPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const DonaterSavedDonationScreen()),
                     );
                   },
                   child: Card(
@@ -185,7 +194,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const TransactionHistoryPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const TransactionHistoryPage()),
                     );
                   },
                   child: Card(
@@ -224,10 +234,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                   //ganti password
-                     Navigator.push(
+                    //ganti password
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const DonaterEditPasswordScreen()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const DonaterEditPasswordScreen()),
                     );
                   },
                   child: Card(
@@ -379,5 +391,3 @@ class ChangePasswordPage extends StatelessWidget {
     );
   }
 }
-
-

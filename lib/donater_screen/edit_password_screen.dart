@@ -103,7 +103,7 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -206,9 +206,10 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                           // Edit profile
                           String oldPassword = _oldPasswordController.text;
                           String newPassword = _newPasswordController.text;
-                          String confirmPassword = _confirmPasswordController.text;
+                          String confirmPassword =
+                              _confirmPasswordController.text;
 
-                           // Verify if new password and confirm password match
+                          // Verify if new password and confirm password match
                           if (newPassword == confirmPassword) {
                             try {
                               // Re-authenticate user with current password
@@ -246,7 +247,7 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                           } else {
                             // New password and confirm password do not match
                             const snackbar = SnackBar(
-                                content:  Text("Passwords do not match!"));
+                                content: Text("Passwords do not match!"));
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackbar);
                           }
@@ -279,5 +280,4 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
       ),
     );
   }
- 
 }

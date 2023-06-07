@@ -69,7 +69,7 @@ class RegisterPage extends StatelessWidget {
                             0.02), // Added extra space to align the back button properly
                     Align(
                       alignment: Alignment.topLeft,
-                      child:   InkWell(
+                      child: InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, MenuScreen.routeName);
                         },
@@ -106,7 +106,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 28.0),
                     TextField(
-                     controller: _usernameController,
+                      controller: _usernameController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(
                           Icons.person,
@@ -319,7 +319,7 @@ class RegisterPage extends StatelessWidget {
                             final password = _passwordController.text;
                             final name = _nameController.text;
                             final phone = _phoneController.text;
-                            final username  = _usernameController.text;
+                            final username = _usernameController.text;
 
                             await _auth
                                 .createUserWithEmailAndPassword(
@@ -328,12 +328,12 @@ class RegisterPage extends StatelessWidget {
                               await FirebaseFirestore.instance
                                   .collection('Users')
                                   .add({
-                                'username': username,   
-                                'password': password, 
+                                'username': username,
+                                'password': password,
                                 'email': email,
                                 'name': name,
                                 'phone': phone,
-                                'uid':value.user!.uid
+                                'uid': value.user!.uid
                               });
                             }).then((value) {
                               const snackbar =
