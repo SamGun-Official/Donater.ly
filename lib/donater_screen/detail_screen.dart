@@ -72,6 +72,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                       ),
                       InkWell(
                         onTap: () async {
+                          print('coba');
                           isDonationExists =
                               dbProvider.savedDonations.any((savedDonation) {
                             return savedDonation.donationId == donation.id &&
