@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,7 @@ class CustomCard extends StatelessWidget {
   final String subtitle;
   final int daysLeft;
   final double progress;
-  final int collectedAmount;
+  final double collectedAmount;
 
   const CustomCard({
     required this.imagePath,
@@ -113,11 +115,14 @@ class _ButtonRowState extends State<ButtonRow> {
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      widget.onButtonPressed(index); // Call the provided callback function
+                      widget.onButtonPressed(
+                          index); // Call the provided callback function
                     });
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.selectedIndex == index ? Colors.blue : Colors.grey,
+                    backgroundColor: widget.selectedIndex == index
+                        ? Colors.blue
+                        : Colors.grey,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -139,7 +144,6 @@ class _ButtonRowState extends State<ButtonRow> {
     );
   }
 }
-
 
 class DonaterHomeScreen extends StatefulWidget {
   static const routeName = '/donater_home';
@@ -257,8 +261,8 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
 
                               for (var document in userDonatesData) {
                                 final donationData = document.data();
-                                final donationAmount =
-                                    donationData['total'] as double;
+                                final donationAmount = double.parse(
+                                    donationData['total'].toString());
                                 totalDonation += donationAmount;
                               }
 
@@ -302,110 +306,110 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                     ),
                   ),
                 ),
-
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.89,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: Colors.grey, // Change the icon color
-                      ),
-                      hintText: 'Search',
-                      filled: true,
-                      fillColor: Colors.grey[300],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
                 SizedBox(
-                width: MediaQuery.of(context).size.width * 0.89,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child:  Container(
-                    alignment: Alignment.topLeft,
-                    child: ButtonRow(
-                      selectedIndex: selectedIndex,
-                      onButtonPressed: (index) {
-                        setState(() {
-                          selectedIndex = index;
-                        });
-                      },
+                  width: MediaQuery.of(context).size.width * 0.89,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.grey, // Change the icon color
+                        ),
+                        hintText: 'Search',
+                        filled: true,
+                        fillColor: Colors.grey[300],
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: _stream,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.89,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Container(
+                      alignment: Alignment.topLeft,
+                      child: ButtonRow(
+                        selectedIndex: selectedIndex,
+                        onButtonPressed: (index) {
+                          setState(() {
+                            selectedIndex = index;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: _stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
-                  final filteredData = snapshot.data!.docs.where((document) {
-                    final data = document.data();
-                    final title = data['title'].toString().toLowerCase();
-                    final subtitle =
-                        data['subtitle'].toString().toLowerCase();
-                    final category =
-                        data['category'].toString().toLowerCase();
-                    final filter_category = selectedIndex == 0 ||
-                        category == (buttonLabels[selectedIndex].toLowerCase());
-                    final filter_keyword =
-                        title.contains(_searchKeyword) ||
-                            subtitle.contains(_searchKeyword);
-                    return filter_category && filter_keyword;
-                  });
-                  return Column(
-                    children: [
-                      ...filteredData.map((document) {
-                        final data = document.data();
-                        return InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/donater_detail',
-                                arguments: Donation(
-                                  id: data['id'],
-                                  imagePath: data['imagePath'],
-                                  title: data['title'],
-                                  subtitle: data['subtitle'],
-                                  description: data['description'],
-                                  fundraiser: data['fundraiser'],
-                                  isFundraiserVerified:
-                                      data['isFundraiserVerified'],
-                                  daysLeft: data['daysLeft'],
-                                  donaterCount: data['donaterCount'],
-                                  progress: data['progress'],
-                                  collectedAmount: data['collectedAmount'],
-                                ));
-                          },
-                          child: CustomCard(
-                            imagePath: data['imagePath'],
-                            title: data['title'],
-                            subtitle: data['subtitle'],
-                            daysLeft: data['daysLeft'],
-                            progress: data['progress'],
-                            collectedAmount: data['collectedAmount'],
-                          ),
-                        );
-                      }),
-                    ],
-                  );
-                },
-              ),
-            ],
+                    final filteredData = snapshot.data!.docs.where((document) {
+                      final data = document.data();
+                      final title = data['title'].toString().toLowerCase();
+                      final subtitle =
+                          data['subtitle'].toString().toLowerCase();
+                      final category =
+                          data['category'].toString().toLowerCase();
+                      final filter_category = selectedIndex == 0 ||
+                          category ==
+                              (buttonLabels[selectedIndex].toLowerCase());
+                      final filter_keyword = title.contains(_searchKeyword) ||
+                          subtitle.contains(_searchKeyword);
+                      return filter_category && filter_keyword;
+                    });
+                    return Column(
+                      children: [
+                        ...filteredData.map((document) {
+                          final data = document.data();
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/donater_detail',
+                                  arguments: Donation(
+                                    id: data['id'],
+                                    imagePath: data['imagePath'],
+                                    title: data['title'],
+                                    subtitle: data['subtitle'],
+                                    description: data['description'],
+                                    fundraiser: data['fundraiser'],
+                                    isFundraiserVerified:
+                                        data['isFundraiserVerified'],
+                                    daysLeft: data['daysLeft'],
+                                    donaterCount: data['donaterCount'],
+                                    progress: data['progress'],
+                                    collectedAmount: data['collectedAmount'],
+                                  ));
+                            },
+                            child: CustomCard(
+                              imagePath: data['imagePath'],
+                              title: data['title'],
+                              subtitle: data['subtitle'],
+                              daysLeft: data['daysLeft'],
+                              progress: data['progress'],
+                              collectedAmount: double.parse(
+                                  data['collectedAmount'].toString()),
+                            ),
+                          );
+                        }),
+                      ],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 }
