@@ -425,6 +425,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                 StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: _firestore.collection('Donations').snapshots(),
                   builder: (context, snapshot) {
+                    print(snapshot);
                     if (!snapshot.hasData) {
                       return const Center(
                         child: CircularProgressIndicator(),

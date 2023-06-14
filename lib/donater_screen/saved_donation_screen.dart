@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
+import 'package:multiplatform_donation_app/models/donation.dart';
 import 'package:multiplatform_donation_app/provider/db_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -6,9 +10,9 @@ class CustomCard extends StatelessWidget {
   final String imagePath;
   final String title;
   final String subtitle;
-  final String daysLeft;
+  final int daysLeft;
   final double progress;
-  final String collectedAmount;
+  final int collectedAmount;
 
   const CustomCard({
     super.key,
@@ -57,7 +61,7 @@ class CustomCard extends StatelessWidget {
                     children: [
                       const Icon(Icons.timer, size: 16),
                       const SizedBox(width: 4),
-                      Text(daysLeft),
+                      Text("$daysLeft days left"),
                     ],
                   ),
                   const SizedBox(height: 8),
@@ -72,7 +76,7 @@ class CustomCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(collectedAmount),
+                  Text(currencyFormat.format(collectedAmount)),
                 ],
               ),
             ),
@@ -94,8 +98,11 @@ class DonaterSavedDonationScreen extends StatefulWidget {
 
 class _DonaterSavedDonationScreenState
     extends State<DonaterSavedDonationScreen> {
+  final _firestore = FirebaseFirestore.instance;
+  final currentUser = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
+    final dbProvider = Provider.of<DbProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -140,7 +147,7 @@ class _DonaterSavedDonationScreenState
                               fontSize: 26, fontWeight: FontWeight.bold),
                         ),
                         const CircleAvatar(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.transparent,
                           child: Opacity(
                             opacity: 0.0,
                             child: Icon(
@@ -153,42 +160,57 @@ class _DonaterSavedDonationScreenState
                     ),
                   ),
                 ),
-
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Many Children Need Food to Survive',
-                  subtitle: 'The Unity',
-                  daysLeft: '20 days left',
-                  progress: 0.2,
-                  collectedAmount: 'Collected Rp 150.000,00',
-                ),
-                const SizedBox(height: 16),
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Build a school to study',
-                  subtitle: 'Another Subtitle',
-                  daysLeft: '10 days left',
-                  progress: 0.5,
-                  collectedAmount: 'Collected Rp 200.000,00',
-                ),
-                const SizedBox(height: 16),
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Build a school to study',
-                  subtitle: 'Another Subtitle',
-                  daysLeft: '10 days left',
-                  progress: 0.5,
-                  collectedAmount: 'Collected Rp 200.000,00',
-                ),
-                const SizedBox(height: 16),
-                const CustomCard(
-                  imagePath: 'images/detail_pic.jpg',
-                  title: 'Build a school to study',
-                  subtitle: 'Another Subtitle',
-                  daysLeft: '10 days left',
-                  progress: 0.5,
-                  collectedAmount: 'Collected Rp 200.000,00',
-                ),
+                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: _firestore.collection('Donations').snapshots(),
+                    builder: (context, snapshot) {
+                      print(snapshot);
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      var donations = snapshot.data!.docs;
+                      return Column(children: [
+                        ...donations.map((document) {
+                          final data = document.data();
+                          if (dbProvider.savedDonations.any((savedDonation) {
+                            return savedDonation.donationId == data['id'] &&
+                                savedDonation.userUid == currentUser.uid;
+                          })) {
+                            return InkWell(
+                              onTap: () async {
+                                final navigator = await Navigator.pushNamed(
+                                    context, '/donater_detail',
+                                    arguments: Donation(
+                                      id: data['id'],
+                                      imagePath: data['imagePath'],
+                                      title: data['title'],
+                                      subtitle: data['subtitle'],
+                                      description: data['description'],
+                                      fundraiser: data['fundraiser'],
+                                      isFundraiserVerified:
+                                          data['isFundraiserVerified'],
+                                      daysLeft: data['daysLeft'],
+                                      donaterCount: data['donaterCount'],
+                                      progress: data['progress'],
+                                      collectedAmount: data['collectedAmount'],
+                                    ));
+                                setState(() {});
+                              },
+                              child: CustomCard(
+                                imagePath: data['imagePath'],
+                                title: data['title'],
+                                subtitle: data['subtitle'],
+                                daysLeft: data['daysLeft'],
+                                progress: data['progress'],
+                                collectedAmount: data['collectedAmount'],
+                              ),
+                            );
+                          }
+                          return const SizedBox(height: 5);
+                        }),
+                      ]);
+                    }),
               ],
             ),
           ),
