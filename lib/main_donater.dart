@@ -22,7 +22,7 @@ class MainDonater extends StatefulWidget {
 }
 
 class _MainDonaterState extends State<MainDonater> {
-  dynamic menu = BottomNavigation.menu;
+  late dynamic menu = DonaterHomeScreen();
 
   void _onItemTapped(int index) {
     setState(() {
