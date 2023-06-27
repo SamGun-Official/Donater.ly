@@ -1,5 +1,7 @@
 import 'dart:ffi';
 
+import 'package:intl/intl.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +76,12 @@ class CustomCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(collectedAmount.toString()),
+                  Text(
+                    NumberFormat.currency(
+                      locale: 'id_ID',
+                      symbol: 'Rp',
+                    ).format(collectedAmount),
+                  ),
                 ],
               ),
             ),
@@ -287,7 +294,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                                         child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            'Rp ${totalDonation.toStringAsFixed(0)} total donation',
+                                            'Rp ${NumberFormat.currency(locale: 'id_ID', symbol: '').format(totalDonation)} total donation',
                                             style: const TextStyle(
                                               fontSize: 16,
                                               color: Colors.black,
@@ -397,7 +404,8 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                               daysLeft: data['daysLeft'],
                               progress: data['progress'],
                               collectedAmount: double.parse(
-                                  data['collectedAmount'].toString()),
+                                data['collectedAmount'].toString(),
+                              ),
                             ),
                           );
                         }),

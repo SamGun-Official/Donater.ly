@@ -89,11 +89,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                               collectedAmount: data['collectedAmount'],
                               donationNeeded: data['donationNeeded']);
 
-                          Navigator.pushNamed(
-                            context,
-                            DonaterDetailScreen.routeName,
-                            arguments: updatedDonation,
-                          );
+                          Navigator.pop(context, updatedDonation);
                         }
                       },
                       child: Container(
@@ -461,7 +457,6 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     const SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: () {
-                        
                         final amount = total;
                         final expiredDate = _dateController.text;
                         final cvv = _cvvController.text.toString();
