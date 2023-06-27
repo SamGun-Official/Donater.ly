@@ -194,6 +194,7 @@ class _DonaterSavedDonationScreenState
                                       donaterCount: data['donaterCount'],
                                       progress: data['progress'],
                                       collectedAmount: data['collectedAmount'],
+                                      donationNeeded: data['donationNeeded']
                                     ));
                                 setState(() {});
                               },

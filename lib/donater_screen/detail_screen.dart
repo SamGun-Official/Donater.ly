@@ -343,8 +343,29 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, "/donater_donate",
-                                  arguments: donation);
+                              if (donation.progress >= 1.0) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text('Donation Closed'),
+                                      content: const Text(
+                                          'Donasi sudah mencapai batas maksimal!'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                Navigator.pushNamed(context, "/donater_donate",
+                                    arguments: donation);
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               foregroundColor: Colors.white,
