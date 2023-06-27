@@ -211,7 +211,7 @@ class LoginPage extends StatelessWidget {
                                 .signInWithEmailAndPassword(
                                     email: email, password: password)
                                 .then((value) {
-                              Navigator.pushNamed(context, '/main_donater');
+                              Navigator.pushNamed(context, '/donater_home_route');
                             });
                           } on Exception catch (e) {
                             final snackbar =
