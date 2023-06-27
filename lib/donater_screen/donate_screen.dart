@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
 import 'package:multiplatform_donation_app/models/donation.dart';
 
 class DonaterDonateScreen extends StatefulWidget {
@@ -16,6 +15,8 @@ class DonaterDonateScreen extends StatefulWidget {
 
 class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
   var selectedIcon = Icons.credit_card;
+  int selectedPaymentMethod = 0; // 0 = Credit Card, 1 = Cash
+  bool isEmptyCVV = true;
   final TextEditingController _dateController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _cvvController = TextEditingController();
@@ -52,7 +53,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final Donation donation = args['donation'] as Donation;
     final Function updateDonation = args['updateDonation'] as Function;
-    final _firestore = FirebaseFirestore.instance;
+    final firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
@@ -92,6 +93,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                               collectedAmount: data['collectedAmount'],
                               donationNeeded: data['donationNeeded']);
                           updateDonation(updatedDonation);
+                          if (!mounted) return;
                           Navigator.pop(context);
                         }
                       },
@@ -115,8 +117,10 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     ),
                     const Text(
                       'Donate',
-                      style:
-                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const CircleAvatar(
                       backgroundColor: Colors.white,
@@ -136,7 +140,11 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     color: Color.fromRGBO(
-                        0, 0, 0, 0.5), // Mengatur warna dengan transparansi
+                      0,
+                      0,
+                      0,
+                      0.5,
+                    ), // Mengatur warna dengan transparansi
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -168,7 +176,9 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                               Text(
                                 donation.title,
                                 style: const TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               Row(
@@ -178,8 +188,10 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                     style: const TextStyle(fontSize: 14),
                                   ),
                                   const SizedBox(width: 8),
-                                  const Icon(Icons.check_circle,
-                                      color: Colors.green),
+                                  const Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green,
+                                  ),
                                 ],
                               ),
                             ],
@@ -272,26 +284,36 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                           selectedIcon = newValue!;
                                         });
                                       },
-                                      items: const [
+                                      items: [
                                         DropdownMenuItem(
                                           value: Icons.credit_card,
-                                          child: Row(
+                                          child: const Row(
                                             children: [
                                               Icon(Icons.credit_card),
                                               SizedBox(width: 8),
                                               Text('Credit Card'),
                                             ],
                                           ),
+                                          onTap: () {
+                                            setState(() {
+                                              selectedPaymentMethod = 0;
+                                            });
+                                          },
                                         ),
                                         DropdownMenuItem(
                                           value: Icons.monetization_on,
-                                          child: Row(
+                                          child: const Row(
                                             children: [
                                               Icon(Icons.monetization_on),
                                               SizedBox(width: 8),
                                               Text('Cash'),
                                             ],
                                           ),
+                                          onTap: () {
+                                            setState(() {
+                                              selectedPaymentMethod = 1;
+                                            });
+                                          },
                                         ),
                                       ],
                                     ),
@@ -305,105 +327,119 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Expired Date',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(10),
-                              child: TextFormField(
-                                controller: _dateController,
-                                readOnly: true,
-                                onTap: () async {
-                                  final DateTime? pickedDate =
-                                      await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime(2100),
-                                  );
-                                  if (pickedDate != null) {
-                                    setState(() {
-                                      _dateController.text =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(pickedDate);
-                                    });
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                    horizontal: 16,
-                                  ),
-                                  hintText: 'Select Date',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
+                Visibility(
+                  visible: selectedPaymentMethod == 0 ? true : false,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Expired Date',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'CVV',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Material(
-                              elevation: 5,
-                              borderRadius: BorderRadius.circular(10),
-                              child: TextFormField(
-                                controller: _cvvController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                    horizontal: 16,
+                              const SizedBox(height: 8),
+                              Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(10),
+                                child: TextFormField(
+                                  controller: _dateController,
+                                  readOnly: true,
+                                  onTap: () async {
+                                    final DateTime? pickedDate =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2100),
+                                    );
+                                    if (pickedDate != null) {
+                                      setState(() {
+                                        _dateController.text =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(pickedDate);
+                                      });
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                      horizontal: 16,
+                                    ),
+                                    hintText: 'Select Date',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.white,
                                   ),
-                                  hintText: 'CVV',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
                                 ),
-                                obscureText: true,
-                              ),
-                            ),
-                          ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'CVV',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Material(
+                                elevation: 5,
+                                borderRadius: BorderRadius.circular(10),
+                                child: TextFormField(
+                                  controller: _cvvController,
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                      horizontal: 16,
+                                    ),
+                                    hintText: 'CVV',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                  ),
+                                  onChanged: (value) {
+                                    if (value.isEmpty) {
+                                      setState(() {
+                                        isEmptyCVV = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        isEmptyCVV = false;
+                                      });
+                                    }
+                                  },
+                                  obscureText: true,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Column(
@@ -459,79 +495,114 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     ),
                     const SizedBox(height: 32),
                     ElevatedButton(
-                      onPressed: () {
-                        final amount = total;
-                        final expiredDate = _dateController.text;
-                        final cvv = _cvvController.text.toString();
-                        final paymentMethod =
-                            ((selectedIcon == Icons.credit_card)
-                                ? "credit card"
-                                : "cash");
-                        _firestore.collection('UserDonates').add({
-                          'CVV': cvv,
-                          'donationID': donation.id,
-                          'expiredDate': DateTime.parse(expiredDate),
-                          'paymentMethod': paymentMethod,
-                          'total': double.parse(amount.toString()),
-                          'userUID': currentUser.uid
-                        }).then((value) {
-                          _firestore
-                              .collection('Donations')
-                              .where('id', isEqualTo: donation.id)
-                              .get()
-                              .then((QuerySnapshot querySnapshot) {
-                            if (querySnapshot.docs.isNotEmpty) {
-                              for (QueryDocumentSnapshot donationDocument
-                                  in querySnapshot.docs) {
-                                final donationId = donationDocument.id;
-                                final currentCollectedAmount = donationDocument
-                                        .get('collectedAmount') as int? ??
-                                    0;
-                                final donaterCount = donationDocument
-                                        .get('donaterCount') as int? ??
-                                    0;
+                      onPressed: (_amountController.text.isEmpty ||
+                              (selectedPaymentMethod == 0 &&
+                                  (_dateController.text.isEmpty || isEmptyCVV)))
+                          ? null
+                          : () {
+                              final amount = total;
+                              final expiredDate = _dateController.text;
+                              final cvv = _cvvController.text.toString();
+                              final paymentMethod =
+                                  ((selectedIcon == Icons.credit_card)
+                                      ? "credit card"
+                                      : "cash");
 
-                                final updatedCollectedAmount =
-                                    currentCollectedAmount + amount.toInt();
+                              try {
+                                if (amount <= 0) {
+                                  throw Exception("Amount cannot be 0!");
+                                }
+                                firestore.collection('UserDonates').add({
+                                  'CVV':
+                                      selectedPaymentMethod == 1 ? null : cvv,
+                                  'donationID': donation.id,
+                                  'expiredDate': selectedPaymentMethod == 1
+                                      ? null
+                                      : DateTime.parse(expiredDate),
+                                  'paymentMethod': paymentMethod,
+                                  'total': double.parse(amount.toString()),
+                                  'userUID': currentUser.uid
+                                }).then((value) {
+                                  firestore
+                                      .collection('Donations')
+                                      .where('id', isEqualTo: donation.id)
+                                      .get()
+                                      .then((QuerySnapshot querySnapshot) {
+                                    if (querySnapshot.docs.isNotEmpty) {
+                                      for (QueryDocumentSnapshot donationDocument
+                                          in querySnapshot.docs) {
+                                        final donationId = donationDocument.id;
+                                        final currentCollectedAmount =
+                                            donationDocument
+                                                        .get('collectedAmount')
+                                                    as int? ??
+                                                0;
+                                        final donaterCount = donationDocument
+                                                .get('donaterCount') as int? ??
+                                            0;
 
-                                final double progress =
-                                    (updatedCollectedAmount /
-                                        (donationDocument.get('donationNeeded')
-                                                as int? ??
-                                            1));
-                                final double roundedProgress =
-                                    double.parse(progress.toStringAsFixed(1));
+                                        final updatedCollectedAmount =
+                                            currentCollectedAmount +
+                                                amount.toInt();
 
-                                _firestore
-                                    .collection('Donations')
-                                    .doc(donationId)
-                                    .update({
-                                      'collectedAmount': updatedCollectedAmount,
-                                      'donaterCount': donaterCount + 1,
-                                      'progress': roundedProgress
-                                    })
-                                    .then((_) {})
-                                    .catchError((error) {
-                                      print(
-                                          'Error updating collected amount: $error');
-                                    });
+                                        final double progress =
+                                            (updatedCollectedAmount /
+                                                (donationDocument.get(
+                                                            'donationNeeded')
+                                                        as int? ??
+                                                    1));
+                                        final double roundedProgress =
+                                            double.parse(
+                                                progress.toStringAsFixed(1));
+
+                                        firestore
+                                            .collection('Donations')
+                                            .doc(donationId)
+                                            .update({
+                                              'collectedAmount':
+                                                  updatedCollectedAmount,
+                                              'donaterCount': donaterCount + 1,
+                                              'progress': roundedProgress
+                                            })
+                                            .then((_) {})
+                                            .catchError((error) {
+                                              debugPrint(
+                                                  'Error updating collected amount: $error');
+                                            });
+                                      }
+                                    } else {
+                                      debugPrint('Donation not found');
+                                    }
+                                  }).catchError((error) {
+                                    debugPrint(
+                                        'Error retrieving donation: $error');
+                                  });
+
+                                  const snackbar = SnackBar(
+                                      content: Text("Donate successful!"));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackbar);
+
+                                  Navigator.of(context).pop();
+                                });
+                              } catch (e) {
+                                String errorMessage = e.toString();
+                                int index = errorMessage.indexOf(':');
+                                String formattedErrorMessage = index != -1
+                                    ? errorMessage.substring(index + 2).trim()
+                                    : errorMessage;
+
+                                final snackbar = SnackBar(
+                                    content: Text(formattedErrorMessage));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackbar);
                               }
-                            } else {
-                              print('Donation not found');
-                            }
-                          }).catchError((error) {
-                            print('Error retrieving donation: $error');
-                          });
-
-                          const snackbar =
-                              SnackBar(content: Text("Donate successful!"));
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                        });
-                      },
+                            },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
-                              10), // Menambahkan border radius
+                            10,
+                          ), // Menambahkan border radius
                         ),
                       ),
                       child: const Text('Donate Now'),
