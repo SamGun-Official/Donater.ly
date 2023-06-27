@@ -38,6 +38,25 @@ class RegisterPage extends StatelessWidget {
   final _usernameController = TextEditingController();
 
   RegisterPage({super.key});
+
+  Future<bool> isUsernameUnique(String username) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('username', isEqualTo: username)
+        .get();
+
+    return querySnapshot.docs.isEmpty;
+  }
+
+  Future<bool> isPhoneUnique(String phone) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('phone', isEqualTo: phone)
+        .get();
+
+    return querySnapshot.docs.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -320,6 +339,55 @@ class RegisterPage extends StatelessWidget {
                             final name = _nameController.text;
                             final phone = _phoneController.text;
                             final username = _usernameController.text;
+
+                            if (username.isEmpty ||
+                                name.isEmpty ||
+                                email.isEmpty ||
+                                phone.isEmpty ||
+                                password.isEmpty) {
+                              throw Exception('All fields are required.');
+                            }
+
+                            // Check if the username is unique
+                            final checkUsernameUnique =
+                                await isUsernameUnique(username);
+                            if (!checkUsernameUnique) {
+                              throw Exception('Username is already taken.');
+                            }
+
+                            // Check if the phone number is unique
+                            final checkPhoneUnique = await isPhoneUnique(phone);
+                            if (!checkPhoneUnique) {
+                              throw Exception(
+                                  'Phone number is already registered.');
+                            }
+
+                            // Regular expression to match a valid phone number format
+                            final phoneRegex = RegExp(r'^08[0-9]{8,10}$');
+
+                            // Check if the phone number is in the correct format
+                            if (!phoneRegex.hasMatch(phone)) {
+                              throw Exception(
+                                  'Invalid phone number format. Please enter a 10 to 12-digit phone number starting with "08".');
+                            }
+
+                            // Validate password
+                            if (password.length < 8) {
+                              throw Exception(
+                                  'Password must be at least 8 characters long.');
+                            }
+                            if (!password.contains(RegExp(r'[A-Z]'))) {
+                              throw Exception(
+                                  'Password must contain at least one uppercase letter.');
+                            }
+                            if (!password.contains(RegExp(r'[a-z]'))) {
+                              throw Exception(
+                                  'Password must contain at least one lowercase letter.');
+                            }
+                            if (!password.contains(RegExp(r'[0-9]'))) {
+                              throw Exception(
+                                  'Password must contain at least one digit.');
+                            }
 
                             await _auth
                                 .createUserWithEmailAndPassword(
