@@ -512,6 +512,16 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                 if (amount <= 0) {
                                   throw Exception("Amount cannot be 0!");
                                 }
+                                DateTime expiredDateValue =
+                                    DateTime.parse(expiredDate);
+                                DateTime todayDateValue = DateTime.now();
+                                if (!DateUtils.isSameDay(
+                                        expiredDateValue, todayDateValue) &&
+                                    expiredDateValue.compareTo(todayDateValue) <
+                                        0) {
+                                  throw Exception("Expired date is not valid!");
+                                }
+
                                 firestore.collection('UserDonates').add({
                                   'CVV':
                                       selectedPaymentMethod == 1 ? null : cvv,
