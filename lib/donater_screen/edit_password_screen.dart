@@ -209,9 +209,26 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                           String confirmPassword =
                               _confirmPasswordController.text;
 
-                          // Verify if new password and confirm password match
-                          if (newPassword == confirmPassword) {
-                            try {
+                          try {
+                            // Validate password
+                            if (newPassword.length < 8) {
+                              throw Exception(
+                                  'Password must be at least 8 characters long.');
+                            } else if (!newPassword
+                                .contains(RegExp(r'[A-Z]'))) {
+                              throw Exception(
+                                  'Password must contain at least one uppercase letter.');
+                            } else if (!newPassword
+                                .contains(RegExp(r'[a-z]'))) {
+                              throw Exception(
+                                  'Password must contain at least one lowercase letter.');
+                            } else if (!newPassword
+                                .contains(RegExp(r'[0-9]'))) {
+                              throw Exception(
+                                  'Password must contain at least one digit.');
+                            }
+                            // Verify if new password and confirm password match
+                            else if (newPassword == confirmPassword) {
                               // Re-authenticate user with current password
                               AuthCredential credential =
                                   EmailAuthProvider.credential(
@@ -236,21 +253,19 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                               _oldPasswordController.clear();
                               _newPasswordController.clear();
                               _confirmPasswordController.clear();
-                            } catch (error) {
-                              // An error occurred while updating password
-                              // Handle the error appropriately
-                              final snackbar =
-                                  SnackBar(content: Text(error.toString()));
+                            } else {
+                              // New password and confirm password do not match
+                              const snackbar = SnackBar(
+                                  content: Text("Passwords do not match!"));
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackbar);
                             }
-                          } else {
-                            // New password and confirm password do not match
-                            const snackbar = SnackBar(
-                                content: Text("Passwords do not match!"));
+                          } on Exception catch (e) {
+                            final snackbar =
+                                SnackBar(content: Text(e.toString()));
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackbar);
-                          }
+                          } finally {}
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
