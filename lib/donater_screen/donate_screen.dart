@@ -48,7 +48,10 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final donation = ModalRoute.of(context)!.settings.arguments as Donation;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final Donation donation = args['donation'] as Donation;
+    final Function updateDonation = args['updateDonation'] as Function;
     final _firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser!;
 
@@ -88,8 +91,8 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                               progress: data['progress'],
                               collectedAmount: data['collectedAmount'],
                               donationNeeded: data['donationNeeded']);
-
-                          Navigator.pop(context, updatedDonation);
+                          updateDonation(updatedDonation);
+                          Navigator.pop(context);
                         }
                       },
                       child: Container(

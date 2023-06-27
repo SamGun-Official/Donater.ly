@@ -20,16 +20,23 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
   final double donationProgress = 0.6;
   final currentUser = FirebaseAuth.instance.currentUser!;
   bool isDonationExists = false;
+  Donation? donation;
+  void updateDonation(Donation updatedDonation) {
+    setState(() {
+      donation = updatedDonation;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final donation = ModalRoute.of(context)!.settings.arguments as Donation;
+    donation ??= ModalRoute.of(context)!.settings.arguments as Donation;
     final currencyFormat = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp');
     final dbProvider = Provider.of<DbProvider>(context, listen: false);
     isDonationExists = dbProvider.savedDonations.any((savedDonation) {
-      return savedDonation.donationId == donation.id &&
+      return savedDonation.donationId == donation!.id &&
           savedDonation.userUid == currentUser.uid;
     });
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -72,10 +79,9 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                       ),
                       InkWell(
                         onTap: () async {
-                          print('coba');
                           isDonationExists =
                               dbProvider.savedDonations.any((savedDonation) {
-                            return savedDonation.donationId == donation.id &&
+                            return savedDonation.donationId == donation!.id &&
                                 savedDonation.userUid == currentUser.uid;
                           });
 
@@ -83,7 +89,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                           if (isDonationExists) {
                             await dbProvider
                                 .removeSavedDonation(
-                                    donation.id, currentUser.uid)
+                                    donation!.id, currentUser.uid)
                                 .then((_) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -99,7 +105,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                           } else {
                             await dbProvider
                                 .addSavedDonation(SavedDonation(
-                              donationId: donation.id,
+                              donationId: donation!.id,
                               userUid: currentUser.uid,
                               createdAt: Timestamp.now().toString(),
                             ))
@@ -158,14 +164,14 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
                         child: Image.asset(
-                          donation.imagePath,
+                          donation!.imagePath,
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      donation.title,
+                      donation!.title,
                       style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
@@ -181,7 +187,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          "${donation.daysLeft} days left",
+                          "${donation!.daysLeft} days left",
                           style: const TextStyle(fontSize: 16),
                         ),
                       ],
@@ -196,9 +202,9 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                             height: 40,
                             child: Stack(
                               children: List.generate(
-                                  donation.donaterCount >= 3
+                                  donation!.donaterCount >= 3
                                       ? 3
-                                      : donation.donaterCount, (index) {
+                                      : donation!.donaterCount, (index) {
                                 return Positioned(
                                   left: 30.0 * index,
                                   child: Container(
@@ -225,7 +231,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            '${donation.donaterCount}+ donated',
+                            '${donation!.donaterCount}+ donated',
                             style: const TextStyle(fontSize: 16),
                           ),
                         ],
@@ -234,7 +240,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: Text(
-                        donation.description,
+                        donation!.description,
                         style: const TextStyle(fontSize: 16),
                         textAlign: TextAlign.justify,
                       ),
@@ -276,21 +282,21 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                                   Row(
                                     children: [
                                       Text(
-                                        donation.fundraiser,
+                                        donation!.fundraiser,
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       const SizedBox(width: 8.0),
-                                      if (donation.isFundraiserVerified)
+                                      if (donation!.isFundraiserVerified)
                                         const Icon(Icons.check_circle,
                                             color: Colors.green),
                                     ],
                                   ),
                                   const SizedBox(height: 8.0),
                                   Text(
-                                    donation.isFundraiserVerified
+                                    donation!.isFundraiserVerified
                                         ? 'Verified Public Donation'
                                         : 'Unverified Public Donation',
                                     style: TextStyle(
@@ -315,7 +321,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                     ),
                     const SizedBox(height: 16),
                     LinearProgressIndicator(
-                      value: donation.progress,
+                      value: donation!.progress,
                       minHeight: 10,
                       backgroundColor: Colors.grey[300],
                       valueColor:
@@ -326,11 +332,11 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${(donation.progress * 100).toStringAsFixed(0)}%',
+                          '${(donation!.progress * 100).toStringAsFixed(0)}%',
                           style: const TextStyle(fontSize: 18),
                         ),
                         Text(
-                          'Collected: ${currencyFormat.format(donation.collectedAmount)}',
+                          'Collected: ${currencyFormat.format(donation!.collectedAmount)}',
                           style: const TextStyle(fontSize: 18),
                         ),
                       ],
@@ -343,7 +349,7 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () {
-                              if (donation.progress >= 1.0) {
+                              if (donation!.progress >= 1.0) {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -364,7 +370,12 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                                 );
                               } else {
                                 Navigator.pushNamed(context, "/donater_donate",
-                                    arguments: donation);
+                                    arguments: {
+                                      'donation': donation,
+                                      'updateDonation': (updatedDonation) {
+                                        updateDonation(updatedDonation);
+                                      },
+                                    });
                               }
                             },
                             style: ElevatedButton.styleFrom(
