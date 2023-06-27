@@ -10,6 +10,7 @@ class Donation {
   int donaterCount;
   double progress;
   int collectedAmount;
+  int donationNeeded;
 
   Donation({
     required this.id,
@@ -23,5 +24,6 @@ class Donation {
     required this.donaterCount,
     required this.progress,
     required this.collectedAmount,
+    required this.donationNeeded
   });
 }

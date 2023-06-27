@@ -484,6 +484,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                                     donaterCount: data['donaterCount'],
                                     progress: data['progress'],
                                     collectedAmount: data['collectedAmount'],
+                                    donationNeeded: data['donationNeeded']
                                   ));
                             },
                             child: CustomCard(
@@ -571,6 +572,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                         donaterCount: data['donaterCount'],
                         progress: data['progress'],
                         collectedAmount: data['collectedAmount'],
+                        donationNeeded: data['donationNeeded']
                       ));
                 },
                 child: CustomCard(

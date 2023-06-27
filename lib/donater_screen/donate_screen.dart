@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
 import 'package:multiplatform_donation_app/models/donation.dart';
 
 class DonaterDonateScreen extends StatefulWidget {
@@ -47,7 +48,10 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final donation = ModalRoute.of(context)!.settings.arguments as Donation;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final Donation donation = args['donation'] as Donation;
+    final Function updateDonation = args['updateDonation'] as Function;
     final _firestore = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser!;
 
@@ -63,8 +67,33 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
+                      onTap: () async {
+                        final updatedDonationSnapshot = await FirebaseFirestore
+                            .instance
+                            .collection('Donations')
+                            .where('id', isEqualTo: donation.id)
+                            .get();
+
+                        if (updatedDonationSnapshot.docs.isNotEmpty) {
+                          final data =
+                              updatedDonationSnapshot.docs.first.data();
+                          final updatedDonation = Donation(
+                              id: data['id'],
+                              imagePath: data['imagePath'],
+                              title: data['title'],
+                              subtitle: data['subtitle'],
+                              description: data['description'],
+                              fundraiser: data['fundraiser'],
+                              isFundraiserVerified:
+                                  data['isFundraiserVerified'],
+                              daysLeft: data['daysLeft'],
+                              donaterCount: data['donaterCount'],
+                              progress: data['progress'],
+                              collectedAmount: data['collectedAmount'],
+                              donationNeeded: data['donationNeeded']);
+                          updateDonation(updatedDonation);
+                          Navigator.pop(context);
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -432,7 +461,6 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     ElevatedButton(
                       onPressed: () {
                         final amount = total;
-
                         final expiredDate = _dateController.text;
                         final cvv = _cvvController.text.toString();
                         final paymentMethod =
@@ -447,6 +475,54 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                           'total': double.parse(amount.toString()),
                           'userUID': currentUser.uid
                         }).then((value) {
+                          _firestore
+                              .collection('Donations')
+                              .where('id', isEqualTo: donation.id)
+                              .get()
+                              .then((QuerySnapshot querySnapshot) {
+                            if (querySnapshot.docs.isNotEmpty) {
+                              for (QueryDocumentSnapshot donationDocument
+                                  in querySnapshot.docs) {
+                                final donationId = donationDocument.id;
+                                final currentCollectedAmount = donationDocument
+                                        .get('collectedAmount') as int? ??
+                                    0;
+                                final donaterCount = donationDocument
+                                        .get('donaterCount') as int? ??
+                                    0;
+
+                                final updatedCollectedAmount =
+                                    currentCollectedAmount + amount.toInt();
+
+                                final double progress =
+                                    (updatedCollectedAmount /
+                                        (donationDocument.get('donationNeeded')
+                                                as int? ??
+                                            1));
+                                final double roundedProgress =
+                                    double.parse(progress.toStringAsFixed(1));
+
+                                _firestore
+                                    .collection('Donations')
+                                    .doc(donationId)
+                                    .update({
+                                      'collectedAmount': updatedCollectedAmount,
+                                      'donaterCount': donaterCount + 1,
+                                      'progress': roundedProgress
+                                    })
+                                    .then((_) {})
+                                    .catchError((error) {
+                                      print(
+                                          'Error updating collected amount: $error');
+                                    });
+                              }
+                            } else {
+                              print('Donation not found');
+                            }
+                          }).catchError((error) {
+                            print('Error retrieving donation: $error');
+                          });
+
                           const snackbar =
                               SnackBar(content: Text("Donate successful!"));
                           ScaffoldMessenger.of(context).showSnackBar(snackbar);
