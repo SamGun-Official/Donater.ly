@@ -512,14 +512,18 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                 if (amount <= 0) {
                                   throw Exception("Amount cannot be 0!");
                                 }
-                                DateTime expiredDateValue =
-                                    DateTime.parse(expiredDate);
-                                DateTime todayDateValue = DateTime.now();
-                                if (!DateUtils.isSameDay(
-                                        expiredDateValue, todayDateValue) &&
-                                    expiredDateValue.compareTo(todayDateValue) <
-                                        0) {
-                                  throw Exception("Expired date is not valid!");
+                                if (selectedPaymentMethod == 0) {
+                                  DateTime expiredDateValue =
+                                      DateTime.parse(expiredDate);
+                                  DateTime todayDateValue = DateTime.now();
+                                  if (!DateUtils.isSameDay(
+                                          expiredDateValue, todayDateValue) &&
+                                      expiredDateValue
+                                              .compareTo(todayDateValue) <
+                                          0) {
+                                    throw Exception(
+                                        "Expired date is not valid!");
+                                  }
                                 }
 
                                 firestore.collection('UserDonates').add({
@@ -615,7 +619,10 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                           ), // Menambahkan border radius
                         ),
                       ),
-                      child: const Text('Donate Now'),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Text('Donate Now'),
+                      ),
                     ),
                   ],
                 ),

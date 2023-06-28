@@ -472,20 +472,19 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                             onTap: () {
                               Navigator.pushNamed(context, '/donater_detail',
                                   arguments: Donation(
-                                    id: data['id'],
-                                    imagePath: data['imagePath'],
-                                    title: data['title'],
-                                    subtitle: data['subtitle'],
-                                    description: data['description'],
-                                    fundraiser: data['fundraiser'],
-                                    isFundraiserVerified:
-                                        data['isFundraiserVerified'],
-                                    daysLeft: data['daysLeft'],
-                                    donaterCount: data['donaterCount'],
-                                    progress: data['progress'],
-                                    collectedAmount: data['collectedAmount'],
-                                    donationNeeded: data['donationNeeded']
-                                  ));
+                                      id: data['id'],
+                                      imagePath: data['imagePath'],
+                                      title: data['title'],
+                                      subtitle: data['subtitle'],
+                                      description: data['description'],
+                                      fundraiser: data['fundraiser'],
+                                      isFundraiserVerified:
+                                          data['isFundraiserVerified'],
+                                      daysLeft: data['daysLeft'],
+                                      donaterCount: data['donaterCount'],
+                                      progress: data['progress'],
+                                      collectedAmount: data['collectedAmount'],
+                                      donationNeeded: data['donationNeeded']));
                             },
                             child: CustomCard(
                               imagePath: data['imagePath'],
@@ -561,19 +560,18 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                 onTap: () {
                   Navigator.pushNamed(context, '/donater_detail',
                       arguments: Donation(
-                        id: data['id'],
-                        imagePath: data['imagePath'],
-                        title: data['title'],
-                        subtitle: data['subtitle'],
-                        description: data['description'],
-                        fundraiser: data['fundraiser'],
-                        isFundraiserVerified: data['isFundraiserVerified'],
-                        daysLeft: data['daysLeft'],
-                        donaterCount: data['donaterCount'],
-                        progress: data['progress'],
-                        collectedAmount: data['collectedAmount'],
-                        donationNeeded: data['donationNeeded']
-                      ));
+                          id: data['id'],
+                          imagePath: data['imagePath'],
+                          title: data['title'],
+                          subtitle: data['subtitle'],
+                          description: data['description'],
+                          fundraiser: data['fundraiser'],
+                          isFundraiserVerified: data['isFundraiserVerified'],
+                          daysLeft: data['daysLeft'],
+                          donaterCount: data['donaterCount'],
+                          progress: data['progress'],
+                          collectedAmount: data['collectedAmount'],
+                          donationNeeded: data['donationNeeded']));
                 },
                 child: CustomCard(
                   imagePath: data['imagePath'],

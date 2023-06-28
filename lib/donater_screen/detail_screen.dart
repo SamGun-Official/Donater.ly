@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -79,48 +80,52 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                       ),
                       InkWell(
                         onTap: () async {
-                          isDonationExists =
-                              dbProvider.savedDonations.any((savedDonation) {
-                            return savedDonation.donationId == donation!.id &&
-                                savedDonation.userUid == currentUser.uid;
-                          });
+                          if (!kIsWeb) {
+                            isDonationExists =
+                                dbProvider.savedDonations.any((savedDonation) {
+                              return savedDonation.donationId == donation!.id &&
+                                  savedDonation.userUid == currentUser.uid;
+                            });
 
-                          // Cek apakah donasi sudah ada pada saved donation
-                          if (isDonationExists) {
-                            await dbProvider
-                                .removeSavedDonation(
-                                    donation!.id, currentUser.uid)
-                                .then((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Berhasil hapus donasi dari daftar saved donations!',
+                            // Cek apakah donasi sudah ada pada saved donation
+                            if (isDonationExists) {
+                              await dbProvider
+                                  .removeSavedDonation(
+                                      donation!.id, currentUser.uid)
+                                  .then((_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Berhasil hapus donasi dari daftar saved donations!',
+                                    ),
                                   ),
-                                ),
-                              );
-                              setState(() {
-                                isDonationExists = false;
+                                );
+                                setState(() {
+                                  isDonationExists = false;
+                                });
                               });
-                            });
+                            } else {
+                              await dbProvider
+                                  .addSavedDonation(SavedDonation(
+                                donationId: donation!.id,
+                                userUid: currentUser.uid,
+                                createdAt: Timestamp.now().toString(),
+                              ))
+                                  .then((value) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Berhasil tambah donasi ke daftar saved donations!',
+                                    ),
+                                  ),
+                                );
+                                setState(() {
+                                  isDonationExists = true;
+                                });
+                              });
+                            }
                           } else {
-                            await dbProvider
-                                .addSavedDonation(SavedDonation(
-                              donationId: donation!.id,
-                              userUid: currentUser.uid,
-                              createdAt: Timestamp.now().toString(),
-                            ))
-                                .then((value) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Berhasil tambah donasi ke daftar saved donations!',
-                                  ),
-                                ),
-                              );
-                              setState(() {
-                                isDonationExists = true;
-                              });
-                            });
+                            // Web, need firestore
                           }
                         },
                         child: Container(
@@ -382,7 +387,10 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
                             ),
-                            child: const Text('Go to Donate'),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16.0),
+                              child: Text('Go to Donate'),
+                            ),
                           ),
                         ),
                       ],

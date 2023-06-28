@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/models/saved_donation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -36,7 +37,7 @@ class DatabaseHelper {
   Future<void> insertSavedDonation(SavedDonation savedDonation) async {
     final Database db = await database;
     await db.insert(_tableName, savedDonation.toMapWithoutId());
-    print("Data inserted!");
+    debugPrint("Data inserted!");
   }
 
   Future<List<SavedDonation>> getSavedDonations() async {
@@ -59,12 +60,12 @@ class DatabaseHelper {
       where: 'donationId = ? AND userUid = ?',
       whereArgs: [donationId, userUid],
     );
-    print('Donasi dihapus dari saved donations');
+    debugPrint('Donasi dihapus dari saved donations');
   }
 
   Future<void> clearSavedDonations() async {
     final Database db = await database;
     await db.delete(_tableName);
-    print("All data cleared from 'saved_donations' table!");
+    debugPrint("All data cleared from 'saved_donations' table!");
   }
 }

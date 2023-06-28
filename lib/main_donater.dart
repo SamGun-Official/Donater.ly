@@ -22,7 +22,7 @@ class MainDonater extends StatefulWidget {
 }
 
 class _MainDonaterState extends State<MainDonater> {
-  late dynamic menu = DonaterHomeScreen();
+  late dynamic menu = const DonaterHomeScreen();
 
   void _onItemTapped(int index) {
     setState(() {
@@ -38,41 +38,42 @@ class _MainDonaterState extends State<MainDonater> {
         ChangeNotifierProvider(create: (context) => DbProvider()),
       ],
       child: MaterialApp(
-          title: 'Main Donater',
-          theme: ThemeData(
-            primaryColor: Colors.white, // Replace with your desired color
+        title: 'Main Donater',
+        theme: ThemeData(
+          primaryColor: Colors.white, // Replace with your desired color
+        ),
+        home: Scaffold(
+          body: GestureDetector(
+            onTap: () => setState(() {
+              menu = BottomNavigation.menu;
+            }),
+            child: menu,
           ),
-          home: Scaffold(
-            body: GestureDetector(
-              onTap: () => setState(() {
-                menu = BottomNavigation.menu;
-              }),
-              child: menu,
-            ),
-            bottomNavigationBar: BottomNavigation(
-              onItemTapped: _onItemTapped,
-            ),
+          bottomNavigationBar: BottomNavigation(
+            onItemTapped: _onItemTapped,
           ),
-          routes: {
-            //Donater
-            DonaterHomeScreen.routeName: (context) => const DonaterHomeScreen(),
-            DonaterDetailScreen.routeName: (context) =>
-                const DonaterDetailScreen(),
-            DonaterDonateScreen.routeName: (context) =>
-                const DonaterDonateScreen(),
-            DonaterDonationScreen.routeName: (context) =>
-                const DonaterDonationScreen(),
-            DonaterEditProfileScreen.routeName: (context) =>
-                DonaterEditProfileScreen(),
-            DonaterMyDonationScreen.routeName: (context) =>
-                DonaterMyDonationScreen(),
-            ProfileScreen.routeName: (context) => ProfileScreen(),
-            DonaterSavedDonationScreen.routeName: (context) =>
-                DonaterSavedDonationScreen(),
-            DonaterTransactionScreen.routeName: (context) =>
-                DonaterTransactionScreen(),
-            MainDonater.routeName: (context) => const MainDonater(),
-          }),
+        ),
+        routes: {
+          //Donater
+          DonaterHomeScreen.routeName: (context) => const DonaterHomeScreen(),
+          DonaterDetailScreen.routeName: (context) =>
+              const DonaterDetailScreen(),
+          DonaterDonateScreen.routeName: (context) =>
+              const DonaterDonateScreen(),
+          DonaterDonationScreen.routeName: (context) =>
+              const DonaterDonationScreen(),
+          DonaterEditProfileScreen.routeName: (context) =>
+              const DonaterEditProfileScreen(),
+          DonaterMyDonationScreen.routeName: (context) =>
+              const DonaterMyDonationScreen(),
+          ProfileScreen.routeName: (context) => const ProfileScreen(),
+          DonaterSavedDonationScreen.routeName: (context) =>
+              const DonaterSavedDonationScreen(),
+          DonaterTransactionScreen.routeName: (context) =>
+              const DonaterTransactionScreen(),
+          MainDonater.routeName: (context) => const MainDonater(),
+        },
+      ),
     );
   }
 }

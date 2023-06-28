@@ -58,8 +58,8 @@ class MyApp extends StatelessWidget {
               DonaterSavedDonationScreen(),
           DonaterTransactionScreen.routeName: (context) =>
               DonaterTransactionScreen(),
-          DonaterEditPasswordScreen.routeName: (context)=>
-          DonaterEditPasswordScreen(),
+          DonaterEditPasswordScreen.routeName: (context) =>
+              DonaterEditPasswordScreen(),
           MainDonater.routeName: (context) => const MainDonater(),
         }
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
