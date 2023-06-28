@@ -259,7 +259,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 subtitle: 'The Unity',
                 daysLeft: '20 days left',
                 progress: 0.2,
-                collectedAmount: 'Collected Rp 150.000,00',
+                collectedAmount: 'Collected Rp150.000,00',
               ),
               const SizedBox(height: 16),
               const CustomCard(
@@ -268,7 +268,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 subtitle: 'Another Subtitle',
                 daysLeft: '10 days left',
                 progress: 0.5,
-                collectedAmount: 'Collected Rp 200.000,00',
+                collectedAmount: 'Collected Rp200.000,00',
               ),
               const SizedBox(height: 16),
               const CustomCard(
@@ -277,7 +277,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 subtitle: 'Another Subtitle',
                 daysLeft: '10 days left',
                 progress: 0.5,
-                collectedAmount: 'Collected Rp 200.000,00',
+                collectedAmount: 'Collected Rp200.000,00',
               ),
               const SizedBox(height: 16),
               const CustomCard(
@@ -286,7 +286,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 subtitle: 'Another Subtitle',
                 daysLeft: '10 days left',
                 progress: 0.5,
-                collectedAmount: 'Collected Rp 200.000,00',
+                collectedAmount: 'Collected Rp200.000,00',
               ),
             ],
           ),

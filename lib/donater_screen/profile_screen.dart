@@ -40,20 +40,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             child: Text(
                               'My Profile',
                               style: TextStyle(
-                                  fontSize: 26, fontWeight: FontWeight.bold),
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Opacity(
-                            opacity: 0.0,
-                            child: Icon(
-                              Icons.bookmark_outline,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
+                        // CircleAvatar(
+                        //   backgroundColor: Colors.white,
+                        //   child: Opacity(
+                        //     opacity: 0.0,
+                        //     child: Icon(
+                        //       Icons.bookmark_outline,
+                        //       color: Colors.black,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -153,7 +155,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const DonaterSavedDonationScreen()),
+                          builder: (context) =>
+                              const DonaterSavedDonationScreen()),
                     );
                   },
                   child: Card(

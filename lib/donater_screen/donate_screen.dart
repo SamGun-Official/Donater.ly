@@ -207,7 +207,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Enter Amount',
+                        'Enter Amount (Min. Rp100,00)',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -453,7 +453,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          '\$${subtotal.toStringAsFixed(2)}',
+                          'Rp${subtotal.toStringAsFixed(2)}',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ],
@@ -467,7 +467,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                           style: TextStyle(fontSize: 16),
                         ),
                         Text(
-                          '\$${tax.toStringAsFixed(2)}',
+                          'Rp${tax.toStringAsFixed(2)}',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ],
@@ -487,7 +487,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          '\$${total.toStringAsFixed(2)}',
+                          'Rp${total.toStringAsFixed(2)}',
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -509,8 +509,8 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                       : "cash");
 
                               try {
-                                if (amount <= 0) {
-                                  throw Exception("Amount cannot be 0!");
+                                if (amount < 100) {
+                                  throw Exception("Minimum amount is Rp100!");
                                 }
                                 if (selectedPaymentMethod == 0) {
                                   DateTime expiredDateValue =

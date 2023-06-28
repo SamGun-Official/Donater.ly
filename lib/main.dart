@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: SplashScreen.routeName,
         routes: {
-          SplashScreen.routeName: (context) => SplashScreen(),
+          SplashScreen.routeName: (context) => const SplashScreen(),
           MenuScreen.routeName: (context) => const MenuScreen(),
           LoginPageScreen.routeName: (context) => const LoginPageScreen(),
           RegisterPageScreen.routeName: (context) => const RegisterPageScreen(),
@@ -50,16 +50,16 @@ class MyApp extends StatelessWidget {
           DonaterDonationScreen.routeName: (context) =>
               const DonaterDonationScreen(),
           DonaterEditProfileScreen.routeName: (context) =>
-              DonaterEditProfileScreen(),
+              const DonaterEditProfileScreen(),
           DonaterMyDonationScreen.routeName: (context) =>
-              DonaterMyDonationScreen(),
-          ProfileScreen.routeName: (context) => ProfileScreen(),
+              const DonaterMyDonationScreen(),
+          ProfileScreen.routeName: (context) => const ProfileScreen(),
           DonaterSavedDonationScreen.routeName: (context) =>
-              DonaterSavedDonationScreen(),
+              const DonaterSavedDonationScreen(),
           DonaterTransactionScreen.routeName: (context) =>
-              DonaterTransactionScreen(),
+              const DonaterTransactionScreen(),
           DonaterEditPasswordScreen.routeName: (context) =>
-              DonaterEditPasswordScreen(),
+              const DonaterEditPasswordScreen(),
           MainDonater.routeName: (context) => const MainDonater(),
         }
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),
