@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:multiplatform_donation_app/models/donation.dart';
 import 'package:intl/intl.dart';
 
@@ -99,6 +100,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
   String selectedCategory = 'All';
   String? selectedSort = 'Ascending';
   String? selectedFilterChoose;
+  String latestKeyword = "";
   bool isFilterApplied = false;
   String searchQuery = '';
 
@@ -123,11 +125,17 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
 
   String filterByTitleQuery = '';
   String? selectedFilterRange;
-  RangeValues selectedFilterRangeValues = RangeValues(0, 1000000);
-  // ...
+  RangeValues selectedFilterRangeValues = const RangeValues(0, 1000000);
+  final TextEditingController _keywordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _keywordController.dispose();
+    super.dispose();
+  }
 
   void _showFilterPopup(BuildContext context) async {
-    final selectedFilter = await showDialog<String>(
+    await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Filter'),
@@ -180,6 +188,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
               filterByTitleQuery = value;
             });
           },
+          controller: _keywordController,
         ),
         actions: [
           TextButton(
@@ -250,7 +259,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
             onPressed: () {
               Navigator.pop(context);
               setState(() {
-                selectedFilterRangeValues = RangeValues(0, 1000000);
+                selectedFilterRangeValues = const RangeValues(0, 1000000);
               });
             },
           ),
@@ -425,7 +434,7 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                 StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                   stream: _firestore.collection('Donations').snapshots(),
                   builder: (context, snapshot) {
-                    print(snapshot);
+                    debugPrint(snapshot.toString());
                     if (!snapshot.hasData) {
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -434,14 +443,18 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                     var donations = snapshot.data!.docs;
                     if (filterByTitleQuery != "") {
                       donations = donations
-                          .where((donation) =>
-                              donation['title'].contains(filterByTitleQuery))
+                          .where((donation) => donation['title']
+                              .toString()
+                              .toLowerCase()
+                              .contains(filterByTitleQuery.toLowerCase()))
                           .toList();
                     }
                     if (searchQuery != "") {
                       donations = donations
-                          .where((donation) =>
-                              donation['title'].contains(searchQuery))
+                          .where((donation) => donation['title']
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchQuery.toLowerCase()))
                           .toList();
                     }
                     donations = donations
