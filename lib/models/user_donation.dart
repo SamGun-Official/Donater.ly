@@ -6,6 +6,7 @@ class UserDonation {
   String paymentMethod;
   int total;
   String userUID;
+  String uniqueID;
 
   UserDonation({
     required this.cvv,
@@ -15,5 +16,6 @@ class UserDonation {
     required this.paymentMethod,
     required this.total,
     required this.userUID,
+    required this.uniqueID,
   });
 }

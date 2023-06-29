@@ -199,6 +199,7 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                       child: Text(
                                         donation.fundraiser,
                                         style: const TextStyle(fontSize: 14),
+                                        maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
