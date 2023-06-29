@@ -77,7 +77,8 @@ class CustomCard extends StatelessWidget {
                         ).format(collectedAmount)}",
                       ),
                     ),
-                    Text("Donated On: $donationDate"),
+                    Text(
+                        "Donated On: ${DateFormat("dd MMMM yyyy").format(DateTime.parse(donationDate))}"),
                   ],
                 ),
               ),
@@ -232,7 +233,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(
-                    top: 18.0,
+                    top: 20.0,
                     bottom: 12.0,
                     left: 4.0,
                     right: 4.0,

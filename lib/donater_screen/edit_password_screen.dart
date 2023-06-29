@@ -158,41 +158,42 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    TextFieldWithShadow(
-                      label: 'Old Password',
-                      placeholder: 'Old Password',
-                      controller: _oldPasswordController,
-                      onChanged: (value) {
-                        // Handle onChanged event
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldWithShadow(
-                      label: 'New Password',
-                      placeholder: 'New Password',
-                      controller: _newPasswordController,
-                      onChanged: (value) {
-                        // Handle onChanged event
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    TextFieldWithShadow(
-                      label: 'Confirm New Password',
-                      placeholder: 'Confirm New Password',
-                      controller: _confirmPasswordController,
-                      onChanged: (value) {
-                        // Handle onChanged event
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      TextFieldWithShadow(
+                        label: 'Old Password',
+                        placeholder: 'Old Password',
+                        controller: _oldPasswordController,
+                        onChanged: (value) {
+                          // Handle onChanged event
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldWithShadow(
+                        label: 'New Password',
+                        placeholder: 'New Password',
+                        controller: _newPasswordController,
+                        onChanged: (value) {
+                          // Handle onChanged event
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      TextFieldWithShadow(
+                        label: 'Confirm New Password',
+                        placeholder: 'Confirm New Password',
+                        controller: _confirmPasswordController,
+                        onChanged: (value) {
+                          // Handle onChanged event
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(

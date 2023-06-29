@@ -140,11 +140,14 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                   ],
                 ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  padding: EdgeInsets.only(
+                    top: 20.0,
+                    bottom: 12.0,
+                  ),
                   child: Text(
                     'Donation Recipient',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       color: Color.fromRGBO(
                         0,
                         0,
@@ -163,18 +166,20 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            image: const DecorationImage(
-                              image: AssetImage('images/profile.png'),
-                              fit: BoxFit.cover,
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              image: const DecorationImage(
+                                image: AssetImage('images/profile.png'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,19 +191,26 @@ class _DonaterDonateScreenState extends State<DonaterDonateScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  Text(
-                                    donation.fundraiser,
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green,
-                                  ),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        donation.fundraiser,
+                                        style: const TextStyle(fontSize: 14),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ],
                           ),

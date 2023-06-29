@@ -259,48 +259,49 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
                             children: [
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.8),
-                                      blurRadius: 5.0,
-                                      spreadRadius: 2.0,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                child: const CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('images/profile.png'),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.8),
+                                        blurRadius: 5.0,
+                                        spreadRadius: 2.0,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage('images/profile.png'),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 16.0),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            donation!.fundraiser,
-                                            style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 8.0),
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              donation!.fundraiser,
+                                              style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        const SizedBox(width: 8.0),
-                                        if (donation!.isFundraiserVerified)
-                                          const Icon(Icons.check_circle,
-                                              color: Colors.green),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                    const SizedBox(height: 8.0),
                                     Text(
                                       donation!.isFundraiserVerified
                                           ? 'Verified Public Donation'
@@ -313,6 +314,9 @@ class _DonaterDetailScreenState extends State<DonaterDetailScreen> {
                                   ],
                                 ),
                               ),
+                              if (donation!.isFundraiserVerified)
+                                const Icon(Icons.check_circle,
+                                    color: Colors.green),
                             ],
                           ),
                         ),

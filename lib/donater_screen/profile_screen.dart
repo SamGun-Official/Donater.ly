@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_password_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
 import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
+import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
 import 'package:multiplatform_donation_app/menu_page_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -46,16 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        // CircleAvatar(
-                        //   backgroundColor: Colors.white,
-                        //   child: Opacity(
-                        //     opacity: 0.0,
-                        //     child: Icon(
-                        //       Icons.bookmark_outline,
-                        //       color: Colors.black,
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),
@@ -198,7 +189,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const TransactionHistoryPage()),
+                          builder: (context) =>
+                              const DonaterTransactionScreen()),
                     );
                   },
                   child: Card(
@@ -284,7 +276,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     FirebaseAuth.instance.signOut().then((value) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MenuScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const MenuScreen()),
                       );
                     });
                   },
@@ -326,70 +319,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: const Center(
-        child: Text('Profile Page'),
-      ),
-    );
-  }
-}
-
-class SavedDonationsPage extends StatelessWidget {
-  const SavedDonationsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Saved Donations'),
-      ),
-      body: const Center(
-        child: Text('Saved Donations Page'),
-      ),
-    );
-  }
-}
-
-class TransactionHistoryPage extends StatelessWidget {
-  const TransactionHistoryPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Transaction History'),
-      ),
-      body: const Center(
-        child: Text('Transaction History Page'),
-      ),
-    );
-  }
-}
-
-class ChangePasswordPage extends StatelessWidget {
-  const ChangePasswordPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Change Password'),
-      ),
-      body: const Center(
-        child: Text('Change Password Page'),
       ),
     );
   }
