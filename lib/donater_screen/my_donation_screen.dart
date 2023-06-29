@@ -147,7 +147,7 @@ Widget buildGridItem(String imagePath, String type) {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          count.toString(),
+                          "${count.toString()}x",
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
