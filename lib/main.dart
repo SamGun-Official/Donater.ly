@@ -1,20 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/edit_password_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/my_donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
-import 'package:multiplatform_donation_app/firebase_options.dart';
-import 'package:multiplatform_donation_app/login_page_screen.dart';
-import 'package:multiplatform_donation_app/main_donater.dart';
-import 'package:multiplatform_donation_app/menu_page_screen.dart';
-import 'package:multiplatform_donation_app/register_page_screen.dart';
-import 'package:multiplatform_donation_app/splash_screen.dart';
+import 'package:donaterly_app/donater_screen/donation_screen.dart';
+import 'package:donaterly_app/donater_screen/edit_password_screen.dart';
+import 'package:donaterly_app/donater_screen/edit_profile_screen.dart';
+import 'package:donaterly_app/donater_screen/home_screen.dart';
+import 'package:donaterly_app/donater_screen/detail_screen.dart';
+import 'package:donaterly_app/donater_screen/my_donation_screen.dart';
+import 'package:donaterly_app/donater_screen/profile_screen.dart';
+import 'package:donaterly_app/donater_screen/saved_donation_screen.dart';
+import 'package:donaterly_app/donater_screen/transaction_screen.dart';
+import 'package:donaterly_app/firebase_options.dart';
+import 'package:donaterly_app/login_page_screen.dart';
+import 'package:donaterly_app/main_donater.dart';
+import 'package:donaterly_app/menu_page_screen.dart';
+import 'package:donaterly_app/register_page_screen.dart';
+import 'package:donaterly_app/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: SplashScreen.routeName,
         routes: {
-          SplashScreen.routeName: (context) => SplashScreen(),
+          SplashScreen.routeName: (context) => const SplashScreen(),
           MenuScreen.routeName: (context) => const MenuScreen(),
           LoginPageScreen.routeName: (context) => const LoginPageScreen(),
           RegisterPageScreen.routeName: (context) => const RegisterPageScreen(),
@@ -50,16 +50,16 @@ class MyApp extends StatelessWidget {
           DonaterDonationScreen.routeName: (context) =>
               const DonaterDonationScreen(),
           DonaterEditProfileScreen.routeName: (context) =>
-              DonaterEditProfileScreen(),
+              const DonaterEditProfileScreen(),
           DonaterMyDonationScreen.routeName: (context) =>
-              DonaterMyDonationScreen(),
-          ProfileScreen.routeName: (context) => ProfileScreen(),
+              const DonaterMyDonationScreen(),
+          ProfileScreen.routeName: (context) => const ProfileScreen(),
           DonaterSavedDonationScreen.routeName: (context) =>
-              DonaterSavedDonationScreen(),
+              const DonaterSavedDonationScreen(),
           DonaterTransactionScreen.routeName: (context) =>
-              DonaterTransactionScreen(),
-          DonaterEditPasswordScreen.routeName: (context)=>
-          DonaterEditPasswordScreen(),
+              const DonaterTransactionScreen(),
+          DonaterEditPasswordScreen.routeName: (context) =>
+              const DonaterEditPasswordScreen(),
           MainDonater.routeName: (context) => const MainDonater(),
         }
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),

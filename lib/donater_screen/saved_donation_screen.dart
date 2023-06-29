@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
-import 'package:multiplatform_donation_app/models/donation.dart';
-import 'package:multiplatform_donation_app/provider/db_provider.dart';
+import 'package:donaterly_app/donater_screen/donation_screen.dart';
+import 'package:donaterly_app/models/donation.dart';
+import 'package:donaterly_app/provider/db_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomCard extends StatelessWidget {
@@ -51,7 +51,10 @@ class CustomCard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: const TextStyle(fontSize: 14),
@@ -100,9 +103,11 @@ class _DonaterSavedDonationScreenState
     extends State<DonaterSavedDonationScreen> {
   final _firestore = FirebaseFirestore.instance;
   final currentUser = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     final dbProvider = Provider.of<DbProvider>(context, listen: false);
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -113,57 +118,53 @@ class _DonaterSavedDonationScreenState
               children: [
                 SizedBox(
                   height: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child:
-                                  Icon(Icons.arrow_back, color: Colors.black),
-                            ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.arrow_back, color: Colors.black),
                           ),
                         ),
-                        const Text(
-                          'Saved Donations',
-                          style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold),
-                        ),
-                        const CircleAvatar(
-                          backgroundColor: Colors.transparent,
-                          child: Opacity(
-                            opacity: 0.0,
-                            child: Icon(
-                              Icons.bookmark_outline,
-                              color: Colors.black,
-                            ),
+                      ),
+                      const Text(
+                        'Saved Donations',
+                        style: TextStyle(
+                            fontSize: 26, fontWeight: FontWeight.bold),
+                      ),
+                      const CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        child: Opacity(
+                          opacity: 0.0,
+                          child: Icon(
+                            Icons.bookmark_outline,
+                            color: Colors.black,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                     stream: _firestore.collection('Donations').snapshots(),
                     builder: (context, snapshot) {
-                      print(snapshot);
+                      debugPrint(snapshot.toString());
                       if (!snapshot.hasData) {
                         return const Center(
                           child: CircularProgressIndicator(),
@@ -179,23 +180,25 @@ class _DonaterSavedDonationScreenState
                           })) {
                             return InkWell(
                               onTap: () async {
-                                final navigator = await Navigator.pushNamed(
+                                await Navigator.pushNamed(
                                     context, '/donater_detail',
                                     arguments: Donation(
-                                      id: data['id'],
-                                      imagePath: data['imagePath'],
-                                      title: data['title'],
-                                      subtitle: data['subtitle'],
-                                      description: data['description'],
-                                      fundraiser: data['fundraiser'],
-                                      isFundraiserVerified:
-                                          data['isFundraiserVerified'],
-                                      daysLeft: data['daysLeft'],
-                                      donaterCount: data['donaterCount'],
-                                      progress: data['progress'],
-                                      collectedAmount: data['collectedAmount'],
-                                      donationNeeded: data['donationNeeded']
-                                    ));
+                                        id: data['id'],
+                                        imagePath: data['imagePath'],
+                                        title: data['title'],
+                                        subtitle: data['subtitle'],
+                                        description: data['description'],
+                                        fundraiser: data['fundraiser'],
+                                        isFundraiserVerified:
+                                            data['isFundraiserVerified'],
+                                        daysLeft: data['daysLeft'],
+                                        donaterCount: data['donaterCount'],
+                                        progress: double.parse(
+                                            data['progress'].toString()),
+                                        collectedAmount:
+                                            data['collectedAmount'],
+                                        donationNeeded: data['donationNeeded'],
+                                        category: data['category']));
                                 setState(() {});
                               },
                               child: CustomCard(
@@ -203,7 +206,8 @@ class _DonaterSavedDonationScreenState
                                 title: data['title'],
                                 subtitle: data['subtitle'],
                                 daysLeft: data['daysLeft'],
-                                progress: data['progress'],
+                                progress:
+                                    double.parse(data['progress'].toString()),
                                 collectedAmount: data['collectedAmount'],
                               ),
                             );

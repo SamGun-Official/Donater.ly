@@ -23,6 +23,7 @@ class TextFieldWithShadow extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _TextFieldWithShadowState createState() => _TextFieldWithShadowState();
 }
 
@@ -90,6 +91,7 @@ class DonaterEditProfileScreen extends StatefulWidget {
   const DonaterEditProfileScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DonaterEditProfileScreenState createState() =>
       _DonaterEditProfileScreenState();
 }
@@ -159,48 +161,66 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
               children: [
                 SizedBox(
                   height: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child:
-                                  Icon(Icons.arrow_back, color: Colors.black),
-                            ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.arrow_back, color: Colors.black),
                           ),
                         ),
-                        const Text(
-                          'Edit Profile',
-                          style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold),
-                        ),
-                        const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Opacity(
-                            opacity: 0.0,
-                            child: Icon(
-                              Icons.bookmark_outline,
-                              color: Colors.black,
-                            ),
+                      ),
+                      const Text(
+                        'Edit Profile',
+                        style: TextStyle(
+                            fontSize: 26, fontWeight: FontWeight.bold),
+                      ),
+                      const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Opacity(
+                          opacity: 0.0,
+                          child: Icon(
+                            Icons.bookmark_outline,
+                            color: Colors.black,
                           ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                CircleAvatar(
+                  radius: 80,
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 3,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black
+                              .withOpacity(0.2), // Ubah warna bayangan di sini
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -309,7 +329,8 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                             }
 
                             // Check if the phone number is unique
-                            final checkPhoneUnique = await isPhoneUnique(phoneNumber);
+                            final checkPhoneUnique =
+                                await isPhoneUnique(phoneNumber);
                             if (!checkPhoneUnique) {
                               throw Exception(
                                   'Phone number is already registered.');
@@ -339,6 +360,7 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                             // Perform any desired actions here
                             const snackbar =
                                 SnackBar(content: Text("Account Edited!"));
+                            // ignore: use_build_context_synchronously
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackbar);
                           } catch (error) {
@@ -353,7 +375,10 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                         ),
-                        child: const Text('Continue'),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          child: Text('Continue'),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -366,7 +391,10 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey,
                         ),
-                        child: const Text('Cancel'),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          child: Text('Cancel'),
+                        ),
                       ),
                     ),
                   ],

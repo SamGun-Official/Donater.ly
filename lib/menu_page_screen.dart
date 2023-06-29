@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/login_page_screen.dart';
-import 'package:multiplatform_donation_app/register_page_screen.dart';
+import 'package:donaterly_app/login_page_screen.dart';
+import 'package:donaterly_app/register_page_screen.dart';
 
 class MenuScreen extends StatelessWidget {
   static const routeName = '/menu_page_screen';
