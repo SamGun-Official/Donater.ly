@@ -36,8 +36,8 @@ class CustomCard extends StatelessWidget {
           children: [
             Image.asset(
               imagePath,
-              width: 80,
-              height: 80,
+              width: 90,
+              height: 90,
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -50,7 +50,10 @@ class CustomCard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: const TextStyle(fontSize: 14),
@@ -243,7 +246,7 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                                         const SizedBox(width: 16),
                                         Expanded(
                                           child: Text(
-                                            "Welcome, ${userData['name']}",
+                                            "Welcome, ${userData['name']}!",
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 18,
@@ -347,7 +350,8 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                   width: MediaQuery.of(context).size.width * 0.89,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 4.0),
+                      horizontal: 16.0,
+                    ),
                     child: Container(
                       alignment: Alignment.topLeft,
                       child: ButtonRow(
@@ -385,7 +389,11 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                       return filterCategory && filterKeyword;
                     });
                     return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: 16.0,
+                      ),
                       child: Column(
                         children: [
                           ...filteredData.map((document) {
@@ -404,18 +412,20 @@ class _DonaterHomeScreenState extends State<DonaterHomeScreen> {
                                             data['isFundraiserVerified'],
                                         daysLeft: data['daysLeft'],
                                         donaterCount: data['donaterCount'],
-                                        progress: data['progress'],
+                                        progress: double.parse(
+                                            data['progress'].toString()),
                                         collectedAmount:
                                             data['collectedAmount'],
-                                        donationNeeded:
-                                            data['donationNeeded']));
+                                        donationNeeded: data['donationNeeded'],
+                                        category: data['category']));
                               },
                               child: CustomCard(
                                 imagePath: data['imagePath'],
                                 title: data['title'],
                                 subtitle: data['subtitle'],
                                 daysLeft: data['daysLeft'],
-                                progress: data['progress'],
+                                progress:
+                                    double.parse(data['progress'].toString()),
                                 collectedAmount: double.parse(
                                   data['collectedAmount'].toString(),
                                 ),

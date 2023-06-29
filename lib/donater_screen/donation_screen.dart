@@ -51,7 +51,10 @@ class CustomCard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
                     style: const TextStyle(fontSize: 14),
@@ -494,16 +497,19 @@ class _DonaterDonationScreenState extends State<DonaterDonationScreen> {
                                           data['isFundraiserVerified'],
                                       daysLeft: data['daysLeft'],
                                       donaterCount: data['donaterCount'],
-                                      progress: data['progress'],
+                                      progress: double.parse(
+                                          data['progress'].toString()),
                                       collectedAmount: data['collectedAmount'],
-                                      donationNeeded: data['donationNeeded']));
+                                      donationNeeded: data['donationNeeded'],
+                                      category: data['category']));
                             },
                             child: CustomCard(
                               imagePath: data['imagePath'],
                               title: data['title'],
                               subtitle: data['subtitle'],
                               daysLeft: data['daysLeft'],
-                              progress: data['progress'],
+                              progress:
+                                  double.parse(data['progress'].toString()),
                               collectedAmount: data['collectedAmount'],
                             ),
                           );
@@ -583,7 +589,8 @@ class CustomSearchDelegate extends SearchDelegate<String> {
                           donaterCount: data['donaterCount'],
                           progress: data['progress'],
                           collectedAmount: data['collectedAmount'],
-                          donationNeeded: data['donationNeeded']));
+                          donationNeeded: data['donationNeeded'],
+                          category: data['category']));
                 },
                 child: CustomCard(
                   imagePath: data['imagePath'],

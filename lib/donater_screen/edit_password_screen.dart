@@ -1,6 +1,3 @@
-// ignore_for_file: sort_child_properties_last
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +20,7 @@ class TextFieldWithShadow extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _TextFieldWithShadowState createState() => _TextFieldWithShadowState();
 }
 
@@ -91,14 +89,13 @@ class DonaterEditPasswordScreen extends StatefulWidget {
   const DonaterEditPasswordScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _DonaterEditPasswordScreenState createState() =>
       _DonaterEditPasswordScreenState();
 }
 
 class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
   final currentUser = FirebaseAuth.instance.currentUser!;
-  final _firestore = FirebaseFirestore.instance;
-
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -115,51 +112,50 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
               children: [
                 SizedBox(
                   height: 60,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child:
-                                  Icon(Icons.arrow_back, color: Colors.black),
-                            ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
                           ),
-                        ),
-                        const Text(
-                          'Change Password',
-                          style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.bold),
-                        ),
-                        const CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Opacity(
-                            opacity: 0.0,
+                          child: const CircleAvatar(
+                            backgroundColor: Colors.white,
                             child: Icon(
-                              Icons.bookmark_outline,
+                              Icons.arrow_back,
                               color: Colors.black,
                             ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      const Text(
+                        'Change Password',
+                        style: TextStyle(
+                            fontSize: 26, fontWeight: FontWeight.bold),
+                      ),
+                      const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Opacity(
+                          opacity: 0.0,
+                          child: Icon(
+                            Icons.bookmark_outline,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -196,7 +192,7 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                     const SizedBox(height: 16),
                   ],
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     Expanded(
@@ -270,7 +266,10 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue,
                         ),
-                        child: const Text('Continue'),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          child: Text('Continue'),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -283,7 +282,10 @@ class _DonaterEditPasswordScreenState extends State<DonaterEditPasswordScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey,
                         ),
-                        child: const Text('Cancel'),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          child: Text('Cancel'),
+                        ),
                       ),
                     ),
                   ],
