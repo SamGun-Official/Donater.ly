@@ -22,7 +22,7 @@ class MainDonater extends StatefulWidget {
 }
 
 class _MainDonaterState extends State<MainDonater> {
-  late dynamic menu = DonaterHomeScreen();
+  late dynamic menu = const DonaterHomeScreen();
 
   void _onItemTapped(int index) {
     setState(() {

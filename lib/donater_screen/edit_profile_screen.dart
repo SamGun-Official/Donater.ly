@@ -129,6 +129,24 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
     }
   }
 
+  Future<bool> isUsernameUnique(String username) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('username', isEqualTo: username)
+        .get();
+
+    return querySnapshot.docs.isEmpty;
+  }
+
+  Future<bool> isPhoneUnique(String phone) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('phone', isEqualTo: phone)
+        .get();
+
+    return querySnapshot.docs.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,35 +206,36 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                     ),
                   ),
                 ),
-                  CircleAvatar(
-                    radius: 80,
-                    backgroundColor: Colors.transparent,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Colors.transparent,
-                          width: 3,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2), // Ubah warna bayangan di sini
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                CircleAvatar(
+                  radius: 80,
+                  backgroundColor: Colors.transparent,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 3,
                       ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          'images/profile.png',
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.cover,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black
+                              .withOpacity(0.2), // Ubah warna bayangan di sini
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
                         ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'images/profile.png',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
+                ),
                 const SizedBox(height: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,6 +301,29 @@ class _DonaterEditProfileScreenState extends State<DonaterEditProfileScreen> {
                           };
 
                           try {
+                            // Check if the username is unique
+                            final checkUsernameUnique =
+                                await isUsernameUnique(username);
+                            if (!checkUsernameUnique) {
+                              throw Exception('Username is already taken.');
+                            }
+
+                            // Check if the phone number is unique
+                            final checkPhoneUnique = await isPhoneUnique(phoneNumber);
+                            if (!checkPhoneUnique) {
+                              throw Exception(
+                                  'Phone number is already registered.');
+                            }
+
+                            // Regular expression to match a valid phone number format
+                            final phoneRegex = RegExp(r'^08[0-9]{8,10}$');
+
+                            // Check if the phone number is in the correct format
+                            if (!phoneRegex.hasMatch(phoneNumber)) {
+                              throw Exception(
+                                  'Invalid phone number format. Please enter a 10 to 12-digit phone number starting with "08".');
+                            }
+
                             // Update Firestore document using set() with merge option
                             await _firestore
                                 .collection('Users')
