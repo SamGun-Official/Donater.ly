@@ -11,6 +11,7 @@ class CustomCard extends StatelessWidget {
   final String subtitle;
   final int collectedAmount;
   final String donationDate;
+  final int donationID;
 
   const CustomCard({
     super.key,
@@ -19,62 +20,69 @@ class CustomCard extends StatelessWidget {
     required this.subtitle,
     required this.collectedAmount,
     required this.donationDate,
+    required this.donationID,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Image.asset(
-                imagePath,
-                width: 90,
-                height: 90,
+    return InkWell(
+      onTap: () async {
+        Navigator.pushNamed(context, '/donater_detail',
+            arguments: await DataFetch.getDonationData(donationID));
+      },
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Image.asset(
+                  imagePath,
+                  width: 90,
+                  height: 90,
+                ),
               ),
-            ),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Text(
-                      subtitle,
-                      style: const TextStyle(fontSize: 14),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        subtitle,
+                        style: const TextStyle(fontSize: 14),
+                      ),
                     ),
-                  ),
-                  const Divider(thickness: 2.0),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0),
-                    child: Text(
-                      "Amount: ${NumberFormat.currency(
-                        locale: 'id_ID',
-                        symbol: 'Rp',
-                      ).format(collectedAmount)}",
+                    const Divider(thickness: 2.0),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4.0),
+                      child: Text(
+                        "Amount: ${NumberFormat.currency(
+                          locale: 'id_ID',
+                          symbol: 'Rp',
+                        ).format(collectedAmount)}",
+                      ),
                     ),
-                  ),
-                  Text("Donated On: $donationDate"),
-                ],
+                    Text("Donated On: $donationDate"),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -224,13 +232,13 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(
-                    top: 20.0,
-                    bottom: 8.0,
+                    top: 18.0,
+                    bottom: 12.0,
                     left: 4.0,
                     right: 4.0,
                   ),
                   child: Text(
-                    'By Categories',
+                    'Donations By Categories',
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -315,13 +323,13 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(
-                    top: 20.0,
-                    bottom: 8.0,
+                    top: 24.0,
+                    bottom: 12.0,
                     left: 4.0,
                     right: 4.0,
                   ),
                   child: Text(
-                    'All Donations',
+                    'All Past Donations',
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -347,6 +355,7 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                                   subtitle: donation.subtitle,
                                   collectedAmount: userDonation.total,
                                   donationDate: userDonation.donationDate,
+                                  donationID: userDonation.donationID,
                                 );
                               } else if (futureSnapshot.hasError) {
                                 return Text('${futureSnapshot.error}');
