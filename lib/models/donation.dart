@@ -11,6 +11,7 @@ class Donation {
   double progress;
   int collectedAmount;
   int donationNeeded;
+  String? category;
 
   Donation({
     required this.id,
@@ -24,6 +25,7 @@ class Donation {
     required this.donaterCount,
     required this.progress,
     required this.collectedAmount,
-    required this.donationNeeded
+    required this.donationNeeded,
+    required this.category,
   });
 }

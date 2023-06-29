@@ -1,20 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:multiplatform_donation_app/models/donation.dart';
+import 'package:multiplatform_donation_app/models/user_donation.dart';
 
 class CustomCard extends StatelessWidget {
   final String imagePath;
   final String title;
   final String subtitle;
-  final String daysLeft;
-  final double progress;
-  final String collectedAmount;
+  final int collectedAmount;
+  final String donationDate;
 
-  const CustomCard({super.key, 
+  const CustomCard({
+    super.key,
     required this.imagePath,
     required this.title,
     required this.subtitle,
-    required this.daysLeft,
-    required this.progress,
     required this.collectedAmount,
+    required this.donationDate,
   });
 
   @override
@@ -22,19 +26,21 @@ class CustomCard extends StatelessWidget {
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Image.asset(
-              imagePath,
-              width: 80,
-              height: 80,
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Image.asset(
+                imagePath,
+                width: 90,
+                height: 90,
+              ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
+            Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,32 +50,27 @@ class CustomCard extends StatelessWidget {
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Icon(Icons.timer, size: 16),
-                      const SizedBox(width: 4),
-                      Text(daysLeft),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: progress,
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
-                      '${(progress * 100).toStringAsFixed(0)}%',
-                      style: const TextStyle(fontSize: 12),
+                      subtitle,
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Text(collectedAmount),
+                  const Divider(thickness: 2.0),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: Text(
+                      "Amount: ${NumberFormat.currency(
+                        locale: 'id_ID',
+                        symbol: 'Rp',
+                      ).format(collectedAmount)}",
+                    ),
+                  ),
+                  Text("Donated On: $donationDate"),
                 ],
               ),
             ),
@@ -80,39 +81,102 @@ class CustomCard extends StatelessWidget {
   }
 }
 
-Widget buildGridItem(String imagePath, String count, String text) {
-  return Container(
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage(imagePath),
-        fit: BoxFit.cover,
-      ),
-    ),
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            count,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-    ),
+Map<String, int> groupAndCountDonationsByType(List<Donation> donations) {
+  Map<String, int> countMap = {};
+  for (var donation in donations) {
+    if (countMap.containsKey(donation.category)) {
+      countMap[donation.category!] = countMap[donation.category]! + 1;
+    } else {
+      countMap[donation.category!] = 1;
+    }
+  }
+  for (var donation in donations) {
+    if (!countMap.containsKey(donation.category)) {
+      countMap[donation.category!] = 0;
+    }
+  }
+  return countMap;
+}
+
+Widget buildGridItem(String imagePath, String type) {
+  return StreamBuilder<List<UserDonation>>(
+    stream:
+        DataFetch.retrieveUserDonations(FirebaseAuth.instance.currentUser!.uid),
+    builder: (streamContext, streamSnapshot) {
+      if (streamSnapshot.hasData) {
+        final List<UserDonation> userDonations = streamSnapshot.data!;
+        final List<int> donationIDs = userDonations
+            .map((userDonation) => userDonation.donationID)
+            .toList();
+        return FutureBuilder<List<Donation>>(
+          future: fetchDonations(donationIDs),
+          builder: (futureContext, futureSnapshot) {
+            if (futureSnapshot.hasData) {
+              final List<Donation> donations = futureSnapshot.data!;
+              final Map<String, int> donationCounts =
+                  groupAndCountDonationsByType(donations);
+              final int count = donationCounts[type] ?? 0;
+              return Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(imagePath),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          count.toString(),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "$type Donation${count > 1 ? 's' : ''}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else if (futureSnapshot.hasError) {
+              return Text('${futureSnapshot.error}');
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        );
+      } else if (streamSnapshot.hasError) {
+        return Text('${streamSnapshot.error}');
+      }
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    },
   );
+}
+
+Future<List<Donation>> fetchDonations(List<int> donationIDs) async {
+  final List<Future<Donation>> donationFutures =
+      donationIDs.map((id) => DataFetch.getDonationData(id)).toList();
+
+  return await Future.wait(donationFutures);
 }
 
 class DonaterMyDonationScreen extends StatefulWidget {
@@ -125,72 +189,61 @@ class DonaterMyDonationScreen extends StatefulWidget {
 }
 
 class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
+  final currentUser = FirebaseAuth.instance.currentUser!;
+
   String selectedCategory = 'All';
   String selectedSort = 'Ascending';
   bool isFilterApplied = false;
 
   List<String> categoryList = ['All', 'Category 1', 'Category 2', 'Category 3'];
   List<String> sortList = ['Ascending', 'Descending'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(
-                height: 60,
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(
+                  height: 60,
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      'My Donations',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    top: 20.0,
+                    bottom: 8.0,
+                    left: 4.0,
+                    right: 4.0,
+                  ),
                   child: Text(
-                    'My Donations',
+                    'By Categories',
                     style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'By Categories',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation:
-                          3, // Tambahkan efek shadow dengan mengatur nilai elevation
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            8.0), // Tambahkan border radius di sini
-                        side: const BorderSide(
-                          color: Colors.grey,
-                          width: 1.0,
-                        ),
-                      ),
-                      child: buildGridItem(
-                        'images/detail_pic.jpg',
-                        '1 x',
-                        'Education Donation',
-                      ),
+                      fontSize: 20,
                     ),
                   ),
-                  // Tambahkan Padding dan Card dengan dekorasi yang serupa untuk grid item lainnya
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
+                ),
+                GridView.count(
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Card(
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -199,16 +252,15 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                           width: 1.0,
                         ),
                       ),
-                      child: buildGridItem(
-                        'images/detail_pic.jpg',
-                        '1 x',
-                        'Education Donation',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: buildGridItem(
+                          'images/education_donation.jpg',
+                          'Education',
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
+                    Card(
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -217,16 +269,15 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                           width: 1.0,
                         ),
                       ),
-                      child: buildGridItem(
-                        'images/detail_pic.jpg',
-                        '1 x',
-                        'Education Donation',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: buildGridItem(
+                          'images/food_donation.jpg',
+                          'Food',
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
+                    Card(
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -235,63 +286,155 @@ class _DonaterMyDonationScreenState extends State<DonaterMyDonationScreen> {
                           width: 1.0,
                         ),
                       ),
-                      child: buildGridItem(
-                        'images/detail_pic.jpg',
-                        '1 x',
-                        'Education Donation',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: buildGridItem(
+                          'images/health_donation.jpg',
+                          'Health',
+                        ),
                       ),
                     ),
+                    Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: buildGridItem(
+                          'images/animal_donation.jpg',
+                          'Animal',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    top: 20.0,
+                    bottom: 8.0,
+                    left: 4.0,
+                    right: 4.0,
                   ),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'All Donations',
-                  style: TextStyle(
-                    fontSize: 20,
+                  child: Text(
+                    'All Donations',
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
                   ),
                 ),
-              ),
-              const CustomCard(
-                imagePath: 'images/detail_pic.jpg',
-                title: 'Many Children Need Food to Survive',
-                subtitle: 'The Unity',
-                daysLeft: '20 days left',
-                progress: 0.2,
-                collectedAmount: 'Collected Rp150.000,00',
-              ),
-              const SizedBox(height: 16),
-              const CustomCard(
-                imagePath: 'images/detail_pic.jpg',
-                title: 'Build a school to study',
-                subtitle: 'Another Subtitle',
-                daysLeft: '10 days left',
-                progress: 0.5,
-                collectedAmount: 'Collected Rp200.000,00',
-              ),
-              const SizedBox(height: 16),
-              const CustomCard(
-                imagePath: 'images/detail_pic.jpg',
-                title: 'Build a school to study',
-                subtitle: 'Another Subtitle',
-                daysLeft: '10 days left',
-                progress: 0.5,
-                collectedAmount: 'Collected Rp200.000,00',
-              ),
-              const SizedBox(height: 16),
-              const CustomCard(
-                imagePath: 'images/detail_pic.jpg',
-                title: 'Build a school to study',
-                subtitle: 'Another Subtitle',
-                daysLeft: '10 days left',
-                progress: 0.5,
-                collectedAmount: 'Collected Rp200.000,00',
-              ),
-            ],
+                StreamBuilder<List<UserDonation>>(
+                  stream: DataFetch.retrieveUserDonations(currentUser.uid),
+                  builder: (streamContext, streamSnapshot) {
+                    if (streamSnapshot.hasData) {
+                      final List<UserDonation> userDonations =
+                          streamSnapshot.data!;
+                      return Wrap(
+                        children: userDonations.map((userDonation) {
+                          return FutureBuilder<Donation>(
+                            future: DataFetch.getDonationData(
+                                userDonation.donationID),
+                            builder: (futureContext, futureSnapshot) {
+                              if (futureSnapshot.hasData) {
+                                final Donation donation = futureSnapshot.data!;
+                                return CustomCard(
+                                  imagePath: donation.imagePath,
+                                  title: donation.title,
+                                  subtitle: donation.subtitle,
+                                  collectedAmount: userDonation.total,
+                                  donationDate: userDonation.donationDate,
+                                );
+                              } else if (futureSnapshot.hasError) {
+                                return Text('${futureSnapshot.error}');
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+                        }).toList(),
+                      );
+                    } else if (streamSnapshot.hasError) {
+                      return Text('${streamSnapshot.error}');
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+class DataFetch {
+  static Future<Donation> getDonationData(int id) async {
+    final QuerySnapshot<Map<String, dynamic>> donationSnapshot =
+        await FirebaseFirestore.instance
+            .collection("Donations")
+            .where("id", isEqualTo: id)
+            .get();
+
+    if (donationSnapshot.docs.isNotEmpty) {
+      final donationData = donationSnapshot.docs[0].data();
+      final imagePath = donationData["imagePath"];
+      final title = donationData["title"];
+      final subtitle = donationData["subtitle"];
+      final description = donationData["description"];
+      final fundraiser = donationData["fundraiser"];
+      final isFundraiserVerified = donationData["isFundraiserVerified"];
+      final daysLeft = donationData["daysLeft"];
+      final donaterCount = donationData["donaterCount"];
+      final progress = donationData["progress"];
+      final collectedAmount = donationData["collectedAmount"];
+      final donationNeeded = donationData["donationNeeded"];
+      final category = donationData["category"];
+
+      return Donation(
+        id: id,
+        imagePath: imagePath,
+        title: title,
+        subtitle: subtitle,
+        description: description,
+        fundraiser: fundraiser,
+        isFundraiserVerified: isFundraiserVerified,
+        daysLeft: daysLeft,
+        donaterCount: donaterCount,
+        progress: progress,
+        collectedAmount: collectedAmount,
+        donationNeeded: donationNeeded,
+        category: category,
+      );
+    }
+
+    throw Exception("No matching donation found");
+  }
+
+  static Stream<List<UserDonation>> retrieveUserDonations(String userUID) {
+    final querySnapshot = FirebaseFirestore.instance
+        .collection("UserDonates")
+        .where("userUID", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .orderBy("donationTimestamp", descending: true)
+        .snapshots();
+
+    return querySnapshot.map((list) => list.docs.map((data) {
+          return UserDonation(
+            cvv: data["CVV"],
+            donationDate: data["donationDate"],
+            donationID: data["donationID"],
+            expiredDate: data["expiredDate"],
+            paymentMethod: data["paymentMethod"],
+            total: data["total"].round(),
+            userUID: data["userUID"],
+          );
+        }).toList());
   }
 }
