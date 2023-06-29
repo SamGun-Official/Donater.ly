@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/bottom_navigation.dart';
-import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/my_donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
-import 'package:multiplatform_donation_app/provider/db_provider.dart';
+import 'package:donaterly_app/bottom_navigation.dart';
+import 'package:donaterly_app/donater_screen/detail_screen.dart';
+import 'package:donaterly_app/donater_screen/donate_screen.dart';
+import 'package:donaterly_app/donater_screen/donation_screen.dart';
+import 'package:donaterly_app/donater_screen/edit_profile_screen.dart';
+import 'package:donaterly_app/donater_screen/home_screen.dart';
+import 'package:donaterly_app/donater_screen/my_donation_screen.dart';
+import 'package:donaterly_app/donater_screen/profile_screen.dart';
+import 'package:donaterly_app/donater_screen/saved_donation_screen.dart';
+import 'package:donaterly_app/donater_screen/transaction_screen.dart';
+import 'package:donaterly_app/provider/db_provider.dart';
 import 'package:provider/provider.dart';
 
 class MainDonater extends StatefulWidget {

@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/edit_password_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/edit_profile_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/saved_donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/transaction_screen.dart';
-import 'package:multiplatform_donation_app/menu_page_screen.dart';
+import 'package:donaterly_app/donater_screen/edit_password_screen.dart';
+import 'package:donaterly_app/donater_screen/edit_profile_screen.dart';
+import 'package:donaterly_app/donater_screen/saved_donation_screen.dart';
+import 'package:donaterly_app/donater_screen/transaction_screen.dart';
+import 'package:donaterly_app/menu_page_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/donater_profile';

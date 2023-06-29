@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/models/saved_donation.dart';
+import 'package:donaterly_app/models/saved_donation.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {

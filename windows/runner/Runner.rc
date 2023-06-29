@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "multiplatform_donation_app" "\0"
+            VALUE "FileDescription", "donaterly_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "multiplatform_donation_app" "\0"
+            VALUE "InternalName", "donaterly_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "multiplatform_donation_app.exe" "\0"
-            VALUE "ProductName", "multiplatform_donation_app" "\0"
+            VALUE "OriginalFilename", "donaterly_app.exe" "\0"
+            VALUE "ProductName", "donaterly_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

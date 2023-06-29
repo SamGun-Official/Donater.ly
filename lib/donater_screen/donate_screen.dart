@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:multiplatform_donation_app/models/donation.dart';
+import 'package:donaterly_app/models/donation.dart';
 
 class DonaterDonateScreen extends StatefulWidget {
   static const routeName = '/donater_donate';

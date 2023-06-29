@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
-import 'package:multiplatform_donation_app/models/donation.dart';
-import 'package:multiplatform_donation_app/provider/db_provider.dart';
+import 'package:donaterly_app/donater_screen/donation_screen.dart';
+import 'package:donaterly_app/models/donation.dart';
+import 'package:donaterly_app/provider/db_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomCard extends StatelessWidget {

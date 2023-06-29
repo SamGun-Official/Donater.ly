@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:multiplatform_donation_app/models/donation.dart';
-import 'package:multiplatform_donation_app/models/saved_donation.dart';
-import 'package:multiplatform_donation_app/provider/db_provider.dart';
+import 'package:donaterly_app/models/donation.dart';
+import 'package:donaterly_app/models/saved_donation.dart';
+import 'package:donaterly_app/provider/db_provider.dart';
 
 class DonaterDetailScreen extends StatefulWidget {
   static const routeName = '/donater_detail';

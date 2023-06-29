@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/menu_page_screen.dart';
+import 'package:donaterly_app/menu_page_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const routeName = '/splash_screen_route';
@@ -8,6 +8,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Desain tampilan SplashScreen
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
         child: AnimatedOpacity(

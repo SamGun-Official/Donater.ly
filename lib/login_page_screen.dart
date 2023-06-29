@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/detail_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/donate_screen.dart';
-import 'package:multiplatform_donation_app/main_donater.dart';
-import 'package:multiplatform_donation_app/menu_page_screen.dart';
+import 'package:donaterly_app/donater_screen/home_screen.dart';
+import 'package:donaterly_app/donater_screen/detail_screen.dart';
+import 'package:donaterly_app/donater_screen/donate_screen.dart';
+import 'package:donaterly_app/main_donater.dart';
+import 'package:donaterly_app/menu_page_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPageScreen extends StatefulWidget {

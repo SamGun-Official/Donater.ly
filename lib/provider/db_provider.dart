@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:multiplatform_donation_app/models/saved_donation.dart';
-import 'package:multiplatform_donation_app/utils/database_helper.dart';
+import 'package:donaterly_app/models/saved_donation.dart';
+import 'package:donaterly_app/utils/database_helper.dart';
 
 class DbProvider extends ChangeNotifier {
   final List<SavedDonation> _arrSavedDonation = [];

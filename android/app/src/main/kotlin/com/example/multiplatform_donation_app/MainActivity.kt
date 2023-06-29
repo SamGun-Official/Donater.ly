@@ -1,4 +1,4 @@
-package com.example.multiplatform_donation_app
+package com.donaterly_app
 
 import io.flutter.embedding.android.FlutterActivity
 

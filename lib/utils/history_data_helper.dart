@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:multiplatform_donation_app/models/donation.dart';
-import 'package:multiplatform_donation_app/models/user_donation.dart';
+import 'package:donaterly_app/models/donation.dart';
+import 'package:donaterly_app/models/user_donation.dart';
 
 class DataFetch {
   static Future<Donation> getDonationData(int id) async {

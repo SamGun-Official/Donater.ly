@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:multiplatform_donation_app/donater_screen/donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/home_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/my_donation_screen.dart';
-import 'package:multiplatform_donation_app/donater_screen/profile_screen.dart';
+import 'package:donaterly_app/donater_screen/donation_screen.dart';
+import 'package:donaterly_app/donater_screen/home_screen.dart';
+import 'package:donaterly_app/donater_screen/my_donation_screen.dart';
+import 'package:donaterly_app/donater_screen/profile_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
-  final Key? key; // Named 'key' parameter
+  // ignore: annotate_overrides, overridden_fields
+  final Key? key;
   final Function(int) onItemTapped;
-  static dynamic menu = DonaterHomeScreen();
+  static dynamic menu = const DonaterHomeScreen();
 
-  BottomNavigation({this.key, required this.onItemTapped}) : super(key: key);
+  const BottomNavigation({this.key, required this.onItemTapped}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _BottomNavigationState createState() => _BottomNavigationState();
 
   static dynamic getMenuByIndex(int index) {
     if (index == 0) {
-      return DonaterHomeScreen();
+      return const DonaterHomeScreen();
     } else if (index == 1) {
-      return DonaterDonationScreen();
+      return const DonaterDonationScreen();
     } else if (index == 2) {
-      return DonaterMyDonationScreen();
+      return const DonaterMyDonationScreen();
     } else if (index == 3) {
-      return ProfileScreen();
+      return const ProfileScreen();
     }
-    return DonaterHomeScreen(); // Default menu
+    return const DonaterHomeScreen();
   }
 }
 
@@ -44,7 +46,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       backgroundColor: Colors.transparent,
       elevation: 0,
       currentIndex: _selectedIndex,
-      selectedItemColor: Color.fromRGBO(107, 147, 225, 1),
+      selectedItemColor: const Color.fromRGBO(107, 147, 225, 1),
       unselectedItemColor: Colors.grey,
       onTap: _onItemTapped,
       items: const [
